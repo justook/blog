@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>信息安全基础与密码学综合实验(一)——Fermat素性检测算法 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Fermat素性检测算法一、实验目的（包括实验环境、实现目标等等） 实验环境：  Window11  Visual Studio Code v1.105.0  python v3.12.0a7  实现目标：   实现Fermat素性检测算法，并对两个大整数进行分析。 二、方案设计 （包括背景、原理、必要的公式、图表、算法步骤等等） 原理： 给定素数p，a∈Z，则有；  奇整数m，若任取一整数2≤a">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>信息安全基础与密码学综合实验(一)——Fermat素性检测算法 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="实验目的（包括实验环境、实现目标等等）实验环境： Window11  Visual Studio Code v1.105.0  python v3.12.0a7   实现目标：实现Fermat素性检测算法，并对两个大整数进行分析。 方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）原理：给定素数p，a∈Z，则有； 奇整数m，若任取一整数$2≤a≤m-2，(a,m)&#x3D;1$，使得，则m至少有的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信息安全基础与密码学综合实验(一)——Fermat素性检测算法">
 <meta property="og:url" content="http://blog.justok.pw/2025/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/Fermat/index.html">
 <meta property="og:site_name" content="just.ok的个人博客">
-<meta property="og:description" content="Fermat素性检测算法一、实验目的（包括实验环境、实现目标等等） 实验环境：  Window11  Visual Studio Code v1.105.0  python v3.12.0a7  实现目标：   实现Fermat素性检测算法，并对两个大整数进行分析。 二、方案设计 （包括背景、原理、必要的公式、图表、算法步骤等等） 原理： 给定素数p，a∈Z，则有；  奇整数m，若任取一整数2≤a">
+<meta property="og:description" content="实验目的（包括实验环境、实现目标等等）实验环境： Window11  Visual Studio Code v1.105.0  python v3.12.0a7   实现目标：实现Fermat素性检测算法，并对两个大整数进行分析。 方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）原理：给定素数p，a∈Z，则有； 奇整数m，若任取一整数$2≤a≤m-2，(a,m)&#x3D;1$，使得，则m至少有的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg">
 <meta property="article:published_time" content="2025-10-19T12:20:12.000Z">
-<meta property="article:modified_time" content="2025-10-29T13:04:42.359Z">
+<meta property="article:modified_time" content="2025-11-02T14:04:36.078Z">
 <meta property="article:author" content="just.ok">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://blog.justok.pw/2025/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/Fermat/",
   "image": "https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg",
   "datePublished": "2025-10-19T12:20:12.000Z",
-  "dateModified": "2025-10-29T13:04:42.359Z",
+  "dateModified": "2025-11-02T14:04:36.078Z",
   "author": [
     {
       "@type": "Person",
@@ -158,183 +158,113 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/67d981e288c538a9b5c04e46.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">信息安全基础与密码学综合实验(一)——Fermat素性检测算法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">信息安全基础与密码学综合实验(一)——Fermat素性检测算法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-19T12:20:12.000Z" title="发表于 2025-10-19 20:20:12">2025-10-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-29T13:04:42.359Z" title="更新于 2025-10-29 21:04:42">2025-10-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">信息安全基础与密码学综合实验</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Fermat素性检测算法"><a href="#Fermat素性检测算法" class="headerlink" title="Fermat素性检测算法"></a>Fermat素性检测算法</h1><h2 id="一、实验目的（包括实验环境、实现目标等等）"><a href="#一、实验目的（包括实验环境、实现目标等等）" class="headerlink" title="一、实验目的（包括实验环境、实现目标等等）"></a>一、实验目的（包括实验环境、实现目标等等）</h2><ol>
-<li><p>实验环境：</p>
-<p> Window11</p>
-<p> Visual Studio Code v1.105.0</p>
-<p> python v3.12.0a7</p>
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/67d981e288c538a9b5c04e46.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">信息安全基础与密码学综合实验(一)——Fermat素性检测算法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">信息安全基础与密码学综合实验(一)——Fermat素性检测算法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-19T12:20:12.000Z" title="发表于 2025-10-19 20:20:12">2025-10-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-02T14:04:36.078Z" title="更新于 2025-11-02 22:04:36">2025-11-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">信息安全基础与密码学综合实验</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="实验目的（包括实验环境、实现目标等等）"><a href="#实验目的（包括实验环境、实现目标等等）" class="headerlink" title="实验目的（包括实验环境、实现目标等等）"></a>实验目的（包括实验环境、实现目标等等）</h2><h3 id="实验环境："><a href="#实验环境：" class="headerlink" title="实验环境："></a>实验环境：</h3><ul>
+<li><p>Window11</p>
 </li>
-<li><p>实现目标：</p>
+<li><p>Visual Studio Code v1.105.0</p>
 </li>
-</ol>
-<p>实现Fermat素性检测算法，并对两个大整数进行分析。</p>
-<p>二、方案设计</p>
-<p>（包括背景、原理、必要的公式、图表、算法步骤等等）</p>
-<p>原理：</p>
-<pre><code>给定素数p，a∈Z，则有；
-
-奇整数m，若任取一整数2≤a≤m-2，(a,m)=1，使得，则m至少有的概率为素数。
-</code></pre><p>算法步骤：</p>
-<p>给定奇整数m≥3和安全参数k：</p>
-<p>随机选取整数a，2≤a≤m-2；</p>
-<p>计算g=(a,m)，如果g=1，转(3);否则，跳出，m为合数;</p>
-<p>计算，如果r=1，m可能是素数，转(1)，否则,跳出，m为合数；</p>
-<p>重复上述过程k次，如果每次得到m可能为素数，则m为素数的概率为。</p>
-<p>三、方案实现</p>
-<p>（包括算法流程图、主要函数的介绍、算法实现的主要代码等等）</p>
-<p>算法流程图</p>
-<p><img src="https://markdowntoword.io/placeholder.png" alt="placeholder">主要函数分析</p>
-<p>2.1    fermat_primality_test(n, k)</p>
-<p>功能：实现费马素性检测算法，用于判断一个数是否为素数</p>
-<p>参数：n：待检测的整数</p>
-<p>k：安全参数，表示测试轮数，越大误判概率越低</p>
-<p>返回值：布尔值，True表示可能是素数，False表示一定是合数</p>
-<p>工作原理：</p>
-<p>-首先处理特殊情况</p>
-<p>-然后进行k轮测试，每轮随机选择a并验证费马小定理</p>
-<p>-若任何一轮不满足，则判定为合数</p>
-<p>2.2 dread_large_number_from_txt(file_path)</p>
-<p>功能：从指定文本文件中读取大整数</p>
-<p>参数：file_path：文本文件路径</p>
-<p>返回值：从文件中读取并转换的整数</p>
-<p>异常处理：</p>
-<p>-文件不存在</p>
-<p>-文件内容不是有效整数</p>
-<p>-其他读取错误</p>
-<p>2.3主程序模块</p>
-<p>功能：程序入口点，负责协调执行整个流程</p>
-<p>执行步骤：</p>
-<p>1.从文本文件读取待检测的大整数</p>
-<p>2.获取用户输入的安全参数k</p>
-<p>3.调用fermat_primality_test函数进行素性检测</p>
-<p>4.输出最终检测结果</p>
-<ol>
-<li>主要代码</li>
-</ol>
-<p>import random</p>
-<p>def fermat_primality_test(n, k):</p>
-<pre><code># 处理特殊情况，直接返回结果
-
-if n &lt;= 1:
-
-    return False
-
-elif n &lt;= 3:
-
-    return True
-
-elif n % 2 == 0:
-
-    return False
-
-
-
-# 多轮检测，降低误判概率
-
-for _ in range(k):
-
-    # 随机选择基数a，范围为[2, n-2]
-
-    a = random.randint(2, n - 2)
-
-    # 用pow函数高效计算a^(n-1) mod n，内置函数支持大整数且性能更优
-
-    if pow(a, n - 1, n) != 1:
-
-        return False
-
-
-
-# 所有轮次通过，判定为大概率素数
-
-return True
-</code></pre><p>def read_large_number_from_txt(file_path):</p>
-<pre><code>try:
-
-    # 读取文件内容，去除空白字符（如换行、空格）
-
-    with open(file_path, &#39;r&#39;, encoding=&#39;utf-8&#39;) as f:
-
-        content = f.read().strip()
-
-    # 将字符串格式的大整数转为int类型（Python原生支持任意长度整数）
-
-    return int(content)
-
-except FileNotFoundError:
-
-    print(f&quot;错误：未找到文件 &#123;file_path&#125;&quot;)
-
-    exit()
-
-except ValueError:
-
-    print(&quot;错误：文件内容不是有效的整数&quot;)
-
-    exit()
-
-except Exception as e:
-
-    print(f&quot;读取文件时发生错误：&#123;e&#125;&quot;)
-
-    exit()
-</code></pre><h1 id="主程序：读取文件并执行检测"><a href="#主程序：读取文件并执行检测" class="headerlink" title="主程序：读取文件并执行检测"></a>主程序：读取文件并执行检测</h1><p>if <strong>name</strong> == “<strong>main</strong>“:</p>
-<pre><code># TXT文件实际路径
-
-txt_file_path = &quot;2.txt&quot;
-
-# 读取TXT中的大整数
-
-large_number = read_large_number_from_txt(txt_file_path)
-
-# 输入安全参数k
-
-k = int(input(&quot;请输入安全参数k:&quot;))
-
-# 执行Fermat素性检测
-
-is_prime = fermat_primality_test(large_number, k)
-
-
-
-# 输出检测结果
-
-if is_prime:
-
-    print(f&quot;检测结果：&#123;large_number&#125;\n该数大概率是素数&quot;)
-
-else:
-
-    print(f&quot;检测结果：&#123;large_number&#125;\n该数是合数&quot;)
-</code></pre><p>四、数据分析(包括算法测试数据的分析，运行结果截图等等)</p>
-<ol>
-<li>对2.txt文件中的大整数进行检测：</li>
-</ol>
-<p><img src="https://markdowntoword.io/placeholder.png" alt="placeholder">2.    对4.txt文件中的大整数进行检测：</p>
-<p><img src="https://markdowntoword.io/placeholder.png" alt="placeholder"></p>
-<p>五、思考与总结</p>
+<li><p>python v3.12.0a7</p>
+</li>
+</ul>
+<h3 id="实现目标："><a href="#实现目标：" class="headerlink" title="实现目标："></a>实现目标：</h3><p>实现Fermat素性检测算法，并对两个大整数进行分析。</p>
+<h2 id="方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）"><a href="#方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）" class="headerlink" title="方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）"></a>方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）</h2><h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>给定素数p，a∈Z，则有；</p>
+<p>奇整数m，若任取一整数$2≤a≤m-2，(a,m)=1$，使得，则m至少有的概率为素数。</p>
+<h3 id="算法步骤："><a href="#算法步骤：" class="headerlink" title="算法步骤："></a>算法步骤：</h3><p>给定奇整数m≥3和安全参数k：</p>
+<p>(1)随机选取整数a，$2≤a≤m-2$；</p>
+<p>(2)计算$g=(a,m)$，如果$g=1$，转(3);否则，跳出，m为合数;</p>
+<p>(3)计算$r=a^{(m-1)} (mod⁡m )$，如果r=1，m可能是素数，转(1)，否则,跳出，m为合数；</p>
+<p>(4)重复上述过程k次，如果每次得到m可能为素数，则m为素数的概率为。</p>
+<h2 id="方案实现"><a href="#方案实现" class="headerlink" title="方案实现"></a>方案实现</h2><p>（包括算法流程图、主要函数的介绍、算法实现的主要代码等等）</p>
+<h3 id="算法流程图"><a href="#算法流程图" class="headerlink" title="算法流程图"></a>算法流程图</h3><p><img src="https://pic1.imgdb.cn/item/68f8e8be3203f7be008f0903.png" alt=""></p>
+<h3 id="主要函数介绍"><a href="#主要函数介绍" class="headerlink" title="主要函数介绍"></a>主要函数介绍</h3><p><code>fermat_primality_test(n, k)</code></p>
 <ul>
+<li><p>功能：实现费马素性检测算法，用于判断一个数是否为素数</p>
+</li>
+<li><p>参数：</p>
+<ul>
+<li><p>n：待检测的整数</p>
+</li>
+<li><p>k：安全参数，表示测试轮数，越大误判概率越低</p>
+</li>
+</ul>
+</li>
+<li><p>返回值：布尔值，True表示可能是素数，False表示一定是合数</p>
+</li>
+<li><p>工作原理：</p>
+<ul>
+<li><p>首先处理特殊情况</p>
+</li>
+<li><p>然后进行k轮测试，每轮随机选择a并验证费马小定理</p>
+</li>
+<li><p>若任何一轮不满足，则判定为合数</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>dread_large_number_from_txt(file_path)</code></p>
+<ul>
+<li><p>功能：从指定文本文件中读取大整数</p>
+</li>
+<li><p>参数：file_path：文本文件路径</p>
+</li>
+<li><p>返回值：从文件中读取并转换的整数</p>
+</li>
+<li><p>异常处理：</p>
+<ul>
+<li><p>文件不存在</p>
+</li>
+<li><p>文件内容不是有效整数</p>
+</li>
+<li><p>其他读取错误</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>主程序模块</p>
+<ul>
+<li><p>功能：程序入口点，负责协调执行整个流程</p>
+</li>
+<li><p>执行步骤：</p>
+<ol>
+<li><p>从文本文件读取待检测的大整数</p>
+</li>
+<li><p>获取用户输入的安全参数k</p>
+</li>
+<li><p>调用fermat_primality_test函数进行素性检测</p>
+</li>
+<li><p>输出最终检测结果</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="主要代码"><a href="#主要代码" class="headerlink" title="主要代码"></a>主要代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fermat_primality_test</span>(<span class="params">n, k</span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 处理特殊情况，直接返回结果</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> n &lt;= <span class="number">3</span>:</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> n % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 多轮检测，降低误判概率</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 随机选择基数a，范围为[2, n-2]</span></span><br><span class="line"></span><br><span class="line">        a = random.randint(<span class="number">2</span>, n - <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 用pow函数高效计算a^(n-1) mod n，内置函数支持大整数且性能更优</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">pow</span>(a, n - <span class="number">1</span>, n) != <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 所有轮次通过，判定为大概率素数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_large_number_from_txt</span>(<span class="params">file_path</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 读取文件内容，去除空白字符（如换行、空格）</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line"></span><br><span class="line">            content = f.read().strip()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将字符串格式的大整数转为int类型（Python原生支持任意长度整数）</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">int</span>(content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> FileNotFoundError:</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;错误：未找到文件 <span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;错误：文件内容不是有效的整数&quot;</span>)</span><br><span class="line"></span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;读取文件时发生错误：<span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主程序：读取文件并执行检测</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># TXT文件实际路径</span></span><br><span class="line"></span><br><span class="line">    txt_file_path = <span class="string">&quot;2.txt&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 读取TXT中的大整数</span></span><br><span class="line"></span><br><span class="line">    large_number = read_large_number_from_txt(txt_file_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入安全参数k</span></span><br><span class="line"></span><br><span class="line">    k = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;请输入安全参数k:&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行Fermat素性检测</span></span><br><span class="line"></span><br><span class="line">    is_prime = fermat_primality_test(large_number, k)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出检测结果</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> is_prime:</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;检测结果：<span class="subst">&#123;large_number&#125;</span>\n该数大概率是素数&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;检测结果：<span class="subst">&#123;large_number&#125;</span>\n该数是合数&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="数据分析-包括算法测试数据的分析，运行结果截图等等"><a href="#数据分析-包括算法测试数据的分析，运行结果截图等等" class="headerlink" title="数据分析(包括算法测试数据的分析，运行结果截图等等)"></a>数据分析(包括算法测试数据的分析，运行结果截图等等)</h2><h3 id="对2-txt文件中的大整数进行检测："><a href="#对2-txt文件中的大整数进行检测：" class="headerlink" title="对2.txt文件中的大整数进行检测："></a>对2.txt文件中的大整数进行检测：</h3><p><img src="https://pic1.imgdb.cn/item/690761933203f7be00c41205.png" alt=""></p>
+<h3 id="对4-txt文件中的大整数进行检测："><a href="#对4-txt文件中的大整数进行检测：" class="headerlink" title="对4.txt文件中的大整数进行检测："></a>对4.txt文件中的大整数进行检测：</h3><p><img src="https://pic1.imgdb.cn/item/690761933203f7be00c41206.png" alt=""></p>
+<h2 id="思考与总结"><a href="#思考与总结" class="headerlink" title="思考与总结"></a>思考与总结</h2><ol>
 <li>如果有一个整数𝒂，(𝒂,𝒎)=𝟏，使得𝒂𝒎−𝟏≡𝟏 𝒎𝒐𝒅 𝒎 则𝒎一定是一个素数吗？为什么？（请简述并举例说明，不能只简单回答“是”或“不是”）  </li>
-</ul>
+</ol>
+<blockquote>
 <p>答：不一定。例如a=8,m=63，a和m互素，并且满足863-1≡1(mod63)，也就是am-1≡1(modm)，但是m并不是素数。</p>
-<ul>
+</blockquote>
+<ol>
 <li>Fermat素性检测中都用到了哪些运算？分别实现什么功能？请简述。</li>
-</ul>
-<p>答:（1）用到了求模运算，主要是计算。</p>
-<p>（2）判断两个数是否互素，主要是计算g=(a,m)，g是否等于1。 </p>
-<ul>
+</ol>
+<blockquote>
+<p>答:（1）用到了求模运算，主要是计算。<br>（2）判断两个数是否互素，主要是计算g=(a,m)，g是否等于1。 </p>
+</blockquote>
+<ol>
 <li>你还了解哪种素性检测算法？请简述，并分析其与Fermat素性检测算法的区别与联系。</li>
-</ul>
+</ol>
+<blockquote>
 <p>答：米勒-拉宾（Miller-Rabin）素性检测算法，两者的联系在于：均为概率性算法，核心依赖模幂运算，且真正的素数必能通过两者的检测。区别在于：米勒-拉宾引入二次探测定理，测试条件更严格，能有效规避费马检测无法识别的卡迈克尔数，准确性和实用性更高；费马检测仅依赖单一条件，易受伪素数干扰，而米勒-拉宾在特定范围内可通过固定基底实现确定性检测。</p>
-<ul>
+</blockquote>
+<ol>
 <li>实验过程中还遇到了什么问题，如何解决的？通过该实验有何收获？</li>
-</ul>
+</ol>
+<blockquote>
 <p>答：通过Fermat素性检测实验，不仅深入理解了该算法的原理与局限性还掌握了快速模幂等优化技巧以应对大整数运算挑战；同时，结合数论知识体会到理论与实践的差距，认识到概率性算法需在效率与准确性间权衡，也为后续理解更优算法奠定了基础，培养了针对具体问题选择和优化算法的思维。</p>
-<p><strong>实验报告提交说明</strong>：</p>
-<p>实验报告同时提交word文档与源代码（.c或者.py）。</p>
-<p>实验报告与源代码命名规则：实验1-学号-姓名，例如：实验1-20009200400-张三。</p>
-<p>请于截止日期前在西电智课平台（学在西电）提交相关文档，逾期未提交，该部分成绩记为0分，周知。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.justok.pw">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.justok.pw/2025/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/Fermat/">http://blog.justok.pw/2025/10/19/信息安全基础与密码学综合实验/Fermat/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.justok.pw" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/23/%E8%BD%AF%E4%BB%B6%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/%E6%B7%B7%E6%B7%86%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" title="软件逆向工程——混淆指令序列分析报告"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">软件逆向工程——混淆指令序列分析报告</div></div><div class="info-2"><div class="info-item-1">混淆指令序列分析报告初始状态说明分析对象为以下指令序列，涉及栈操作、寄存器操作及条件转移相关逻辑：   push addr_branch_default  ; 压入默认分支地址 push ebx                  ; 压入ebx寄存器值 push edx                  ; 压入edx寄存器值 mov ebx, [esp+8]          ; 从栈中读取默认分支地址到ebx mov edx, addr_branch_jmp  ; 将目标跳转地址存入edx cmovz ebx, edx            ; 若ZF=1，ebx更新为addr_branch_jmp；否则ebx保持不变 mov [esp+8], ebx          ; 将ebx的值写回栈中（覆盖原默认分支地址位置） pop edx                   ; 恢复edx寄存器 pop ebx                   ; 恢复ebx寄存器 ret                       ; 从栈顶弹出地址并跳转  栈偏移说明：假设初始栈顶为es...</div></div></div></a><a class="pagination-related" href="/2025/04/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%BC%96%E7%A8%8B/" title="操作系统综合实验(四)——多线程与信号量编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">操作系统综合实验(四)——多线程与信号量编程</div></div><div class="info-2"><div class="info-item-1">操作系统综合实验(四)——多线程与信号量编程一、实验题目生产者—消费者问题&ensp;&ensp;&ensp;&ensp;在第 5.7.1 节中，我们提出了一种使用有界缓冲区的信号量解决方案来解决生产者消费者问题。你将使用图 5.9 和 5.10 中所示的生产者和消费者进程来设计有界缓冲区问题的编程解决方案。5.7.1 节中介绍的解决方案使用三个信号量：empty 和 full，它们计算缓冲区中空槽和满槽的数量，以及 mutex，它是一个二进制（或互斥）信号量，用于保护实际插入或删除缓冲区中的项目。你将使用标准计数信号量表示empty和full，并使用互斥锁而不是二进制信号量来表示mutex。生产者和消费者作为单独的线程运行——将产品移入和移出与empty、full和mutex结构同步的缓冲区。可以使用 Pthreads 或 Windows API 实现。&ensp;&ensp;&ensp;&ensp;生产者线程将在随机休眠一段时间和将随机整数插入缓冲区之间交替。随机数将使用 rand() 函数产生，该函数产生介于 O 和 RAND_MAX 之间的随机整数。消费者也会随机休眠一段...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Fermat%E7%B4%A0%E6%80%A7%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">Fermat素性检测算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84%EF%BC%88%E5%8C%85%E6%8B%AC%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E3%80%81%E5%AE%9E%E7%8E%B0%E7%9B%AE%E6%A0%87%E7%AD%89%E7%AD%89%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">一、实验目的（包括实验环境、实现目标等等）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E7%A8%8B%E5%BA%8F%EF%BC%9A%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%B9%B6%E6%89%A7%E8%A1%8C%E6%A3%80%E6%B5%8B"><span class="toc-number">2.</span> <span class="toc-text">主程序：读取文件并执行检测</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/01/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ElGamal%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/" title="信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法">信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法</a><time datetime="2025-11-01T01:30:21.000Z" title="发表于 2025-11-01 09:30:21">2025-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/29/markdown%E4%B8%AD%E7%BC%96%E8%BE%91%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/" title="无标题">无标题</a><time datetime="2025-10-29T14:39:09.069Z" title="发表于 2025-10-29 22:39:09">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E5%9F%BA%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86%E5%85%B1%E4%BA%AB%E6%96%B9%E6%A1%88/" title="信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案">信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案</a><time datetime="2025-10-27T08:08:42.000Z" title="发表于 2025-10-27 16:08:42">2025-10-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/25/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" title="信息安全基础与密码学综合实验(二)——中国剩余定理">信息安全基础与密码学综合实验(二)——中国剩余定理</a><time datetime="2025-10-25T07:40:00.000Z" title="发表于 2025-10-25 15:40:00">2025-10-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/23/%E8%BD%AF%E4%BB%B6%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/windows%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E5%AE%9E%E9%AA%8C%E4%B8%8A%E6%9C%BA%E6%8A%A5%E5%91%8A/" title="软件逆向工程——Windows系统编程实验上机报告">软件逆向工程——Windows系统编程实验上机报告</a><time datetime="2025-10-23T08:44:59.000Z" title="发表于 2025-10-23 16:44:59">2025-10-23</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-flex"><div class="footer-flex-items"><div class="footer-flex-item"><div class="footer-flex-title">其他</div><div class="footer-flex-content"><a href="/links/" target="_blank" title="友链">友链</a></div></div></div><div class="footer-flex-items"><div class="footer-flex-item"><div class="footer-flex-title">框架</div><div class="footer-flex-content"><a href="https://hexo.io/zh-cn/" target="_blank" title="Hexo">Hexo</a><a href="https://butterfly.js.org/" target="_blank" title="Butterfly">Butterfly</a></div></div></div></div><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2025 By just.ok</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.justok.pw">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.justok.pw/2025/10/19/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/Fermat/">http://blog.justok.pw/2025/10/19/信息安全基础与密码学综合实验/Fermat/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.justok.pw" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/23/%E8%BD%AF%E4%BB%B6%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/%E6%B7%B7%E6%B7%86%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" title="软件逆向工程——混淆指令序列分析报告"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">软件逆向工程——混淆指令序列分析报告</div></div><div class="info-2"><div class="info-item-1">混淆指令序列分析报告初始状态说明分析对象为以下指令序列，涉及栈操作、寄存器操作及条件转移相关逻辑：   push addr_branch_default  ; 压入默认分支地址 push ebx                  ; 压入ebx寄存器值 push edx                  ; 压入edx寄存器值 mov ebx, [esp+8]          ; 从栈中读取默认分支地址到ebx mov edx, addr_branch_jmp  ; 将目标跳转地址存入edx cmovz ebx, edx            ; 若ZF=1，ebx更新为addr_branch_jmp；否则ebx保持不变 mov [esp+8], ebx          ; 将ebx的值写回栈中（覆盖原默认分支地址位置） pop edx                   ; 恢复edx寄存器 pop ebx                   ; 恢复ebx寄存器 ret                       ; 从栈顶弹出地址并跳转  栈偏移说明：假设初始栈顶为es...</div></div></div></a><a class="pagination-related" href="/2025/04/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%BC%96%E7%A8%8B/" title="操作系统综合实验(四)——多线程与信号量编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">操作系统综合实验(四)——多线程与信号量编程</div></div><div class="info-2"><div class="info-item-1">操作系统综合实验(四)——多线程与信号量编程一、实验题目生产者—消费者问题&ensp;&ensp;&ensp;&ensp;在第 5.7.1 节中，我们提出了一种使用有界缓冲区的信号量解决方案来解决生产者消费者问题。你将使用图 5.9 和 5.10 中所示的生产者和消费者进程来设计有界缓冲区问题的编程解决方案。5.7.1 节中介绍的解决方案使用三个信号量：empty 和 full，它们计算缓冲区中空槽和满槽的数量，以及 mutex，它是一个二进制（或互斥）信号量，用于保护实际插入或删除缓冲区中的项目。你将使用标准计数信号量表示empty和full，并使用互斥锁而不是二进制信号量来表示mutex。生产者和消费者作为单独的线程运行——将产品移入和移出与empty、full和mutex结构同步的缓冲区。可以使用 Pthreads 或 Windows API 实现。&ensp;&ensp;&ensp;&ensp;生产者线程将在随机休眠一段时间和将随机整数插入缓冲区之间交替。随机数将使用 rand() 函数产生，该函数产生介于 O 和 RAND_MAX 之间的随机整数。消费者也会随机休眠一段...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84%EF%BC%88%E5%8C%85%E6%8B%AC%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E3%80%81%E5%AE%9E%E7%8E%B0%E7%9B%AE%E6%A0%87%E7%AD%89%E7%AD%89%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">实验目的（包括实验环境、实现目标等等）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">实验环境：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%9B%AE%E6%A0%87%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">实现目标：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1%EF%BC%88%E5%8C%85%E6%8B%AC%E8%83%8C%E6%99%AF%E3%80%81%E5%8E%9F%E7%90%86%E3%80%81%E5%BF%85%E8%A6%81%E7%9A%84%E5%85%AC%E5%BC%8F%E3%80%81%E5%9B%BE%E8%A1%A8%E3%80%81%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4%E7%AD%89%E7%AD%89%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">方案设计（包括背景、原理、必要的公式、图表、算法步骤等等）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">算法步骤：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">方案实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">3.1.</span> <span class="toc-text">算法流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D"><span class="toc-number">3.2.</span> <span class="toc-text">主要函数介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E4%BB%A3%E7%A0%81"><span class="toc-number">3.3.</span> <span class="toc-text">主要代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90-%E5%8C%85%E6%8B%AC%E7%AE%97%E6%B3%95%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E6%9E%90%EF%BC%8C%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E6%88%AA%E5%9B%BE%E7%AD%89%E7%AD%89"><span class="toc-number">4.</span> <span class="toc-text">数据分析(包括算法测试数据的分析，运行结果截图等等)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B92-txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%95%B4%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%A3%80%E6%B5%8B%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">对2.txt文件中的大整数进行检测：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B94-txt%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%95%B4%E6%95%B0%E8%BF%9B%E8%A1%8C%E6%A3%80%E6%B5%8B%EF%BC%9A"><span class="toc-number">4.2.</span> <span class="toc-text">对4.txt文件中的大整数进行检测：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%80%83%E4%B8%8E%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">思考与总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/01/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/ElGamal%E5%85%AC%E9%92%A5%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95/" title="信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法">信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法</a><time datetime="2025-11-01T01:30:21.000Z" title="发表于 2025-11-01 09:30:21">2025-11-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/29/markdown%E4%B8%AD%E7%BC%96%E8%BE%91%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/" title="无标题">无标题</a><time datetime="2025-10-29T14:39:09.069Z" title="发表于 2025-10-29 22:39:09">2025-10-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/27/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E5%9F%BA%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86%E5%85%B1%E4%BA%AB%E6%96%B9%E6%A1%88/" title="信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案">信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案</a><time datetime="2025-10-27T08:08:42.000Z" title="发表于 2025-10-27 16:08:42">2025-10-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/25/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" title="信息安全基础与密码学综合实验(二)——中国剩余定理">信息安全基础与密码学综合实验(二)——中国剩余定理</a><time datetime="2025-10-25T07:40:00.000Z" title="发表于 2025-10-25 15:40:00">2025-10-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/23/%E8%BD%AF%E4%BB%B6%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/windows%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E5%AE%9E%E9%AA%8C%E4%B8%8A%E6%9C%BA%E6%8A%A5%E5%91%8A/" title="软件逆向工程——Windows系统编程实验上机报告">软件逆向工程——Windows系统编程实验上机报告</a><time datetime="2025-10-23T08:44:59.000Z" title="发表于 2025-10-23 16:44:59">2025-10-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a target="_blank" rel="noopener" href="https://blog.3ms.run/link">网址导航</a></li><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/">来杯咖啡</a><a target="_blank" rel="noopener" href="https://blog.3ms.run/comments">留点什么</a></li><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/categories">文章分类</a><a target="_blank" rel="noopener" href="https://blog.3ms.run/tags">文章标签</a></li><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/">我的相册</a><a target="_blank" rel="noopener" href="https://blog.3ms.run/">我的追番</a></li><li><a target="_blank" rel="noopener" href="https://blog.3ms.run/">一些特效</a><a target="_blank" rel="noopener" href="https://blog.3ms.run/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.3ms.run/"><img src="/img/avatar-icon.jpg" alt=" ZeroLatency" title="ZeroLatency"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2025  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
   const loadMathjax = () => {
     if (!window.MathJax) {
       window.MathJax = {
@@ -408,4 +338,4 @@ else:
 
   btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
   window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
-})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
