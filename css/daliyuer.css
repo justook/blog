@@ -184,6 +184,8 @@
 }
 
 /* 自定义底部  End */
+
+/* 版权与框架信息居中 */
 .copyright, .framework-info {
     text-align: center;
     width: 100%;
@@ -201,3 +203,4 @@
     display: inline-block;
     margin: 0 5px;
 }
+/* 版权与框架信息居中end */
