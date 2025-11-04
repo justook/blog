@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>相册 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.imgdb.cn&#x2F;item&#x2F;6908b7233203f7be00cc7955.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;},{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.imgdb.cn&#x2F;item&#x2F;6908b7233203f7be00cc7957.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;},{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="相册">
+<meta property="og:url" content="http://blog.justok.pw/Gallery/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="[{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.imgdb.cn&#x2F;item&#x2F;6908b7233203f7be00cc7955.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;},{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.imgdb.cn&#x2F;item&#x2F;6908b7233203f7be00cc7957.jpg&quot;,&quot;alt&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;},{&quot;url&quot;:&quot;https:&#x2F;&#x2F;pic1.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg">
+<meta property="article:published_time" content="2025-11-04T09:01:36.000Z">
+<meta property="article:modified_time" content="2025-11-04T09:16:23.075Z">
+<meta property="article:author" content="just.ok">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.justok.pw/Gallery/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '相册',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/67d981e288c538a9b5c04e46.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">相册</h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><!-- 1-66 -->
+<div class="gallery-container" data-type="data" data-button="" data-limit="10" data-first="10">
+    <div class="gallery-items">[{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cd.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cc.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79d1.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79d0.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0d.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a10.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0e.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a11.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a21.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a24.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a25.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a22.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a23.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7ef3203f7be00cc7a29.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7ef3203f7be00cc7a28.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6908b7ef3203f7be00cc7a2a.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bf6a3203f7be00cf703c.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bf6b3203f7be00cf703e.png","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bf693203f7be00cf7039.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c5.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c7.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c8.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c6.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c5.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c7.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c8.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c6.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c5.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c7.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c8.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c6.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7140.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7141.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe23203f7be00cf7144.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7142.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7143.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7171.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7172.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7173.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7174.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7175.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bfed3203f7be00cf7176.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bff93203f7be00cf718d.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bff93203f7be00cf7190.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bff93203f7be00cf718e.jpg","alt":"","title":""},{"url":"https://pic1.imgdb.cn/item/6909bff93203f7be00cf718f.jpg","alt":"","title":""}]</div>
+  </div>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/2a4d6d4f/" title="markdown中编写数学公式"><img src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a23.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="markdown中编写数学公式"/></a><div class="content"><a class="title" href="/posts/2a4d6d4f/" title="markdown中编写数学公式">markdown中编写数学公式</a><time datetime="2025-11-01T13:19:02.000Z" title="发表于 2025-11-01 21:19:02">2025-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fac93ced/" title="信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法"><img src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a21.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法"/></a><div class="content"><a class="title" href="/posts/fac93ced/" title="信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法">信息安全基础与密码学综合实验(四)——ElGamal公钥密码算法</a><time datetime="2025-11-01T01:30:21.000Z" title="发表于 2025-11-01 09:30:21">2025-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/34530dc3/" title="信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案"/></a><div class="content"><a class="title" href="/posts/34530dc3/" title="信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案">信息安全基础与密码学综合实验(三)——基于中国剩余定理的秘密共享方案</a><time datetime="2025-10-27T08:08:42.000Z" title="发表于 2025-10-27 16:08:42">2025-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/8b57213f/" title="信息安全基础与密码学综合实验(二)——中国剩余定理"><img src="https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="信息安全基础与密码学综合实验(二)——中国剩余定理"/></a><div class="content"><a class="title" href="/posts/8b57213f/" title="信息安全基础与密码学综合实验(二)——中国剩余定理">信息安全基础与密码学综合实验(二)——中国剩余定理</a><time datetime="2025-10-25T07:40:00.000Z" title="发表于 2025-10-25 15:40:00">2025-10-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/d27b86f/" title="软件逆向工程——Windows系统编程实验上机报告"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="软件逆向工程——Windows系统编程实验上机报告"/></a><div class="content"><a class="title" href="/posts/d27b86f/" title="软件逆向工程——Windows系统编程实验上机报告">软件逆向工程——Windows系统编程实验上机报告</a><time datetime="2025-10-23T08:44:59.000Z" title="发表于 2025-10-23 16:44:59">2025-10-23</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AF%86%E7%A0%81%E5%AD%A6%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/"><span class="card-category-list-name">信息安全基础与密码学综合实验</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/"><span class="card-category-list-name">操作系统综合实验</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="card-category-list-name">数据结构</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%A9%BA%E9%97%B4%E5%AE%89%E5%85%A8%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">网络空间安全数学基础</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%BD%AF%E4%BB%B6%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/"><span class="card-category-list-name">软件逆向工程</span><span class="card-category-list-count">2</span></a></li>
+          </ul></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/11/">
+            <span class="card-archive-list-date">
+              十一月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/04/">
+            <span class="card-archive-list-date">
+              四月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              三月 2025
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/11/">
+            <span class="card-archive-list-date">
+              十一月 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">15</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">18.8k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-04T09:34:35.844Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.justok.pw/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.justok.pw/link">网址导航</a></li><li><a href="https://blog.justok.pw/">来杯咖啡</a><a href="https://blog.justok.pw/comments">留点什么</a></li><li><a href="https://blog.justok.pw/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.justok.pw/categories">文章分类</a><a href="https://blog.justok.pw/tags">文章标签</a></li><li><a href="https://blog.justok.pw/Gallery/">我的相册</a><a href="https://blog.justok.pw/">我的追番</a></li><li><a href="https://blog.justok.pw/">一些特效</a><a href="https://blog.justok.pw/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a href="https://blog.justok.pw/"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" alt="just.ok" title="just.ok"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2025  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/11.png);"> <a class="categoryBar-list-link" href="/categories/网络空间安全数学基础/">网络空间安全数学基础</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(/img/12.png);"> <a class="categoryBar-list-link" href="/categories/数据结构/">数据结构</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(/img/13.png);"> <a class="categoryBar-list-link" href="/categories/信息安全基础与密码学综合实验/">信息安全基础与密码学综合实验</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(/img/14.png);"> <a class="categoryBar-list-link" href="/categories/软件逆向工程/">软件逆向工程</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(/img/15.png);"> <a class="categoryBar-list-link" href="/categories/操作系统综合实验/">操作系统综合实验</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">5</span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
