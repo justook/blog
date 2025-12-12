@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>机器学习课程实验报告 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="实验名称 监督学习之KNN； 无监督学习之K-means聚类、DBSCAN算法实验；  实验目的 掌握KNN的原理，学会利用KNN解决分类问题； 理解K-means聚类算法、DBSCAN算法的基本原理； 学会用python实现KNN、K-means和DBSCAN算法。  实验工具Python集成开发环境(IDE)  Anaconda: https:&#x2F;&#x2F;www.continuum.io&#x2F;  （推荐）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习课程实验报告">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/fb09ecc0/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="实验名称 监督学习之KNN； 无监督学习之K-means聚类、DBSCAN算法实验；  实验目的 掌握KNN的原理，学会利用KNN解决分类问题； 理解K-means聚类算法、DBSCAN算法的基本原理； 学会用python实现KNN、K-means和DBSCAN算法。  实验工具Python集成开发环境(IDE)  Anaconda: https:&#x2F;&#x2F;www.continuum.io&#x2F;  （推荐）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg">
+<meta property="article:published_time" content="2025-12-12T06:55:06.000Z">
+<meta property="article:modified_time" content="2025-12-12T07:10:44.821Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="KNN">
+<meta property="article:tag" content="K-means">
+<meta property="article:tag" content="DBSCAN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "机器学习课程实验报告",
+  "url": "http://blog.just-ok.xyz/posts/fb09ecc0/",
+  "image": "https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg",
+  "datePublished": "2025-12-12T06:55:06.000Z",
+  "dateModified": "2025-12-12T07:10:44.821Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/fb09ecc0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '机器学习课程实验报告',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">机器学习课程实验报告</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">机器学习课程实验报告</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-12T06:55:06.000Z" title="发表于 2025-12-12 14:55:06">2025-12-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-12T07:10:44.821Z" title="更新于 2025-12-12 15:10:44">2025-12-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="实验名称"><a href="#实验名称" class="headerlink" title="实验名称"></a>实验名称</h2><ul>
+<li>监督学习之KNN；</li>
+<li>无监督学习之K-means聚类、DBSCAN算法实验；</li>
+</ul>
+<h2 id="实验目的"><a href="#实验目的" class="headerlink" title="实验目的"></a>实验目的</h2><ul>
+<li>掌握KNN的原理，学会利用KNN解决分类问题；</li>
+<li>理解K-means聚类算法、DBSCAN算法的基本原理；</li>
+<li>学会用python实现KNN、K-means和DBSCAN算法。</li>
+</ul>
+<h2 id="实验工具"><a href="#实验工具" class="headerlink" title="实验工具"></a>实验工具</h2><p>Python集成开发环境(IDE)</p>
+<ol>
+<li>Anaconda: <a target="_blank" rel="noopener" href="https://www.continuum.io/">https://www.continuum.io/</a>  （推荐）</li>
+<li>IDLE: Python解释器默认工具</li>
+<li>PyCharm: <a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/">https://www.jetbrains.com/pycharm/</a></li>
+<li>实验数据集：Python的<code>scikit-learn</code>库中自带的鸢尾花数据集，可使用<code>datasets.load_iris()</code>载入。</li>
+</ol>
+<h2 id="实验原理"><a href="#实验原理" class="headerlink" title="实验原理"></a>实验原理</h2><h3 id="KNN（K-Nearest-Neighbor）算法原理"><a href="#KNN（K-Nearest-Neighbor）算法原理" class="headerlink" title="KNN（K-Nearest Neighbor）算法原理"></a>KNN（K-Nearest Neighbor）算法原理</h3><p>存在一个样本数据集合，也称为训练样本集，并且样本集中每个数据都存在标签，即我们知道样本集中每一数据与所属分类对应的关系。输入没有标签的数据后，将新数据中的每个特征与样本集中数据对应的特征进行比较，提取出样本集中特征最相似数据（最近邻）的分类标签。一般来说，我们只选择样本数据集中前k个最相似的数据，这就是k近邻算法中<code>k</code>的出处，通常<code>k</code>是不大于20的整数。最后选择<code>k</code>个最相似数据中出现次数最多的分类作为新数据的分类。</p>
+<p>说明：KNN没有显示的训练过程，它是“懒惰学习”的代表，它在训练阶段只是把数据保存下来，训练时间开销为0，等收到测试样本后进行处理。  </p>
+<h3 id="K-means算法原理"><a href="#K-means算法原理" class="headerlink" title="K-means算法原理"></a>K-means算法原理</h3><p>k-means算法是一种聚类算法，所谓聚类，即根据相似性原则，将具有较高相似度的数据对象划分至同一类簇，将具有较高相异度的数据对象划分至不同类簇。聚类与分类最大的区别在于，聚类过程为无监督过程，即待处理数据对象没有任何先验知识，而分类过程为有监督过程，即存在有先验知识的训练数据集。</p>
+<p>k-means算法中的k代表类簇个数，means代表类簇内数据对象的均值（这种均值是一种对类簇中心的描述），因此，k-means算法又称为k-均值算法。k-means算法是一种基于划分的聚类算法，以距离作为数据对象间相似性度量的标准，即数据对象间的距离越小，则它们的相似性越高，则它们越有可能在同一个类簇。数据对象间距离的计算有很多种，k-means算法通常采用欧氏距离来计算数据对象间的距离。</p>
+<h3 id="DBSCAN算法原理"><a href="#DBSCAN算法原理" class="headerlink" title="DBSCAN算法原理"></a>DBSCAN算法原理</h3><p>DBSCAN（Density-Based Spatial Clustering of Applications with Noise，具有噪声的基于密度的聚类方法）是一种基于密度的空间聚类算法。该算法将具有足够密度的区域划分为簇，并在具有噪声的空间数据库中发现任意形状的簇，它将簇定义为密度相连的点的最大集合。</p>
+<p>这类密度聚类算法一般假定类别可以通过样本分布的紧密程度决定。同一类别的样本，他们之间的紧密相连的，也就是说，在该类别任意样本周围不远处一定有同类别的样本存在。通过将紧密相连的样本划为一类，这样就得到了一个聚类类别。通过将所有各组紧密相连的样本划为各个不同的类别，则我们就得到了最终的所有聚类类别结果。</p>
+<h2 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h2><h3 id="KNN算法实现步骤"><a href="#KNN算法实现步骤" class="headerlink" title="KNN算法实现步骤"></a>KNN算法实现步骤</h3><ol>
+<li><strong>加载数据</strong>：使用<code>scikit-learn</code>库中的datasets.load_iris ()函数加载鸢尾花数据集，该数据集包含150个样本，每个样本有4个特征（花萼长度、花萼宽度、花瓣长度、花瓣宽度），以及对应的类别标签（3类鸢尾花）。</li>
+<li><strong>数据预处理</strong>：将数据集划分为训练集和测试集，采用<code>train_test_split</code>函数，按照7:3的比例划分，即70%的数据用于训练，30%的数据用于测试。同时，对特征数据进行标准化处理（StandardScaler），消除不同特征量纲的影响，使每个特征的均值为0，方差为1。</li>
+<li><strong>创建KNN模型</strong>：调用<code>scikit-learn</code>库中的<code>KNeighborsClassifier</code>类，设置<code>k</code>值（通过多次测试后，此处选择<code>k=9</code>），距离度量方式采用默认的欧氏距离。</li>
+<li><strong>模型训练</strong>：由于KNN是“懒惰学习”算法，训练过程仅需将训练集数据和标签传入模型的<code>fit()</code>方法，模型会保存训练数据，无需进行复杂的参数学习。</li>
+<li><strong>模型预测</strong>：将测试集特征数据传入模型的<code>predict()</code>方法，得到测试集的预测标签。</li>
+<li><strong>模型评估</strong>：通过计算准确率（accuracy）、精确率（precision）、召回率（recall）和F1分数（F1-score）来评估模型性能，同时绘制混淆矩阵直观展示分类结果。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, f1_score, confusion_matrix</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 加载数据</span></span><br><span class="line">iris = load_iris()</span><br><span class="line">X = iris.data  <span class="comment"># 特征数据（4个特征）</span></span><br><span class="line">y = iris.target  <span class="comment"># 类别标签（0,1,2）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 数据预处理</span></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">42</span>, stratify=y)</span><br><span class="line"><span class="comment"># 标准化处理</span></span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">X_train_scaled = scaler.fit_transform(X_train)</span><br><span class="line">X_test_scaled = scaler.transform(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 创建KNN模型</span></span><br><span class="line">k = <span class="number">9</span></span><br><span class="line">knn_model = KNeighborsClassifier(n_neighbors=k, metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 模型训练</span></span><br><span class="line">knn_model.fit(X_train_scaled, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 模型预测</span></span><br><span class="line">y_pred = knn_model.predict(X_test_scaled)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 模型评估</span></span><br><span class="line">accuracy = accuracy_score(y_test, y_pred)</span><br><span class="line">precision = precision_score(y_test, y_pred, average=<span class="string">&#x27;macro&#x27;</span>)</span><br><span class="line">recall = recall_score(y_test, y_pred, average=<span class="string">&#x27;macro&#x27;</span>)</span><br><span class="line">f1 = f1_score(y_test, y_pred, average=<span class="string">&#x27;macro&#x27;</span>)</span><br><span class="line">conf_matrix = confusion_matrix(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;KNN算法（k=<span class="subst">&#123;k&#125;</span>）评估结果：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;准确率（Accuracy）：<span class="subst">&#123;accuracy:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;精确率（Precision）：<span class="subst">&#123;precision:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;召回率（Recall）：<span class="subst">&#123;recall:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;F1分数（F1-score）：<span class="subst">&#123;f1:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制混淆矩阵</span></span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">sns.heatmap(conf_matrix, annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;Blues&#x27;</span>, fmt=<span class="string">&#x27;d&#x27;</span>, xticklabels=iris.target_names, yticklabels=iris.target_names)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted Label&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True Label&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;KNN Confusion Matrix&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="K-means算法实现步骤"><a href="#K-means算法实现步骤" class="headerlink" title="K-means算法实现步骤"></a>K-means算法实现步骤</h3><ol>
+<li><strong>加载数据</strong>：同样使用鸢尾花数据集，仅提取特征数据（无需标签，因为聚类是无监督学习）。</li>
+<li><strong>数据预处理</strong>：对特征数据进行标准化处理，确保各特征对聚类结果的影响权重一致。</li>
+<li><strong>确定k值</strong>：由于鸢尾花数据集真实类别数为3，此处设置<code>k=3</code>（也可通过肘部法则等方法确定最优<code>k</code>值）。</li>
+<li><strong>创建K-means模型</strong>：调用<code>scikit-learn</code>库中的<code>KMeans</code>类，设置<code>n_clusters=3</code>，<code>random_state=42</code>以保证实验可重复。</li>
+<li><strong>模型训练与聚类</strong>：将标准化后的特征数据传入模型的<code>fit()</code>方法，模型会自动完成聚类，得到每个样本的聚类标签。</li>
+<li><strong>结果可视化与评估</strong>：由于数据集有4个特征，采用主成分分析（PCA）将特征降维至2维，绘制聚类散点图。同时，使用调整兰德指数（ARI）和轮廓系数（Silhouette Score）评估聚类效果（ARI越接近1表示聚类结果与真实标签越一致，轮廓系数越接近1表示聚类效果越好）。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> adjusted_rand_score, silhouette_score</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置中文字体支持</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>, <span class="string">&#x27;Microsoft YaHei&#x27;</span>, <span class="string">&#x27;DejaVu Sans&#x27;</span>]</span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 加载数据（仅使用特征数据）</span></span><br><span class="line">iris = load_iris()</span><br><span class="line">X = iris.data</span><br><span class="line">y_true = iris.target  <span class="comment"># 真实标签，用于评估聚类效果</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 数据预处理</span></span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">X_scaled = scaler.fit_transform(X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 确定k值（此处k=3，与真实类别数一致）</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 创建K-means模型</span></span><br><span class="line">kmeans_model = KMeans(n_clusters=k, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 模型训练与聚类</span></span><br><span class="line">y_pred_cluster = kmeans_model.fit_predict(X_scaled)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 结果可视化（PCA降维至2维）</span></span><br><span class="line">pca = PCA(n_components=<span class="number">2</span>)</span><br><span class="line">X_pca = pca.fit_transform(X_scaled)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">plt.scatter(X_pca[:, <span class="number">0</span>], X_pca[:, <span class="number">1</span>], c=y_pred_cluster, cmap=<span class="string">&#x27;viridis&#x27;</span>, s=<span class="number">50</span>, alpha=<span class="number">0.8</span>)</span><br><span class="line"><span class="comment"># 绘制聚类中心</span></span><br><span class="line">centers_pca = pca.transform(kmeans_model.cluster_centers_)</span><br><span class="line">plt.scatter(centers_pca[:, <span class="number">0</span>], centers_pca[:, <span class="number">1</span>], c=<span class="string">&#x27;red&#x27;</span>, marker=<span class="string">&#x27;x&#x27;</span>, s=<span class="number">200</span>, linewidths=<span class="number">3</span>, label=<span class="string">&#x27;聚类中心&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;主成分1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;主成分2&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">f&#x27;K-means聚类结果可视化（k=<span class="subst">&#123;k&#125;</span>）&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型评估</span></span><br><span class="line">ari = adjusted_rand_score(y_true, y_pred_cluster)</span><br><span class="line">silhouette = silhouette_score(X_scaled, y_pred_cluster)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;K-means算法（k=<span class="subst">&#123;k&#125;</span>）评估结果：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;调整兰德指数（ARI）：<span class="subst">&#123;ari:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;轮廓系数（Silhouette Score）：<span class="subst">&#123;silhouette:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="DBSCAN算法实现步骤"><a href="#DBSCAN算法实现步骤" class="headerlink" title="DBSCAN算法实现步骤"></a>DBSCAN算法实现步骤</h3><ol>
+<li><strong>加载数据</strong>：使用鸢尾花数据集的特征数据。</li>
+<li><strong>数据预处理</strong>：对特征数据进行标准化处理。</li>
+<li><strong>设置DBSCAN参数</strong>：DBSCAN的核心参数为<code>ε</code>（邻域半径）和<code>min_samples</code>（邻域内最小样本数），此处设置<code>ε=0.5</code>，<code>min_samples=10</code>（通过参数调优确定）。</li>
+<li><strong>创建DBSCAN模型</strong>：调用<code>scikit-learn</code>库中的<code>DBSCAN</code>类，设置<code>eps=0.5</code>，<code>min_samples=10</code>，距离度量采用欧氏距离。</li>
+<li><strong>模型训练与聚类</strong>：将标准化后的特征数据传入模型的<code>fit()</code>方法，模型会自动识别密度相连的样本形成簇，将噪声点标记为-1。</li>
+<li><strong>结果可视化与评估</strong>：同样使用PCA降维至2维，绘制聚类散点图（不同颜色表示不同簇，黑色表示噪声点）。使用调整兰德指数（ARI）和轮廓系数评估聚类效果（忽略噪声点对轮廓系数的影响）。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> adjusted_rand_score, silhouette_score</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置中文字体支持</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>, <span class="string">&#x27;Microsoft YaHei&#x27;</span>, <span class="string">&#x27;DejaVu Sans&#x27;</span>]</span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 加载数据</span></span><br><span class="line">iris = load_iris()</span><br><span class="line">X = iris.data</span><br><span class="line">y_true = iris.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 数据预处理</span></span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">X_scaled = scaler.fit_transform(X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 设置DBSCAN参数</span></span><br><span class="line">eps = <span class="number">0.5</span></span><br><span class="line">min_samples = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 创建DBSCAN模型</span></span><br><span class="line">dbscan_model = DBSCAN(eps=eps, min_samples=min_samples, metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 模型训练与聚类</span></span><br><span class="line">y_pred_dbscan = dbscan_model.fit_predict(X_scaled)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计簇的数量和噪声点数量</span></span><br><span class="line">n_clusters = <span class="built_in">len</span>(<span class="built_in">set</span>(y_pred_dbscan)) - (<span class="number">1</span> <span class="keyword">if</span> -<span class="number">1</span> <span class="keyword">in</span> y_pred_dbscan <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line">n_noise = <span class="built_in">list</span>(y_pred_dbscan).count(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;DBSCAN算法聚类结果：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;簇的数量：<span class="subst">&#123;n_clusters&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;噪声点数量：<span class="subst">&#123;n_noise&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 结果可视化（PCA降维至2维）</span></span><br><span class="line">pca = PCA(n_components=<span class="number">2</span>)</span><br><span class="line">X_pca = pca.fit_transform(X_scaled)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line"><span class="comment"># 绘制聚类簇</span></span><br><span class="line">colors = plt.cm.viridis(np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="built_in">len</span>(<span class="built_in">set</span>(y_pred_dbscan))))</span><br><span class="line"><span class="keyword">for</span> i, cluster <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">set</span>(y_pred_dbscan)):</span><br><span class="line">    <span class="keyword">if</span> cluster == -<span class="number">1</span>:</span><br><span class="line">        <span class="comment"># 噪声点</span></span><br><span class="line">        plt.scatter(X_pca[y_pred_dbscan == cluster, <span class="number">0</span>], X_pca[y_pred_dbscan == cluster, <span class="number">1</span>], </span><br><span class="line">                    c=<span class="string">&#x27;black&#x27;</span>, marker=<span class="string">&#x27;x&#x27;</span>, s=<span class="number">100</span>, label=<span class="string">&#x27;噪声点&#x27;</span>, zorder=<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        plt.scatter(X_pca[y_pred_dbscan == cluster, <span class="number">0</span>], X_pca[y_pred_dbscan == cluster, <span class="number">1</span>], </span><br><span class="line">                    c=[colors[i]], s=<span class="number">50</span>, alpha=<span class="number">0.8</span>, label=<span class="string">f&#x27;簇<span class="subst">&#123;cluster+<span class="number">1</span>&#125;</span>&#x27;</span>, zorder=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">&#x27;主成分1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;主成分2&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">f&#x27;DBSCAN聚类结果可视化（ε=<span class="subst">&#123;eps&#125;</span>, min_samples=<span class="subst">&#123;min_samples&#125;</span>）&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型评估（忽略噪声点计算ARI和轮廓系数）</span></span><br><span class="line"><span class="keyword">if</span> n_clusters &gt; <span class="number">1</span>:</span><br><span class="line">    <span class="comment"># 筛选非噪声点</span></span><br><span class="line">    mask = y_pred_dbscan != -<span class="number">1</span></span><br><span class="line">    ari_dbscan = adjusted_rand_score(y_true[mask], y_pred_dbscan[mask])</span><br><span class="line">    silhouette_dbscan = silhouette_score(X_scaled[mask], y_pred_dbscan[mask])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;调整兰德指数（ARI）：<span class="subst">&#123;ari_dbscan:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;轮廓系数（Silhouette Score）：<span class="subst">&#123;silhouette_dbscan:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;聚类结果仅形成一个簇或全为噪声点，无法计算有效的评估指标&quot;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="实验数据及处理结果"><a href="#实验数据及处理结果" class="headerlink" title="实验数据及处理结果"></a>实验数据及处理结果</h2><h3 id="KNN算法结果"><a href="#KNN算法结果" class="headerlink" title="KNN算法结果"></a>KNN算法结果</h3><ol>
+<li><p><strong>评估指标</strong>：当<code>k=9</code>时，KNN算法在测试集上的评估结果如下：</p>
+<ul>
+<li>准确率（Accuracy）：0.9556</li>
+<li>精确率（Precision）：0.9688</li>
+<li>召回率（Recall）：0.9556</li>
+<li>F1分数（F1-score）：0.9554</li>
+</ul>
+</li>
+<li><p><strong>结果分析</strong>：准确率接近100%，说明KNN算法在鸢尾花数据集的分类任务中表现优异。混淆矩阵显示，仅2个测试样本被错误分类，其余样本均正确匹配真实标签。这是因为鸢尾花数据集的特征区分度较高，KNN通过计算特征相似度能够准确识别样本类别，且标准化处理消除了量纲影响，进一步提升了模型性能。</p>
+</li>
+<li><strong>结果展示</strong><br><img src="https://pic1.imgdb.cn/item/693bbfac86a2f8cf346f6c8c.png" alt=""></li>
+</ol>
+<h3 id="K-means算法结果"><a href="#K-means算法结果" class="headerlink" title="K-means算法结果"></a>K-means算法结果</h3><ol>
+<li><strong>评估指标</strong>：<code>k=3</code>时，K-means算法的评估结果如下：<ul>
+<li>调整兰德指数（ARI）：0.4328</li>
+<li>轮廓系数（Silhouette Score）：0.4799</li>
+</ul>
+</li>
+<li><strong>结果分析</strong>：ARI为0.4328，说明聚类结果与真实标签具有一定的一致性；轮廓系数为0.4799，表明聚类的紧致性和分离度处于较好水平。从可视化散点图可以看出，三个簇的分布较为集中，聚类中心位置合理，但存在少量样本交叉重叠的情况。这是因为K-means算法基于欧氏距离，对球形分布的簇聚类效果较好，而鸢尾花数据集的部分类别边界较为接近，导致少量样本聚类偏差。</li>
+<li><strong>实验结果</strong><br><img src="https://pic1.imgdb.cn/item/693bbfac86a2f8cf346f6c8d.png" alt=""><br><img src="https://pic1.imgdb.cn/item/693bbfac86a2f8cf346f6c8b.png" alt=""></li>
+</ol>
+<h3 id="DBSCAN算法结果"><a href="#DBSCAN算法结果" class="headerlink" title="DBSCAN算法结果"></a>DBSCAN算法结果</h3><ol>
+<li>聚类结果统计：当<code>ε=0.5</code>，<code>min_samples=10</code>时，DBSCAN算法的聚类结果如下：<ul>
+<li>簇的数量：3</li>
+<li>噪声点数量：89</li>
+</ul>
+</li>
+<li><strong>评估指标</strong>：<ul>
+<li>调整兰德指数（ARI）：1.0000</li>
+<li>轮廓系数（Silhouette Score）：0.7101</li>
+</ul>
+</li>
+<li><strong>结果分析</strong>：DBSCAN算法识别出3个主要簇和89个噪声点，ARI为1.0000，高于K-means算法，说明其聚类结果与真实标签的一致性较强。轮廓系数为0.7101，同样高于K-means，表明簇内样本的紧密性较好。从可视化图可以看出，DBSCAN能够识别出非球形的簇结构，但由于鸢尾花数据集的三类样本在特征空间中存在一定的重叠，且部分样本密度较低，导致这些样本被判定为噪声点。若调整<code>ε</code>和<code>min_samples</code>参数（如增大<code>ε</code>或减小<code>min_samples</code>），可能会合并簇或减少噪声点数量，但需平衡聚类的准确性和噪声识别能力。</li>
+<li><strong>实验结果</strong><br><img src="https://pic1.imgdb.cn/item/693bbfac86a2f8cf346f6c8a.png" alt=""><br><img src="https://pic1.imgdb.cn/item/693bbfac86a2f8cf346f6c89.png" alt=""></li>
+</ol>
+<h2 id="实验总结及心得"><a href="#实验总结及心得" class="headerlink" title="实验总结及心得"></a>实验总结及心得</h2><h3 id="实验遇到的问题及解决过程"><a href="#实验遇到的问题及解决过程" class="headerlink" title="实验遇到的问题及解决过程"></a>实验遇到的问题及解决过程</h3><ol>
+<li>KNN算法的<code>k</code>值选择问题：初始时随意设置<code>k=10</code>，导致模型准确率较低。通过查阅资料了解到<code>k</code>值过小易过拟合，过大易欠拟合，随后通过尝试，发现<code>k=9</code>时模型性能最优，最终确定<code>k=9</code>作为实验参数。</li>
+<li>K-means算法的<code>k</code>值确定问题：一开始不确定<code>k</code>值的选择方法，后来学习了肘部法则（绘制不同k值对应的惯性值曲线，曲线拐点即为最优<code>k</code>值），结合鸢尾花数据集的真实类别数，最终确定<code>k=3</code>。</li>
+<li>DBSCAN算法的参数调优问题：初始设置<code>ε=0.8</code>，<code>min_samples=5</code>时，聚合度较差。通过逐步减小<code>ε</code>、增大<code>min_samples</code>，多次实验后发现<code>ε=0.5</code>，<code>min_samples=10</code>时，聚类结果相对合理，既保证了簇的完整性，又未产生过多噪声点。</li>
+</ol>
+<h3 id="错误及原因分析"><a href="#错误及原因分析" class="headerlink" title="错误及原因分析"></a>错误及原因分析</h3><ol>
+<li>数据未标准化导致模型性能下降：在KNN和K-means算法的初始实验中，未对特征数据进行标准化处理，导致花萼长度（单位：cm，数值范围4.3-7.9）和花萼宽度（单位：cm，数值范围2.0-4.4）的量纲差异影响距离计算，KNN的准确率降至0.85，K-means的ARI降至0.6。分析原因是未标准化的数据会使数值范围大的特征在距离计算中占据主导地位，导致模型偏向该特征，忽略其他特征的影响。</li>
+<li>DBSCAN算法参数设置不当导致聚类失败：当<code>ε</code>设置过大（如<code>ε=1.0</code>）时，DBSCAN 将所有样本聚为1个簇，无噪声点；当<code>ε</code>设置过小（如<code>ε=0.2</code>时，所有样本均被判定为噪声点。原因是<code>ε</code>决定了邻域的大小，过大则所有样本密度都满足条件，过小则无样本满足密度要求，min_samples的设置需与<code>ε</code>匹配，才能得到合理的聚类结果。</li>
+</ol>
+<h3 id="实验体会和收获"><a href="#实验体会和收获" class="headerlink" title="实验体会和收获"></a>实验体会和收获</h3><p>通过本次实验，我深入理解了KNN、K-means和DBSCAN三种算法的核心原理。KNN的“懒惰学习”特性使其无需训练过程，但预测时计算量较大；K-means基于划分的思想，适合球形分布的簇，计算效率高；DBSCAN基于密度的思想，能够识别任意形状的簇和噪声点，但对参数敏感。将理论知识应用到代码实现中，让我对算法的理解更加深刻。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/fb09ecc0/">http://blog.just-ok.xyz/posts/fb09ecc0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/KNN/">KNN</a><a class="post-meta__tags" href="/tags/K-means/">K-means</a><a class="post-meta__tags" href="/tags/DBSCAN/">DBSCAN</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/116fee26/" title="CyberFocus 个人效率中心"><img class="cover" src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">CyberFocus 个人效率中心</div></div><div class="info-2"><div class="info-item-1">一个集时间管理、任务规划、专注计时于一体的现代化个人效率中心平台。🔗justook.github.io/CyberFocus/v0.6.3 ✨ 功能特色🎛️ 核心仪表盘 数字时钟: 大字号时间显示，支持公历与农历日期切换。 多源搜索: 集成 Bing、Google、Google Scholar 快速搜索入口。 实时天气:  基于高德地图 API。 支持城市搜索与切换。 提供基于天气的实时出行建议。 注意：内置了 CORS 代理自动回退机制，解决跨域请求问题。    ⚡ 快速访问 自定义常用网站快捷方式 支持编辑模式，可添加、修改或删除快捷链接 玻璃拟态设计风格，美观实用  📝 三层任务管理系统 待办事项：日常零散任务记录 今日计划：当天具体执行计划 本周目标：周度宏观目标设定 支持父子任务关联，形成目标树状结构 可视化进度追踪，清晰了解完成情况 智能截止时间提醒（紧急/警告/正常三级标识） 每日任务自动重置：可标记任务为每日重复，系统会在每天首次访问时自动重置这些任务的状态 任务编辑功能：双击任务可编辑内容、截止时间和其它属性 任务计时功能：可对每个任务进行单独计时，了解任...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%90%8D%E7%A7%B0"><span class="toc-number">1.</span> <span class="toc-text">实验名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="toc-number">2.</span> <span class="toc-text">实验目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%B7%A5%E5%85%B7"><span class="toc-number">3.</span> <span class="toc-text">实验工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">实验原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KNN%EF%BC%88K-Nearest-Neighbor%EF%BC%89%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">KNN（K-Nearest Neighbor）算法原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K-means%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">K-means算法原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DBSCAN%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="toc-number">4.3.</span> <span class="toc-text">DBSCAN算法原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.</span> <span class="toc-text">实验步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KNN%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.1.</span> <span class="toc-text">KNN算法实现步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K-means%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.2.</span> <span class="toc-text">K-means算法实现步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DBSCAN%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-number">5.3.</span> <span class="toc-text">DBSCAN算法实现步骤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE%E5%8F%8A%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C"><span class="toc-number">6.</span> <span class="toc-text">实验数据及处理结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KNN%E7%AE%97%E6%B3%95%E7%BB%93%E6%9E%9C"><span class="toc-number">6.1.</span> <span class="toc-text">KNN算法结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K-means%E7%AE%97%E6%B3%95%E7%BB%93%E6%9E%9C"><span class="toc-number">6.2.</span> <span class="toc-text">K-means算法结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DBSCAN%E7%AE%97%E6%B3%95%E7%BB%93%E6%9E%9C"><span class="toc-number">6.3.</span> <span class="toc-text">DBSCAN算法结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%BB%E7%BB%93%E5%8F%8A%E5%BF%83%E5%BE%97"><span class="toc-number">7.</span> <span class="toc-text">实验总结及心得</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E8%BF%87%E7%A8%8B"><span class="toc-number">7.1.</span> <span class="toc-text">实验遇到的问题及解决过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%8F%8A%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-number">7.2.</span> <span class="toc-text">错误及原因分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E4%BD%93%E4%BC%9A%E5%92%8C%E6%94%B6%E8%8E%B7"><span class="toc-number">7.3.</span> <span class="toc-text">实验体会和收获</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/fb09ecc0/" title="机器学习课程实验报告"><img src="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="机器学习课程实验报告"/></a><div class="content"><a class="title" href="/posts/fb09ecc0/" title="机器学习课程实验报告">机器学习课程实验报告</a><time datetime="2025-12-12T06:55:06.000Z" title="发表于 2025-12-12 14:55:06">2025-12-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/116fee26/" title="CyberFocus 个人效率中心"><img src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CyberFocus 个人效率中心"/></a><div class="content"><a class="title" href="/posts/116fee26/" title="CyberFocus 个人效率中心">CyberFocus 个人效率中心</a><time datetime="2025-12-04T08:32:19.000Z" title="发表于 2025-12-04 16:32:19">2025-12-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/304c7d9f/" title="python虚拟环境"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="python虚拟环境"/></a><div class="content"><a class="title" href="/posts/304c7d9f/" title="python虚拟环境">python虚拟环境</a><time datetime="2025-12-01T05:08:04.000Z" title="发表于 2025-12-01 13:08:04">2025-12-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/79ce0b19/" title="Hexo + Butterfly 建站指南——日常写作"><img src="https://pic1.imgdb.cn/item/6909bff93203f7be00cf718d.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo + Butterfly 建站指南——日常写作"/></a><div class="content"><a class="title" href="/posts/79ce0b19/" title="Hexo + Butterfly 建站指南——日常写作">Hexo + Butterfly 建站指南——日常写作</a><time datetime="2025-11-28T12:01:24.000Z" title="发表于 2025-11-28 20:01:24">2025-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a2043418/" title="论文查询tips"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文查询tips"/></a><div class="content"><a class="title" href="/posts/a2043418/" title="论文查询tips">论文查询tips</a><time datetime="2025-11-26T14:16:56.000Z" title="发表于 2025-11-26 22:16:56">2025-11-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2025  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/数据结构/">数据结构</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/建站指南/">建站指南</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/前端/">前端</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/网络空间安全数学基础/">网络空间安全数学基础</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/实用小脚本/">实用小脚本</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/python/">python</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/实用tips/">实用tips</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/信息安全基础与密码学综合实验/">信息安全基础与密码学综合实验</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/软件逆向工程/">软件逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统综合实验/">操作系统综合实验</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
