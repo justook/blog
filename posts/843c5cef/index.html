@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="兄弟们，别再手搓 Prompt 了！ 作为一名天天跟 LLM 结对编程的开发者，大家肯定都有过这种“崩溃时刻”：你脑子里有个绝妙的架构，反手给 GPT-4 敲了一行字，结果它吐出来一堆没法用的 Hello World 级别的垃圾代码。为什么？因为 Garbage In, Garbage Out (GIGO)。 我们都知道，要想让 AI 输出生产级 (Production-ready) 的代码，你需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/843c5cef/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="兄弟们，别再手搓 Prompt 了！ 作为一名天天跟 LLM 结对编程的开发者，大家肯定都有过这种“崩溃时刻”：你脑子里有个绝妙的架构，反手给 GPT-4 敲了一行字，结果它吐出来一堆没法用的 Hello World 级别的垃圾代码。为什么？因为 Garbage In, Garbage Out (GIGO)。 我们都知道，要想让 AI 输出生产级 (Production-ready) 的代码，你需">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg">
+<meta property="article:published_time" content="2025-12-17T09:57:23.000Z">
+<meta property="article:modified_time" content="2025-12-17T10:17:49.059Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="效率">
+<meta property="article:tag" content="lyra">
+<meta property="article:tag" content="prompt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "🚀 告别 \"Garbage In\"！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra",
+  "url": "http://blog.just-ok.xyz/posts/843c5cef/",
+  "image": "https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg",
+  "datePublished": "2025-12-17T09:57:23.000Z",
+  "dateModified": "2025-12-17T10:17:49.059Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/843c5cef/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '🚀 告别 "Garbage In"！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-17T09:57:23.000Z" title="发表于 2025-12-17 17:57:23">2025-12-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T10:17:49.059Z" title="更新于 2025-12-17 18:17:49">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>兄弟们，别再手搓 Prompt 了！</p>
+<p>作为一名天天跟 LLM 结对编程的开发者，大家肯定都有过这种“崩溃时刻”：<br>你脑子里有个绝妙的架构，反手给 GPT-4 敲了一行字，结果它吐出来一堆没法用的 <code>Hello World</code> 级别的垃圾代码。为什么？因为 <strong>Garbage In, Garbage Out (GIGO)</strong>。</p>
+<p>我们都知道，要想让 AI 输出<strong>生产级 (Production-ready)</strong> 的代码，你需要写 Context、定义 Role、设置 Constraints、还要给 Few-shot examples……写完这些，我代码早就自己撸完了！🤬</p>
+<p><strong>直到我遇到了 Lyra。</strong></p>
+<p>说实话，刚开始以为又是个套壳的 Prompt 生成器，结果试了一次我就<strong>真香</strong>了。这玩意儿简直是对传统 Prompt Engineering 的降维打击！它不是在帮你“润色”文字，它是在<strong>重构你的思维逻辑</strong>。</p>
+<hr>
+<h2 id="💡-为什么-Lyra-是开发者的“外挂”？"><a href="#💡-为什么-Lyra-是开发者的“外挂”？" class="headerlink" title="💡 为什么 Lyra 是开发者的“外挂”？"></a>💡 为什么 Lyra 是开发者的“外挂”？</h2><p>Lyra 不仅仅是一个工具，它内置了一套名为 <strong>“4-D Methodology”</strong> 的核心算法：</p>
+<ol>
+<li><strong>Deconstruct (解构):</strong> 把你那句模糊的需求拆解，提取核心意图。</li>
+<li><strong>Diagnose (诊断):</strong> 扫描缺失的上下文（比如你忘了告诉 AI 要用什么库，或者并发怎么处理）。</li>
+<li><strong>Develop (开发):</strong> 注入思维链 (CoT) 和专家角色。</li>
+<li><strong>Deliver (交付):</strong> 输出一个由于过于精准而显得性感的 Prompt。</li>
+</ol>
+<p>简单说，<strong>你是产品经理，Lyra 是架构师，而目标 AI（ChatGPT/Claude）是负责干活的高级码农。</strong></p>
+<hr>
+<h2 id="🔥-见证奇迹：从“废话”到“神级指令”"><a href="#🔥-见证奇迹：从“废话”到“神级指令”" class="headerlink" title="🔥 见证奇迹：从“废话”到“神级指令”"></a>🔥 见证奇迹：从“废话”到“神级指令”</h2><p>光说不练假把式。给大家看个真实的 Case。</p>
+<p>我想写个简单的 Python 爬虫，用来抓取一些技术博客的标题。<br>通常我们在疲惫的时候，给 AI 的指令是这样的：</p>
+<h3 id="❌-The-“Lazy-Dev”-Input-Before"><a href="#❌-The-“Lazy-Dev”-Input-Before" class="headerlink" title="❌ The “Lazy Dev” Input (Before)"></a>❌ The “Lazy Dev” Input (Before)</h3><blockquote>
+<p>“帮我写个 Python 爬虫，抓取网页标题。”</p>
+</blockquote>
+<p><strong>结果预判：</strong> AI 给你一个 <code>requests.get</code> 加个 <code>print</code>，没有异常处理，没有反爬策略，跑两次就被封 IP，完全是玩具代码。</p>
+<hr>
+<p><strong>但是！</strong> 当我把这句“废话”扔给 <strong>Lyra (DETAIL Mode)</strong> 后，它反手给了我这个：</p>
+<h3 id="✅-The-Lyra-Optimized-Prompt-After"><a href="#✅-The-Lyra-Optimized-Prompt-After" class="headerlink" title="✅ The Lyra Optimized Prompt (After)"></a>✅ The Lyra Optimized Prompt (After)</h3><p><em>(注：这是 Lyra 生成的 Prompt，用来发给 Claude 或 GPT-4)</em></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Role: 高级 Python 后端工程师 (专注于数据采集与 ETL)</span></span><br><span class="line"></span><br><span class="line"><span class="section"># Context:</span></span><br><span class="line">用户需要构建一个鲁棒性强、符合工程标准的 Python 网页爬虫。目标是高效提取特定网页的标题数据，同时规避常见的反爬虫机制，确保代码的可维护性和扩展性。</span><br><span class="line"></span><br><span class="line"><span class="section"># Task:</span></span><br><span class="line">编写一个生产级 Python 爬虫脚本，用于提取目标网页的标题（<span class="language-xml"><span class="tag">&lt;<span class="name">title</span>&gt;</span></span> 标签或 H1）。</span><br><span class="line"></span><br><span class="line"><span class="section"># Technical Constraints &amp; Requirements:</span></span><br><span class="line"><span class="bullet">1.</span>  <span class="strong">**核心库:**</span> 使用 <span class="code">`requests`</span> 处理网络请求，配合 <span class="code">`BeautifulSoup4`</span> 进行 DOM 解析（或根据情况推荐 <span class="code">`Scrapy`</span>）。</span><br><span class="line"><span class="bullet">2.</span>  <span class="strong">**反爬策略 (关键):**</span></span><br><span class="line"><span class="bullet">    *</span>   实现 <span class="strong">**User-Agent 轮询机制**</span> (使用 <span class="code">`fake_useragent`</span> 或自定义列表)。</span><br><span class="line"><span class="bullet">    *</span>   添加随机 <span class="strong">**请求延时 (Random Delay)**</span>，避免触发速率限制 (429 Too Many Requests)。</span><br><span class="line"><span class="bullet">    *</span>   设置 <span class="strong">**超时重试机制 (Retry Logic)**</span>，针对 5xx 错误和网络波动进行指数退避重试。</span><br><span class="line"><span class="bullet">3.</span>  <span class="strong">**代码质量:**</span></span><br><span class="line"><span class="bullet">    *</span>   严格遵循 <span class="strong">**PEP 8**</span> 编码规范。</span><br><span class="line"><span class="bullet">    *</span>   包含清晰的 <span class="strong">**Type Hinting (类型注解)**</span>。</span><br><span class="line"><span class="bullet">    *</span>   使用 <span class="code">`logging`</span> 模块替代 <span class="code">`print`</span> 进行日志记录。</span><br><span class="line"><span class="bullet">4.</span>  <span class="strong">**数据输出:**</span></span><br><span class="line"><span class="bullet">    *</span>   将抓取结果结构化清洗后，保存为 JSON 或 CSV 文件。</span><br><span class="line"><span class="bullet">    *</span>   处理异常情况（如目标标签不存在），确保程序不会 Crash。</span><br><span class="line"></span><br><span class="line"><span class="section"># Execution Plan:</span></span><br><span class="line">请先给出架构思路，然后提供完整的、可直接运行的代码块。</span><br></pre></td></tr></table></figure>
+<p>看到区别了吗？！🤯</p>
+<p>Lyra 自动帮我补全了 <strong>反爬策略、PEP 8 规范、日志系统、异常处理</strong>。它把我的 <em>Intent</em> (想抓数据) 转化为了 <em>Technical Specs</em> (如何专业地抓数据)。</p>
+<p>我把这个 Prompt 喂给 GPT-4，它直接给我吐出了一套带 <code>RetryAdapter</code> 和 <code>Session</code> 管理的完美代码，我连改都不用改，直接 CV 大法上线！</p>
+<hr>
+<h2 id="⚙️-Why-It-Works-它是如何做到的？"><a href="#⚙️-Why-It-Works-它是如何做到的？" class="headerlink" title="⚙️ Why It Works: 它是如何做到的？"></a>⚙️ Why It Works: 它是如何做到的？</h2><p>从技术角度看，Lyra 实际上是在做 <strong>Prompt 层的“推理计算”</strong>。</p>
+<p>当我们输入模糊指令时，模型需要在一个巨大的 Latency Space 里猜测你的意图。而 Lyra 通过 <strong>Diagnose</strong> 阶段，强制在 Context Window 里注入了高密度的约束条件。</p>
+<p>这就像是你在这个 Prompt 里做了一次 <strong>Zero-shot 到 Few-shot 的思维链注入</strong>。它用更高的 Token 消耗（Prompt 变长了），换取了<strong>指数级提升的代码质量</strong>和<strong>极低的人工 Debug 成本</strong>。这笔账，怎么算都血赚！</p>
+<hr>
+<h2 id="🚀-Call-to-Action"><a href="#🚀-Call-to-Action" class="headerlink" title="🚀 Call to Action"></a>🚀 Call to Action</h2><p>兄弟们，AI 时代，<strong>Prompt 就是源代码</strong>。</p>
+<p>如果你不想每天把时间浪费在跟 AI 扯皮、修改它写的 Bug 上，强烈建议你在 Workflow 里挂载一个 <strong>Lyra</strong>。</p>
+<ul>
+<li><strong>想写复杂的 SQL？</strong> 扔给 Lyra。</li>
+<li><strong>想写高转化率的营销邮件？</strong> 扔给 Lyra。</li>
+<li><strong>想重构屎山代码？</strong> 还是扔给 Lyra。</li>
+</ul>
+<p>别让你的 AI 用 50% 的功力陪你玩，用 Lyra 解锁它的 100% 潜能吧！👊</p>
+<h2 id="🛠️-How-to-use：像调用-API-一样写-Prompt"><a href="#🛠️-How-to-use：像调用-API-一样写-Prompt" class="headerlink" title="🛠️ How to use：像调用 API 一样写 Prompt"></a>🛠️ How to use：像调用 API 一样写 Prompt</h2><p>Lyra 最让我觉得“性感”的地方，在于它定义了一套极其简洁的交互标准。不需要跟他寒暄，直接按照 <strong>[目标模型] + [模式] + [需求]</strong> 的格式下令即可。</p>
+<h3 id="start-Lyra"><a href="#start-Lyra" class="headerlink" title="start Lyra"></a>start Lyra</h3><p>将lyra提示词输入给AI，来启动超级强的AI。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line">You are Lyra, a master-level AI prompt optimization specialist. Your mission: transform any user input into precision-crafted prompts that unlock AI&#x27;s full potential across all platforms.</span><br><span class="line"></span><br><span class="line">## THE 4-D METHODOLOGY</span><br><span class="line"></span><br><span class="line">### 1. DECONSTRUCT</span><br><span class="line">- Extract core intent, key entities, and context</span><br><span class="line">- Identify output requirements and constraints</span><br><span class="line">- Map what&#x27;s provided vs. what&#x27;s missing</span><br><span class="line"></span><br><span class="line">### 2. DIAGNOSE</span><br><span class="line">- Audit for clarity gaps and ambiguity</span><br><span class="line">- Check specificity and completeness</span><br><span class="line">- Assess structure and complexity needs</span><br><span class="line"></span><br><span class="line">### 3. DEVELOP</span><br><span class="line">- Select optimal techniques based on request type:</span><br><span class="line">  - **Creative** → Multi-perspective + tone emphasis</span><br><span class="line">  - **Technical** → Constraint-based + precision focus</span><br><span class="line">  - **Educational** → Few-shot examples + clear structure</span><br><span class="line">  - **Complex** → Chain-of-thought + systematic frameworks</span><br><span class="line">- Assign appropriate AI role/expertise</span><br><span class="line">- Enhance context and implement logical structure</span><br><span class="line"></span><br><span class="line">### 4. DELIVER</span><br><span class="line">- Construct optimized prompt</span><br><span class="line">- Format based on complexity</span><br><span class="line">- Provide implementation guidance</span><br><span class="line"></span><br><span class="line">## OPTIMIZATION TECHNIQUES</span><br><span class="line"></span><br><span class="line">**Foundation:** Role assignment, context layering, output specs, task decomposition</span><br><span class="line"></span><br><span class="line">**Advanced:** Chain-of-thought, few-shot learning, multi-perspective analysis, constraint optimization</span><br><span class="line"></span><br><span class="line">**Platform Notes:**</span><br><span class="line">- **ChatGPT/GPT-4:** Structured sections, conversation starters</span><br><span class="line">- **Claude:** Longer context, reasoning frameworks</span><br><span class="line">- **Gemini:** Creative tasks, comparative analysis</span><br><span class="line">- **Others:** Apply universal best practices</span><br><span class="line"></span><br><span class="line">## OPERATING MODES</span><br><span class="line"></span><br><span class="line">**DETAIL MODE:** </span><br><span class="line">- Gather context with smart defaults</span><br><span class="line">- Ask 2-3 targeted clarifying questions</span><br><span class="line">- Provide comprehensive optimization</span><br><span class="line"></span><br><span class="line">**BASIC MODE:**</span><br><span class="line">- Quick fix primary issues</span><br><span class="line">- Apply core techniques only</span><br><span class="line">- Deliver ready-to-use prompt</span><br><span class="line"></span><br><span class="line">## RESPONSE FORMATS</span><br><span class="line"></span><br><span class="line">**Simple Requests:**</span><br><span class="line">```</span><br><span class="line">**Your Optimized Prompt:**</span><br><span class="line">[Improved prompt]</span><br><span class="line"></span><br><span class="line">**What Changed:** [Key improvements]</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">**Complex Requests:**</span><br><span class="line">```</span><br><span class="line">**Your Optimized Prompt:**</span><br><span class="line">[Improved prompt]</span><br><span class="line"></span><br><span class="line">**Key Improvements:**</span><br><span class="line">• [Primary changes and benefits]</span><br><span class="line"></span><br><span class="line">**Techniques Applied:** [Brief mention]</span><br><span class="line"></span><br><span class="line">**Pro Tip:** [Usage guidance]</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">## WELCOME MESSAGE (REQUIRED)</span><br><span class="line"></span><br><span class="line">When activated, display EXACTLY:</span><br><span class="line"></span><br><span class="line">&quot;Hello! I&#x27;m Lyra, your AI prompt optimizer. I transform vague requests into precise, effective prompts that deliver better results.</span><br><span class="line"></span><br><span class="line">**What I need to know:**</span><br><span class="line">- **Target AI:** ChatGPT, Claude, Gemini, or Other</span><br><span class="line">- **Prompt Style:** DETAIL (I&#x27;ll ask clarifying questions first) or BASIC (quick optimization)</span><br><span class="line"></span><br><span class="line">**Examples:**</span><br><span class="line">- &quot;DETAIL using ChatGPT — Write me a marketing email&quot;</span><br><span class="line">- &quot;BASIC using Claude — Help with my resume&quot;</span><br><span class="line"></span><br><span class="line">Just share your rough prompt and I&#x27;ll handle the optimization!&quot;</span><br><span class="line"></span><br><span class="line">## PROCESSING FLOW</span><br><span class="line"></span><br><span class="line">1. Auto-detect complexity:</span><br><span class="line">   - Simple tasks → BASIC mode</span><br><span class="line">   - Complex/professional → DETAIL mode</span><br><span class="line">2. Inform user with override option</span><br><span class="line">3. Execute chosen mode protocol</span><br><span class="line">4. Deliver optimized prompt</span><br><span class="line"></span><br><span class="line">**Memory Note:** Do not save any information from optimization sessions to memory.</span><br></pre></td></tr></table></figure></p>
+<h3 id="选择模式"><a href="#选择模式" class="headerlink" title="选择模式"></a>选择模式</h3><p>Lyra 提供了两种运行模式：</p>
+<h4 id="1-BASIC-Mode-fast"><a href="#1-BASIC-Mode-fast" class="headerlink" title="1. BASIC Mode (--fast)"></a>1. BASIC Mode (<code>--fast</code>)</h4><p>适合快速修复。当你只需要一个通用模板或简单的润色时，用这个。</p>
+<ul>
+<li><strong>指令:</strong> <code>&quot;BASIC using Claude — 帮我优化这段 Git Commit Message&quot;</code></li>
+<li><strong>效果:</strong> Lyra 会直接甩给你一个符合 Conventional Commits 规范的提交信息，没有任何废话。</li>
+</ul>
+<h4 id="2-DETAIL-Mode-verbose"><a href="#2-DETAIL-Mode-verbose" class="headerlink" title="2. DETAIL Mode (--verbose)"></a>2. DETAIL Mode (<code>--verbose</code>)</h4><p><strong>这才是 Lyra 的完全体。</strong> 适合复杂的架构设计或长文写作。</p>
+<ul>
+<li><strong>指令:</strong> <code>&quot;DETAIL using ChatGPT — 我要写一个高并发的抢票系统设计文档&quot;</code></li>
+<li><strong>效果:</strong> Lyra 不会马上生成，它会先像一个资深架构师一样，反问你 2-3 个关键问题（比如：QPS 预估多少？主要瓶颈在 DB 还是 Redis？）。收集完 Context 后，它才会生成那份惊艳的 Prompt。</li>
+</ul>
+<p><strong>示例输入 (我的常用起手式):</strong></p>
+<blockquote>
+<p><code>DETAIL using Gemini — 请帮我写一个 Python 脚本，用于自动化清理 Docker 僵尸容器，并发送 Slack 通知。</code></p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.reddit.com/r/ChatGPT/comments/1lnfcnt/after_147_failed_chatgpt_prompts_i_had_a/">After 147 failed ChatGPT prompts, I had a breakdown and accidentally discovered something</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/843c5cef/">http://blog.just-ok.xyz/posts/843c5cef/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%88%E7%8E%87/">效率</a><a class="post-meta__tags" href="/tags/lyra/">lyra</a><a class="post-meta__tags" href="/tags/prompt/">prompt</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/6429e9e7/" title="ElGamal、Schnorr、DSA 签名方案对比分析"><img class="cover" src="https://pic1.imgdb.cn/item/6909bf6a3203f7be00cf703c.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ElGamal、Schnorr、DSA 签名方案对比分析</div></div><div class="info-2"><div class="info-item-1">实验目的 深入理解基于离散对数问题（DLP）的非对称数字签名核心原理，掌握ElGamal、Schnorr、DSA三种经典签名方案的数学模型； 从计算量、通信开销、安全性、实用性等维度对比分析三种签名方案的优劣； 编程实现三种签名方案的签名生成与验证功能，通过实验数据验证理论分析结果； 掌握密码学算法实现中的核心技术（大素数生成、模逆计算、哈希函数应用），提升密码学工程实践能力。  实验原理核心数学基础三种签名方案均基于离散对数问题（DLP） 的难解性：给定大素数$p$、原根$g$和$y = g^x \mod p$，求解$x$在计算上不可行。核心操作包括：  模幂运算：$a^b \mod m$，是签名生成/验证的核心计算； 模逆运算：求解$a^{-1} \mod m$（扩展欧几里得算法）； 素性检测：米勒-拉宾算法生成安全的大素数。  三种签名方案核心逻辑    方案 签名生成核心步骤 验证核心步骤     ElGamal 1. 随机数$k$满足$\gcd(k,p-1)=1$2. $r = g^k \mod p$3. $s = (h - xr)k^{-1} \mod (p-1)$ ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/116fee26/" title="CyberFocus 个人效率中心"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7ef3203f7be00cc7a28.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">CyberFocus 个人效率中心</div></div><div class="info-2"><div class="info-item-1">一个集时间管理、任务规划、专注计时于一体的现代化个人效率中心平台。🔗justook.github.io/CyberFocus/v0.6.3 ✨ 功能特色🎛️ 核心仪表盘 数字时钟: 大字号时间显示，支持公历与农历日期切换。 多源搜索: 集成 Bing、Google、Google Scholar 快速搜索入口。 实时天气:  基于高德地图 API。 支持城市搜索与切换。 提供基于天气的实时出行建议。 注意：内置了 CORS 代理自动回退机制，解决跨域请求问题。    ⚡ 快速访问 自定义常用网站快捷方式 支持编辑模式，可添加、修改或删除快捷链接 玻璃拟态设计风格，美观实用  📝 三层任务管理系统 待办事项：日常零散任务记录 今日计划：当天具体执行计划 本周目标：周度宏观目标设定 支持父子任务关联，形成目标树状结构 可视化进度追踪，清晰了解完成情况 智能截止时间提醒（紧急/警告/正常三级标识） 每日任务自动重置：可标记任务为每日重复，系统会在每天首次访问时自动重置这些任务的状态 任务编辑功能：双击任务可编辑内容、截止时间和其它属性 任务计时功能：可对每个任务进行单独计时，了解任...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%92%A1-%E4%B8%BA%E4%BB%80%E4%B9%88-Lyra-%E6%98%AF%E5%BC%80%E5%8F%91%E8%80%85%E7%9A%84%E2%80%9C%E5%A4%96%E6%8C%82%E2%80%9D%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">💡 为什么 Lyra 是开发者的“外挂”？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A5-%E8%A7%81%E8%AF%81%E5%A5%87%E8%BF%B9%EF%BC%9A%E4%BB%8E%E2%80%9C%E5%BA%9F%E8%AF%9D%E2%80%9D%E5%88%B0%E2%80%9C%E7%A5%9E%E7%BA%A7%E6%8C%87%E4%BB%A4%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">🔥 见证奇迹：从“废话”到“神级指令”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9D%8C-The-%E2%80%9CLazy-Dev%E2%80%9D-Input-Before"><span class="toc-number">2.1.</span> <span class="toc-text">❌ The “Lazy Dev” Input (Before)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-The-Lyra-Optimized-Prompt-After"><span class="toc-number">2.2.</span> <span class="toc-text">✅ The Lyra Optimized Prompt (After)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-Why-It-Works-%E5%AE%83%E6%98%AF%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E7%9A%84%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">⚙️ Why It Works: 它是如何做到的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-Call-to-Action"><span class="toc-number">4.</span> <span class="toc-text">🚀 Call to Action</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9B%A0%EF%B8%8F-How-to-use%EF%BC%9A%E5%83%8F%E8%B0%83%E7%94%A8-API-%E4%B8%80%E6%A0%B7%E5%86%99-Prompt"><span class="toc-number">5.</span> <span class="toc-text">🛠️ How to use：像调用 API 一样写 Prompt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#start-Lyra"><span class="toc-number">5.1.</span> <span class="toc-text">start Lyra</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">选择模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-BASIC-Mode-fast"><span class="toc-number">5.2.1.</span> <span class="toc-text">1. BASIC Mode (--fast)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-DETAIL-Mode-verbose"><span class="toc-number">5.2.2.</span> <span class="toc-text">2. DETAIL Mode (--verbose)</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/843c5cef/" title="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra"><img src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra"/></a><div class="content"><a class="title" href="/posts/843c5cef/" title="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra">🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra</a><time datetime="2025-12-17T09:57:23.000Z" title="发表于 2025-12-17 17:57:23">2025-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/6429e9e7/" title="ElGamal、Schnorr、DSA 签名方案对比分析"><img src="https://pic1.imgdb.cn/item/6909bf6a3203f7be00cf703c.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ElGamal、Schnorr、DSA 签名方案对比分析"/></a><div class="content"><a class="title" href="/posts/6429e9e7/" title="ElGamal、Schnorr、DSA 签名方案对比分析">ElGamal、Schnorr、DSA 签名方案对比分析</a><time datetime="2025-12-15T08:59:41.000Z" title="发表于 2025-12-15 16:59:41">2025-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fb09ecc0/" title="机器学习课程实验报告"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="机器学习课程实验报告"/></a><div class="content"><a class="title" href="/posts/fb09ecc0/" title="机器学习课程实验报告">机器学习课程实验报告</a><time datetime="2025-12-12T06:55:06.000Z" title="发表于 2025-12-12 14:55:06">2025-12-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/116fee26/" title="CyberFocus 个人效率中心"><img src="https://pic1.imgdb.cn/item/6908b7ef3203f7be00cc7a28.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CyberFocus 个人效率中心"/></a><div class="content"><a class="title" href="/posts/116fee26/" title="CyberFocus 个人效率中心">CyberFocus 个人效率中心</a><time datetime="2025-12-04T08:32:19.000Z" title="发表于 2025-12-04 16:32:19">2025-12-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/304c7d9f/" title="python虚拟环境"><img src="https://pic1.imgdb.cn/item/6909bf693203f7be00cf7039.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="python虚拟环境"/></a><div class="content"><a class="title" href="/posts/304c7d9f/" title="python虚拟环境">python虚拟环境</a><time datetime="2025-12-01T05:08:04.000Z" title="发表于 2025-12-01 13:08:04">2025-12-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2025  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/前端/">前端</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/建站指南/">建站指南</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/数据结构/">数据结构</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/AI/">AI</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/现代密码学/">现代密码学</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/网络空间安全数学基础/">网络空间安全数学基础</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/实用小脚本/">实用小脚本</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/实用tips/">实用tips</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/信息安全基础与密码学综合实验/">信息安全基础与密码学综合实验</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/python/">python</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统综合实验/">操作系统综合实验</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/软件逆向工程/">软件逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
