@@ -1,0 +1,556 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数据安全与隐私笔记 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第一章 大数据安全的概念本书从五个特征来定义大数据，这五个特征可以总结为五个V,即 Volume、Velocity、 Variety、Veracity 和 Value（大规模、高速性、多样性、准确性和价值） 大数据安全的两重含义 大数据服务中的安全问题 大数据服务中的安全问题，主要包括以下几个方面的内容：  大数据服务系统架构与认证授权问题 利用大数据服务的系统漏洞，攻击大数据服务系统 利用大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据安全与隐私笔记">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/2c2d59f9/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="第一章 大数据安全的概念本书从五个特征来定义大数据，这五个特征可以总结为五个V,即 Volume、Velocity、 Variety、Veracity 和 Value（大规模、高速性、多样性、准确性和价值） 大数据安全的两重含义 大数据服务中的安全问题 大数据服务中的安全问题，主要包括以下几个方面的内容：  大数据服务系统架构与认证授权问题 利用大数据服务的系统漏洞，攻击大数据服务系统 利用大数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg">
+<meta property="article:published_time" content="2026-01-08T06:16:56.000Z">
+<meta property="article:modified_time" content="2026-01-09T07:35:45.755Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="数据安全与隐私">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "数据安全与隐私笔记",
+  "url": "http://blog.just-ok.xyz/posts/2c2d59f9/",
+  "image": "https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg",
+  "datePublished": "2026-01-08T06:16:56.000Z",
+  "dateModified": "2026-01-09T07:35:45.755Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/2c2d59f9/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '数据安全与隐私笔记',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">数据安全与隐私笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">数据安全与隐私笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-08T06:16:56.000Z" title="发表于 2026-01-08 14:16:56">2026-01-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-09T07:35:45.755Z" title="更新于 2026-01-09 15:35:45">2026-01-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%B8%8E%E9%9A%90%E7%A7%81/">数据安全与隐私</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="第一章-大数据安全的概念"><a href="#第一章-大数据安全的概念" class="headerlink" title="第一章 大数据安全的概念"></a>第一章 大数据安全的概念</h2><p>本书从五个特征来定义大数据，这五个特征可以总结为五个V,即 <strong>Volume、Velocity、 Variety、Veracity 和 Value</strong>（大规模、高速性、多样性、准确性和价值）</p>
+<h3 id="大数据安全的两重含义"><a href="#大数据安全的两重含义" class="headerlink" title="大数据安全的两重含义"></a>大数据安全的两重含义</h3><ol>
+<li><p>大数据服务中的安全问题</p>
+<p>大数据服务中的安全问题，主要包括以下几个方面的内容：</p>
+<ul>
+<li><del>大数据服务系统架构与认证授权问题</del></li>
+<li><del>利用大数据服务的系统漏洞，攻击大数据服务系统</del></li>
+<li><del>利用大数据服务的算法缺陷或者训练数据管理的漏洞，注入攻击数据</del></li>
+<li><del>利用大数据服务的合法功能，发起攻击</del></li>
+<li><del>利用大数据服务系统的合法功能，获取隐私信息</del></li>
+</ul>
+</li>
+<li><p>大数据技术在安全领域的应用</p>
+<p>一方面可以利用大数据技术解决安全问题。例如，利用流量特征，识别攻击流量；利用大数据技术，分析微博、微信等社交数据，预测突发事件的走向，及时制定并动态调整；利用大数据技术，引导网络舆情的走向，防止事态恶化。这些技术已经被深入研究并广泛使用。</p>
+<p>另一方面，攻击者<del>基于大数据技术开发新的攻击技术。例如，利用 AI对验证码进行 破译;利用关联分析，获取隐私信息。这些案例在现实中已经发生。</del></p>
+</li>
+</ol>
+<h3 id="隐私的含义"><a href="#隐私的含义" class="headerlink" title="隐私的含义"></a>隐私的含义</h3><p> 1890 年，布兰代斯与他的同学沃伦在《哈佛法律评论》上共同发表了关于隐私权的奠基之 作《隐私权》 (Right to Privacy) 。布兰代斯将”隐私权”定义为”<strong>不受别人干扰的权利</strong>“。他 认为，这项权利是个人自由的起点，只有通过界定这项”人类最广泛、文明人最珍视”的权利，个 人的”信仰、思想、情感和感受”才能得到保障。这种保障不仅仅意味着个人可以对抗他人对其 自由的侵扰，也意味着个人事有不受新闻媒体、政府权力干扰和侵犯的自由。美国最早意义上 的隐私权，也正是集中在以住宅为代表的物理空间之上的。<strong>隐私权意味着一个人可以在自己 的城堡中不受监督、不受干涉地发展自己的个性，决定自己的生活方式。</strong></p>
+<h3 id="隐私与法律"><a href="#隐私与法律" class="headerlink" title="隐私与法律"></a>隐私与法律</h3><p>先回顾一下关于隐私权的重大历史事件。 </p>
+<ul>
+<li>1965 年，美国中央数据银行计划。</li>
+<li>1974 年，尼克松的水门事件。美国《隐私法案))CPrivacy Act of 1974)的诞生。 </li>
+<li>2002 年，美国在《2002 国土安全法》中重新提出中央数据银行计划，还赋予该计划一个更 响亮的名字:万维信息触角计划(Total Information Awareness) 。 </li>
+<li>2013 年，斯诺登事件导致美国的”棱镜计划”被曝光。 </li>
+<li>2018 年，欧洲联盟(简称欧盟)的《通用数据保护条例》于 2018 年 5 月 25 日开始实施。 </li>
+<li>2018 年，中国的《信息<del>安全技术个人信息安全规范》于 2018 年 5 月 1 日起正式实施。</del></li>
+</ul>
+<h3 id="欧盟《通用数据保护条例》"><a href="#欧盟《通用数据保护条例》" class="headerlink" title="欧盟《通用数据保护条例》"></a>欧盟《通用数据保护条例》</h3><p>2018 年 5 月 25 日，《通用数据保护条例》(GDPR)在欧盟全面实施。<br>GDPR 是 20 年来数据隐私条例的最重要变化，它取代了欧盟的《个人资料隐私保护指令》 95/46/EC，并协调了全欧洲的有关数据隐私的法律，为所有欧盟民众保护和授权数据隐私，并重塑整个地区的数据隐私保护形式。 </p>
+<ol>
+<li><p>GDPR 要点概述</p>
+<p><del>规定针对从欧盟公民处收集数据的企业：强制企业遵循Privacy by  Design 原则。</del> </p>
+<p><del>• 数据转移权：该规定声明，用户可要求自己的个人数据畅通无阻地直接 迁移至新的提供商，数据以机器可读的格式迁移。 • 当用户不再使用该公司产品时，它们将会丢失大量数据。</del></p>
+<p> <del>• 被遗忘权：每个数据主体有权要求数据控制者删除个人数据</del> </p>
+<p><del>• 算法公平性：数据主体有权要求对算法自动决策给出解释</del></p>
+</li>
+</ol>
+<h3 id="我国的《信息安全技术个人倍息安全规范》"><a href="#我国的《信息安全技术个人倍息安全规范》" class="headerlink" title="我国的《信息安全技术个人倍息安全规范》"></a>我国的《信息安全技术个人倍息安全规范》</h3><p>2018 年 1 月，由全国信息安全标准化技术委员会组织制定的国家标准《信息安全技术个 人信息安全规范))(以下简称《规范》获批发布全文。尽管这是一部推荐性的国家标准，不具有强制力，但仍引起学界与实务界的广泛关注。</p>
+<h2 id="第二章-基础知识"><a href="#第二章-基础知识" class="headerlink" title="第二章 基础知识"></a>第二章 基础知识</h2><h3 id="加解密过程示意图"><a href="#加解密过程示意图" class="headerlink" title="加解密过程示意图"></a>加解密过程示意图</h3><p><img src="img\image-20260104191238955.png" alt="image-20260104191238955"></p>
+<h3 id="引入秘钥的加解密过程示意图"><a href="#引入秘钥的加解密过程示意图" class="headerlink" title="引入秘钥的加解密过程示意图"></a>引入秘钥的加解密过程示意图</h3><p><img src="img\image-20260104191342056.png" alt="image-20260104191342056"></p>
+<h3 id="密码设计思想"><a href="#密码设计思想" class="headerlink" title="密码设计思想"></a>密码设计思想</h3><p>在密码设计中，最常用的两种技巧是<strong>代换</strong>和<strong>置换</strong>。代换是指系统地将一组字母换成其他字母或符号；置换是指将字母顺序重新排列。</p>
+<h3 id="流密码设计方案"><a href="#流密码设计方案" class="headerlink" title="流密码设计方案"></a>流密码设计方案</h3><p>密钥作为一个种子，用到一个伪随机发生器来获得一个长的随机字符串；然后，和明文消息做异或处理，如图所示。</p>
+<p><img src="img\image-20260104191828415.png" alt="image-20260104191828415"></p>
+<p>这种类型的加密方案被称为流密码。这是因为加密的执行是通过首先生成一个伪随机比特流，然后将该比特流和明文做异或运算来实现的。</p>
+<h3 id="常用的分组密码算法"><a href="#常用的分组密码算法" class="headerlink" title="常用的分组密码算法"></a>常用的分组密码算法</h3><ul>
+<li>DES 数据加密标准</li>
+<li>IDEA</li>
+<li>Blowfish</li>
+<li>AES</li>
+</ul>
+<h3 id="分组密码操作模式"><a href="#分组密码操作模式" class="headerlink" title="分组密码操作模式"></a>分组密码操作模式</h3><ul>
+<li>电码本模式（ECB）</li>
+<li>密码分组链接模式（CBC）</li>
+<li>密文反馈模式（CFB）</li>
+<li>输出反馈模式（OFB）</li>
+<li>计数器模式（CTR）</li>
+</ul>
+<h3 id="消息的完整性"><a href="#消息的完整性" class="headerlink" title="消息的完整性"></a>消息的完整性</h3><p><del>对传送的消息进行加密，能够保证消息的机密性。</del></p>
+<h3 id="公钥加密体制"><a href="#公钥加密体制" class="headerlink" title="公钥加密体制"></a>公钥加密体制</h3><p><img src="img\image-20260104194204058.png" alt="image-20260104194204058"></p>
+<p><img src="img\image-20260104194305241.png" alt="image-20260104194305241"></p>
+<p><img src="img\image-20260104194540728.png" alt="image-20260104194540728"></p>
+<h3 id="IPSec"><a href="#IPSec" class="headerlink" title="IPSec"></a>IPSec</h3><p>IPSec(Internet协议安全)是一个工业标准网络安全协议，为IP网络通信提供透明的安全服务，可使TCP/IP通信免遭窃听和篡改，可以有效抵御网络攻击，同时保持易用性。IPSec有两个基本目标：</p>
+<ol>
+<li><p>保护IP数据包安全；</p>
+</li>
+<li><p>为抵御网络攻击提供防护措施。</p>
+<p>IPSec基于一种端到端的安全模式。</p>
+<p>IPSec提供了两种机制：认证和加密。</p>
+</li>
+</ol>
+<h3 id="TLS-SSL"><a href="#TLS-SSL" class="headerlink" title="TLS/SSL"></a>TLS/SSL</h3><p>安全套接层（SSL）协议是Web浏览器和Web服务器之间安全交换信息的网络协议 。SSL提供了两个基本安全服务：认证与保密。SSL提供了Web浏览器与Web服务器之间的逻辑安全管道。</p>
+<h3 id="身份认证的概念和常用方法"><a href="#身份认证的概念和常用方法" class="headerlink" title="身份认证的概念和常用方法"></a>身份认证的概念和常用方法</h3><ol>
+<li><p>概念</p>
+<p><del>身份认证即身份识别与鉴定，确认实体为其声明的实体，用来鉴定用户身份的真伪。</del></p>
+</li>
+<li><p>常用方法 </p>
+<p>可以用许多方法进行身份认证，传统上<u>使用用户名和口令</u>，但这种机制存在不少安全问 题。口令以明文形式传递以明文形式存放在服务器中，这是很危险的，不过现在的基于口令认 证技术都采用了加密或用口令派生出的数据保护口令的技术。<u>认证令牌</u>在基于口令认证技术 中增加了随机性，使口令更加安全，它要求用户拥有令牌，这种认证方式在需要高度安全的应 用中非常普及。<u>基于证书的认证</u>是一种现代认证机制，它归功于公钥基础设施(PKI，Public  Key Infrastructure)技术，可以将智能卡与这个技术结合起来，智能卡在卡中进行加密运算，使 整个过程更安全可靠。<u>生物认证方法</u>目前也已经广泛应用，其主要将用户的图像、指纹、声音 等作为认证数据，免于用户记忆口令或者携带令牌的麻烦，使用方便，提升了用户体验。</p>
+</li>
+</ol>
+<h3 id="单点登录原理"><a href="#单点登录原理" class="headerlink" title="单点登录原理"></a>单点登录原理</h3><p>现有的密钥分发协议很多都源自 1978 年的 NeedharrγSchroeder 协议。 “Needham…Schroeder”协议有两种形式: N eedham-Schroeder 对称密钥协议和 Needham Schroeder 公钥协议。基于对称加密算法的 Needham-Schroeder 对称密钥协议是 Kerberos 协 议的基础，其自的是为在网络上通信的双方建立一个会话密钥，通常是为了保护双方进一步的 通信;而对基于公钥加密的Needham-Schroeder 公钥协议，其目的是为在网络上的两个通信方 之间提供相互身份验证，但其提出的形式是不安全的。</p>
+<p>’<img src="img\image-20260104201001030.png" alt="image-20260104201001030"></p>
+<h3 id="BLP模型"><a href="#BLP模型" class="headerlink" title="BLP模型"></a>BLP模型</h3><p><img src="img\image-20260104201200630.png" alt="image-20260104201200630"></p>
+<p><img src="img\image-20260104201213439.png" alt="image-20260104201213439"></p>
+<p><img src="img\image-20260104201226544.png" alt="image-20260104201226544"></p>
+<h3 id="Biba模型"><a href="#Biba模型" class="headerlink" title="Biba模型"></a>Biba模型</h3><p><img src="img\image-20260104201339719.png" alt="image-20260104201339719"></p>
+<p><img src="img\image-20260104201401508.png" alt="image-20260104201401508"></p>
+<h2 id="第三章-大数据服务架构及其安全"><a href="#第三章-大数据服务架构及其安全" class="headerlink" title="第三章 大数据服务架构及其安全"></a>第三章 大数据服务架构及其安全</h2><p>Web Services 技术体系由一系列开放的协议和规范组成</p>
+<h3 id="Web-Services安全"><a href="#Web-Services安全" class="headerlink" title="Web Services安全"></a>Web Services安全</h3><p><del>由结构化信息标准促进组织(OASIS) 发起，计算机行业的领导者们已经联合开发了一套标准，称为 WS Security。这个标准对基本的 SOAP 通信做了改善，</del>以便能够处理以下几个问题。</p>
+<ol>
+<li><p>消息机密性</p>
+<p>由于拦截HTTP消息的方式非常多，因此，在请求和响应的过程中，必须能够对所有信息加密。很幸运，现在的加密技术非常先进，我们能够对消息内容进行加密，以保证消息不被修改。</p>
+</li>
+<li><p>客户和服务身份</p>
+<p>即必须能够核实SOAP请求来源的身份。</p>
+<p>SOAP在安全方面是通过使用XML-Security和XML<del>-Signature两个规范组成WS-Security 来实现安全控制的，这已经得到了各个厂商的广泛支持</del></p>
+</li>
+</ol>
+<h3 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h3><p>基于SOAP和WSDL的Web Services架构属于复杂的、重量级的协议。随着Web2.0的兴起，表述性状态转移（REST）逐步成为一个流行的架构风格。REST是一种轻量级的SOA架构实现风格，可以完全通过HTTP协议实现，并且能够利用缓存Cache来提高响应速度，在效能、效率和易用性上都优于基于SOAP和WSDL的Web Services架构。</p>
+<h3 id="REST概念"><a href="#REST概念" class="headerlink" title="REST概念"></a>REST概念</h3><p>REST是2000年由Roy Fielding 在他的博士论文中提出的，它是SOA概念的另一种技术实现。</p>
+<p>在这种架构风格中，软件组件被封装<del>成网络服务。</del></p>
+<h3 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h3><p>微服务这一概念出现于2012年。在现代化企业应用开发中，微服务架构是一个很重要的趋势。相对于大量分散的应用程序以及它们高昂的维护费用和基础设施开销，基于微服务的应用程序把各种功能打散，然后通过API连接。这一方法使应用的各个元素可以独立地更新和扩展。</p>
+<p>传统的 SOA面向组织创建一个广泛的架构，以确保人们可以重用资源。高度的重用要求创建合适的编排，这可以把不同的孤岛系统联系到一起。微服务正是对传统 SOA的解读。 微服务架构可以与现代化移动优先的应用开发方法融洽地结合，可以轻松地与 DevOps流程融合。</p>
+<p>许多流行的网站和服务都是使用微服务模型构建的，亚马逊就是一个著名的例子。在亚马逊，小型 DevOps 团队负责构建和维护运行在网站上的各种微服务，亚马逊的主页使用了 200 个甚至更多的微服务。微服务模型还意味着它可以提升服务性能。</p>
+<h3 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h3><p>微服务集与外部世界的连通一般经由API网关模式实现，如图所示。利用API网关模式，需要进行声明的微服务能够在该网关内获得对应的API。当然，并不是所有微服务都需要立足于API网关实现声明。</p>
+<p>要想通过API网关访问某项微服务，请求发起方必须首先获得有效的OAuth令牌。系统能够以自身角色访问微服务，也可以作为其他用户实现访问。对于后一种情况，假设用户登录至某Web应用，那么此后该Web应用即可以所登录用户的身份进行微服务访问。最终用 户对微服务的访问(通过API实现)应当在边界或者API网关处进行验证。</p>
+<p>目前最为常见的API安全保护模式为OAuth2.0。 </p>
+<p>OAuth 2.0是一套作为访问代表的框架，它允许某方对另一方进行某种操作。客户端可利用此协议获取资源拥有方的许可，从而代表拥有方进行资源访问。 </p>
+<p><strong>OAuth的参与实体</strong>至少有如下三个。 </p>
+<ul>
+<li>RO (Resource Owner) :资源拥有者，对资源具有授权能力的人。 </li>
+<li>RS (Resource Server) :资源服务器，它存储资源,</li>
+</ul>
+<p><strong>OAuth 协议的基本流程</strong>如下，如图 3-10 所示。 </p>
+<ol>
+<li>客户端请求RO的授权，请求中一般包含:要访问的资源、路径，操作类型，客户端的身 份等信息。 </li>
+<li>RO批准授权，并将”授权证据”发送给客户端。至于 RO如何批准，这个是协议之外的 事情。典型的做法是，AS提供授权审批界面，让 RO显式批准。 </li>
+<li>客户端向 AS请求”访问令牌CAccess Token)”。此时，客户端需向 AS 提供 RO 的”授 权证据”，以及客户端自己身份的凭证。</li>
+<li>AS验证通过后，向客户端返回”访问令牌”。访问令牌也有多种类型，若为 bearer类 型，那么谁持有访问令牌，谁就能访问资源。 </li>
+<li>客户端携带”访问令牌”访问 RS上的资源。在令牌的有效期内，客户端可以多次携带 令牌去访问资源。 </li>
+<li>RS验证令牌的<del>有效性，如是否伪造、是否越权、是否过期，验证通过后，才能提供服务。</del></li>
+</ol>
+<p><img src="img\image-20260104223436579.png" alt="image-20260104223436579"></p>
+<h2 id="第四章-可信计算环境"><a href="#第四章-可信计算环境" class="headerlink" title="第四章 可信计算环境"></a>第四章 可信计算环境</h2><h3 id="可信执行环境的基本概念"><a href="#可信执行环境的基本概念" class="headerlink" title="可信执行环境的基本概念"></a>可信执行环境的基本概念</h3><p>可信执行环境（TEE）由 GlobalPlatform（GP)提出，是移动设备(包含智能手机、平板计算机、机顶盒、智能电视等)主处理器上的一个安全区域，其可以保证加载到该环境内部的代码和数据的安全性、机密性以及完整性。 TEE提供一个隔离的执行环境，提供的安全特征包含:隔离执行、可信应用的完整性、可信数据的机密性、安全存储 等。此外，TEE通过创建一个可以在 TrustZone 的”安全世界”中独立运行的小型操作系统来实现，该操作系统以系统调用(由 TrustZone 内核直接<del>处理)的方式直接提供少数的服务。</del></p>
+<h3 id="TEE的架构"><a href="#TEE的架构" class="headerlink" title="TEE的架构"></a>TEE的架构</h3><p>TEE 是一个与 Rich OS并行运行的独立执行环境，为 Rich 环境提供安全服务。 TEE 独立于Rich OS 和其上的应用，来访问硬件和软件安全资源。 </p>
+<p>如图所示，TEE 为 TA 提供了安全执行环境;它同时提供保密性、完整性并对所属 TA 的资源和数据提供访问权限的控制。为保证 TEE有可倍的 root，在安全启动过程中， TEE 首先进行鉴权，然后从Rich OS 中隔离出来。在TEE 内部，TA之间是互相独立的，在未授权访问的情况下，一个TA不能执行其他TA的资源。 TA可以来自不同的应用提供商。</p>
+<p>如图与图所示，TA通过 TEE 内部 API来获取安全资源和服务的访问权限，这里所述的安全资源和服务包括密钥注入和管理、加密算法、安全存储、安全时钟、可信用户界面 （UI） 、可信键击，等等。已公布的TEE客户端 API是一个底层的通信接口，接口的设计目的是使Rich OS 中的 CA 可以与TEE中的TA进行交互。 TEE客户端 API规范可以从 GP 网站进行下载。最后，为了完善整个生态系统，TEE功能性接口将给 CA 提供一系列”Rich OS  友好”的 API 接口，这些接口会以 Rich OS 应用开发者熟悉的编程模式提供，允许访问 TEE 的部分服务，如加密算法或安全存储。 TEE功能性接口的定义也列为 GP TEE交付成果的一 部分。</p>
+<h3 id="Rich-OS、TEE与SE的比较"><a href="#Rich-OS、TEE与SE的比较" class="headerlink" title="Rich OS、TEE与SE的比较"></a>Rich OS、TEE与SE的比较</h3><p>TEE 为设备安全提供了框架，在 Rich OS 和安全元素(SE)之间提供了一个安全层。当前，移动安全的解决方案还是主要依赖于 SE，SE方案要求提供一种大多数金融机构，包括银行和信用卡公司都支持的安全控制机制。然而，几个少数应用场景缺少迫切的安全需求，并且 由于 SE 的性能、交互及用户体验受限等问题，也并没有很好地应用起来。总体来说，安全级别和财产的重要性是需要权衡的，高安全性需要在速度、易用性和用户体验上进行折中。</p>
+<p><img src="img\image-20260104224811210.png" alt="image-20260104224811210"></p>
+<p><img src="img\image-20260104224907399.png" alt="image-20260104224907399"></p>
+<p><img src="img\image-20260104224922602.png" alt="image-20260104224922602"></p>
+<p><img src="img\image-20260104224955580.png" alt="image-20260104224955580"></p>
+<p><img src="img\image-20260104225005226.png" alt="image-20260104225005226"></p>
+<h3 id="TrustZone"><a href="#TrustZone" class="headerlink" title="TrustZone"></a>TrustZone</h3><p>基于OMTP的方案，ARM公司于2006年提出了一种硬件虚拟化TrustZone及其相关硬件实现方案。</p>
+<p>TrustZone 技术是 ARM 公司提出的一种硬件级的安全运行解决方案。 TrustZone 在概念上将 SoC 的硬件和软件资源划分为安全(Secure World)和非安全(Normal World)两个世界，所有需要保密的操作在安全世界执行(如指纹识别、密码处理、数据加解密、安全认证等),  其余操作在非安全世界执行(如用户操作系统、各种应用程序等)，安全世界和非安全世界通过 监控模式进行转换，如图所示。</p>
+<p><img src="img\image-20260105150346258.png" alt="image-20260105150346258"></p>
+<p>如图，所有切换操作等通过监控器来执行。</p>
+<p><img src="img\image-20260105163052794.png" alt="image-20260105163052794"></p>
+<h3 id="SGX"><a href="#SGX" class="headerlink" title="SGX"></a>SGX</h3><p>针对可信计算，类似于ARM的TrustZone，Intel也针对x86平台提出了自己的安全架构 SGX: Intel Software Guard Extensions (Intel SGX)。</p>
+<p>SGX技术是Intel于2013年在ISCA(International Symposium on Computer Architecture)会议的Workshop HASP中提出的，但当时只是提出了这一概念和原理。</p>
+<p>2015年，Intel发布了第一代支持SGX技术的CPU一一Skylake。</p>
+<p><img src="img\image-20260105163306861.png" alt="image-20260105163306861"></p>
+<h3 id="SGX的原理"><a href="#SGX的原理" class="headerlink" title="SGX的原理"></a>SGX的原理</h3><p>SGX的保护是针对应用程序的地址空间的。SGX利用处理器提供的指令，在内存中划分出一部分区域(叫作EPC，Enclave Page Cache)，并将应用程序地址空间中的Enclave映射到这部分内存区域中。这部分内存区域是加密的，通过CPU中的内存控制单元进行加密和地址转化。 </p>
+<p>SGX内存保护原理: 当处理器访问Enclave中的数据时，CPU自动切换到一个新的CPU 模式，叫作Enclave模式。Enclave模式会强制对每一个内存访问进行额外的硬件检查。由数据放在EPC中，为了防止已知的内存攻击(如内存嗅探)，EPC中的内存内容会被内存加密引擎(MEE，Memory Encryption Engine)加密。EPC中的内存内容只有当进入CPU时，才会解密;返回EPC内存中会被加密。</p>
+<h2 id="第五章-大数据处理与存储及其安全隐私"><a href="#第五章-大数据处理与存储及其安全隐私" class="headerlink" title="第五章 大数据处理与存储及其安全隐私"></a>第五章 大数据处理与存储及其安全隐私</h2><h3 id="云计算的定义与特征"><a href="#云计算的定义与特征" class="headerlink" title="云计算的定义与特征"></a>云计算的定义与特征</h3><p>云计算有三种主要的服务模式</p>
+<ul>
+<li><del>软件即服务</del></li>
+<li><del>平台即服务</del></li>
+<li><del>基础设施即服务</del></li>
+</ul>
+<p>部署方式</p>
+<ul>
+<li><del>公有云</del></li>
+<li><del>私有云</del></li>
+<li><del>行业云</del></li>
+<li><del>混合云</del></li>
+</ul>
+<h3 id="谷歌的MapReduce"><a href="#谷歌的MapReduce" class="headerlink" title="谷歌的MapReduce"></a>谷歌的MapReduce</h3><h3 id="开源系统-Hadoop"><a href="#开源系统-Hadoop" class="headerlink" title="开源系统:Hadoop"></a>开源系统:Hadoop</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><ol>
+<li>为什么需要同态加密？</li>
+<li>同态加密技术</li>
+</ol>
+<p>1977年RSA算法可以实现乘法的同态。1999年Pascal Paillier论文实现了加法同态。</p>
+<h3 id="私有信息检索"><a href="#私有信息检索" class="headerlink" title="私有信息检索"></a>私有信息检索</h3><p>大数据时代，用户的私有信息变得十分重要。这些私有信息不仅包括用户的密码、身份 ID(如身份证号、护照号等人医疗数据、信用卡信息等敏感信怠，还包括用户的兴趣爱好、社交信息、互联网账号、一般的财务数据，等等。在大数据时代，这些信息经过多源数据关联分析，从很多看似无关的信息中，往往能够挖掘出很多用户的敏感数据，导致用户的隐私信息无法得到保障。 </p>
+<p>一个恶意的数据库拥有者可能会跟踪用户的查询并据此推断用户所感兴趣的信息。 私有信息检索(PIR，Private Information Retrieval)是为了保障个人隐私在公共网络平台上的私密性而采用的一种阻止数据库知晓用户查询信息的策略。 </p>
+<p>私有信息检索是指用户在不泄露自己的查询信息给数据库的情况下，完成对数据库的查询操作。该概念由Chor等人于1995年首次提出，目的是保护用户的查询隐私，因此服务器不能知道用户查询记录的身份信息和查询内容。 </p>
+<p>PIR的应用非常广泛，以下是几个典型的应用场景。①患有某种疾病的人想通过一个专家系统查询其疾病的治疗方法，如果以该疾病名作为查询条件，专家系统服务器将会猜测到该病人可能患有这样的疾病，从而导致用户的隐私被泄露。②在股票交易市场中，某重要用户想查询某只股票的信息，但又不希望将自己感兴趣的股票被服务器获得，以免该信息被公之于众从而影响股票价格。③定位服务。</p>
+<h3 id="安全多方计算"><a href="#安全多方计算" class="headerlink" title="安全多方计算"></a>安全多方计算</h3><ol>
+<li>什么是安全多方计算(SMC，Secure Multi-Party Computation)?</li>
+<li>安全多方计算模型有两种:<strong>半诚实模型</strong>和<strong>恶意模型。</strong></li>
+</ol>
+<h3 id="平均工资问题"><a href="#平均工资问题" class="headerlink" title="平均工资问题"></a>平均工资问题</h3><p>ACM 协会想了解计算机领域<del>大学教授的平均收入，但是参与调查的人不希望泄露自己 的工资数据，并且也无法完全信任任何第三方。那么，如何设计计算协议才能够在不泄露个人 数据的前提下算出大家的平均工资呢?</del> </p>
+<p><del>我们可以简化一下这个问题，以四个人的情况为例，说明设计方法。</del></p>
+<p><del>假设四个参与者是Alice、Bob、Carol 和 Dave，算法设计如下。 ~</del>~</p>
+<p><del>① Alice 生成一个随机数，将其与自己的工资相加，用 Bob 的公钥加密发送给 Bob。</del></p>
+<p><del>② Bob 用自己的私钥解密，加进自己的工资，然后用 Carol 的公钥加密发送给 CaroL 178  ……·第 5 章 大数据处理与存储及其安全隐私</del></p>
+<p><del>③ Carol 用自己的私钥解密，加进自己的工资，然后用 Dave 的公钥加密发送给 Daveo</del> </p>
+<p><del>④ Dave 用自己的私钥解密，加进自己的工资，然后用 Alice 的公钥加密发送给 Aliceo</del> </p>
+<p><del>⑤ Alice 用自己的私钥解密，减去原来的随机数得到工资总和。</del> </p>
+<p><del>⑥ Alice 将工资总和除以人数得到平均工资，宣布结果。</del></p>
+<p><del>该算法是基于所有的参与者是诚实的这一假设。如果不诚实则平均工资错误;并且 Alice 作为”名义上”的集成者，可以谎报结果。</del></p>
+<h3 id="大数据存储及其安全隐患"><a href="#大数据存储及其安全隐患" class="headerlink" title="大数据存储及其安全隐患"></a>大数据存储及其安全隐患</h3><ol>
+<li>GFS</li>
+<li>BigTable</li>
+</ol>
+<p><img src="img\image-20260105172542158.png" alt="image-20260105172542158"></p>
+<h3 id="数据完整性机制"><a href="#数据完整性机制" class="headerlink" title="数据完整性机制"></a>数据完整性机制</h3><p><del>在这个架构中一共有三个角色:用户、云服务器和第三方</del>审计者(TPA, Third Party  Auditor)。</p>
+<p>数据可恢复性证明(POR, Proofs of  Retrievability)的概念。</p>
+<h3 id="隐私保护机制"><a href="#隐私保护机制" class="headerlink" title="隐私保护机制"></a>隐私保护机制</h3><ol>
+<li><p>数据加密去重技术及其理论</p>
+<p>消息锁定式加密(MLE, Message-Locked Encryption)  的框架。</p>
+</li>
+<li><p>拥有权证明</p>
+</li>
+</ol>
+<h2 id="第六章-大数据共享及其安全隐私"><a href="#第六章-大数据共享及其安全隐私" class="headerlink" title="第六章 大数据共享及其安全隐私"></a>第六章 大数据共享及其安全隐私</h2><h3 id="隐私的概念"><a href="#隐私的概念" class="headerlink" title="隐私的概念"></a>隐私的概念</h3><ol>
+<li><p>定义</p>
+<p><del>隐私就是个人、机构等实体不愿意被外部世界知晓的信息。</del></p>
+</li>
+<li><p>隐私的分类</p>
+<ul>
+<li>个人隐私</li>
+<li>共同隐私</li>
+</ul>
+</li>
+<li><p>隐私的度量与量化表示</p>
+</li>
+<li><p>完美隐私</p>
+</li>
+</ol>
+<h3 id="数据匿名化技术"><a href="#数据匿名化技术" class="headerlink" title="数据匿名化技术"></a>数据匿名化技术</h3><p><img src="img\image-20260105193701641.png" alt="image-20260105193701641"></p>
+<p>为了保护本表中的人员隐私，医院数据库管理员将在发布此数据之前采取以下步骤对数据进行处理。</p>
+<ol>
+<li><p>识别身份信息</p>
+<p>姓名、出生日期、性别和邮政编码</p>
+</li>
+<li><p>抑制(Suppression)</p>
+</li>
+<li><p>泛化(Generalization) </p>
+</li>
+<li><p>聚合(Aggregation) </p>
+<p>最后，为了更好地理解<del>什么是”发布-遗忘”模型，可以考虑一种不遵循”发布一遗忘”的常用 技术。</del></p>
+</li>
+</ol>
+<h3 id="K匿名隐私保护模型"><a href="#K匿名隐私保护模型" class="headerlink" title="K匿名隐私保护模型"></a>K匿名隐私保护模型</h3><h3 id="l-多样性隐私保护模型"><a href="#l-多样性隐私保护模型" class="headerlink" title="$l$-多样性隐私保护模型"></a>$l$-多样性隐私保护模型</h3><h3 id="T相近隐私保护模型"><a href="#T相近隐私保护模型" class="headerlink" title="T相近隐私保护模型"></a>T相近隐私保护模型</h3><h3 id="差分隐私技术"><a href="#差分隐私技术" class="headerlink" title="差分隐私技术"></a>差分隐私技术</h3><ol>
+<li>工作原理</li>
+</ol>
+<h2 id="第七章-大数据算法及其安全"><a href="#第七章-大数据算法及其安全" class="headerlink" title="第七章 大数据算法及其安全"></a>第七章 大数据算法及其安全</h2><h3 id="搜索引擎算法的基本原理"><a href="#搜索引擎算法的基本原理" class="headerlink" title="搜索引擎算法的基本原理"></a>搜索引擎算法的基本原理</h3><h3 id="对大数据算法的攻击"><a href="#对大数据算法的攻击" class="headerlink" title="对大数据算法的攻击"></a>对大数据算法的攻击</h3><ol>
+<li>通过伪造共同访问对推荐系统进行攻击</li>
+<li>搜索引擎优化</li>
+<li>诱导分类器产生错误分类</li>
+<li>诱导视觉分类算法</li>
+</ol>
+<h2 id="第八章-大数据服务的认证与访问控制"><a href="#第八章-大数据服务的认证与访问控制" class="headerlink" title="第八章 大数据服务的认证与访问控制"></a>第八章 大数据服务的认证与访问控制</h2><h3 id="身份认证技术"><a href="#身份认证技术" class="headerlink" title="身份认证技术"></a>身份认证技术</h3><ol>
+<li>身份认证技术基础</li>
+<li>多因子认证</li>
+<li>把身份认证视为一个分类器</li>
+</ol>
+<h3 id="访问控制技术"><a href="#访问控制技术" class="headerlink" title="访问控制技术"></a>访问控制技术</h3><ol>
+<li><p>访问控制的基本概念</p>
+</li>
+<li><p>访问控制的常用方法</p>
+<p>传统的访问控制模式有如下三类。</p>
+<ul>
+<li><del>自主访问控制</del></li>
+<li><del>强制访问控制</del></li>
+<li><del>基于角色的访问控制</del></li>
+</ul>
+</li>
+<li><p>云环境下的细粒度访问控制技术</p>
+<p>函数加密(FE，Functional Encryption)</p>
+</li>
+</ol>
+<h2 id="第九章-大数据采集及其安全隐私"><a href="#第九章-大数据采集及其安全隐私" class="headerlink" title="第九章 大数据采集及其安全隐私"></a>第九章 大数据采集及其安全隐私</h2><h3 id="匿名通信的基本框架"><a href="#匿名通信的基本框架" class="headerlink" title="匿名通信的基本框架"></a>匿名通信的基本框架</h3><p>匿名通信的基本框架可以从三个方面加以阐述:匿名属性(Anonymity Property)、对手能力(Adversary Capability) 和网络类型(Network Type) 。</p>
+<p>现阶段匿名通信的技术方案主要分为三类:基于Mix算法的匿名通信系统、基于洋葱路由(Onion Routing)算法的匿名通信系统和基于泛洪算法的匿名通信系统。</p>
+<h3 id="什么是HTTPS"><a href="#什么是HTTPS" class="headerlink" title="什么是HTTPS?"></a>什么是HTTPS?</h3><h3 id="端到端的加密"><a href="#端到端的加密" class="headerlink" title="端到端的加密"></a>端到端的加密</h3><p>SSL加密是用来从普通黑客处保护数据的，并不能从互联网公司手中保护数据。因为 SSL 加密标准仅仅保护用户的设备和互联网公司服务器之间的数据传输。由于这些互联网公司拥有用户的这些加密数据的非加密版本，它们可以无障碍访问用户的所谓加密数据。 </p>
+<p>如果用户愿意使用端到端加密通信，那么上述问题便可以得到解决。 </p>
+<p>信息发送者在本地将信息加密，信息接收者在收到加密信息后本地解密。谷歌、微软等信 息传输媒介仅仅能够访问加密信息，这样它们便无法为相关机构提供你的信息拷贝。 </p>
+<p>例如，最古老的是电子邮件加密软件 PGP，它诞生于 1991 年。还有加密即时通信软件， 可以提供加密互联网电话服务。</p>
+<h2 id="第一章-一个简单的通信游戏"><a href="#第一章-一个简单的通信游戏" class="headerlink" title="第一章 一个简单的通信游戏"></a>第一章 一个简单的通信游戏</h2><p><img src="img\image-20260106214155687.png" alt="image-20260106214155687"></p>
+<p><img src="img\image-20260106214229502.png" alt="image-20260106214229502"></p>
+<h2 id="第二章-防守与攻击"><a href="#第二章-防守与攻击" class="headerlink" title="第二章 防守与攻击"></a>第二章 防守与攻击</h2><p>加密和解密算法统称为密码算法（密码系统或密码体制），加密和解密过程均由密钥控制。在对称（或共享密钥）密码体制中，加密和解密采用同一密钥；而在 非对称（或公钥）密码体制中，加密和解密采用两个不同的密钥：加密密钥和（相匹配的）解密密钥，加密密钥可以公开（因此也称为公开密钥）而不会泄露解密密钥（因此公钥密码体制中解密密钥也称为私钥）。</p>
+<h3 id="易受攻击的环境（Dolev-Yao威胁模型）"><a href="#易受攻击的环境（Dolev-Yao威胁模型）" class="headerlink" title="易受攻击的环境（Dolev-Yao威胁模型）"></a>易受攻击的环境（Dolev-Yao威胁模型）</h3><p>在这样脆弱的环境中预料到如此强大的对手，Dolev和Yao提出了一个威胁模型，这一模型被广泛地采纳为密码协议的标准威胁模型。在这个模型中，Malice有如下特征：</p>
+<ul>
+<li>他能获得经过网络的任何消息</li>
+<li>他是网络的一个合法使用者，因而能够发起与任何其他用户的对话</li>
+<li>他有机会成为任何主体发出信息的接收者</li>
+<li>他能够冒充任何特别的主体给任意主体发消息</li>
+</ul>
+<p>Malice不能做的事情：</p>
+<ul>
+<li>Malice 不能猜到从足够大空间中选出的随机数</li>
+<li>没有正确的密钥（或私钥），Malice不能由给定的密文恢复出明文；对于完善加密算法，Malice也不能从给定的明文构造出正确的密文</li>
+<li>Malice不能求出私有部分，比如，与给定的公钥相匹配的私钥</li>
+<li>Malice虽然能控制我们的计算和通信环境的大量公共部分，但一般他不能控制计算机环境中的许多私有区域，如访问离线主体的存储器</li>
+</ul>
+<h3 id="“从Alice到Bob”协议"><a href="#“从Alice到Bob”协议" class="headerlink" title="“从Alice到Bob”协议"></a>“从Alice到Bob”协议</h3><p><img src="img\image-20260106220110208.png" alt="image-20260106220110208"></p>
+<h3 id="“来自Trent的会话密钥”协议"><a href="#“来自Trent的会话密钥”协议" class="headerlink" title="“来自Trent的会话密钥”协议"></a>“来自Trent的会话密钥”协议</h3><p><img src="img\image-20260106220212764.png" alt="image-20260106220212764"></p>
+<h3 id="一个攻击"><a href="#一个攻击" class="headerlink" title="一个攻击"></a>一个攻击</h3><p><img src="img\image-20260106220337246.png" alt="image-20260106220337246"></p>
+<h3 id="消息认证"><a href="#消息认证" class="headerlink" title="消息认证"></a>消息认证</h3><p><img src="img\image-20260106220456451.png" alt="image-20260106220456451"></p>
+<h3 id="询问-应答协议"><a href="#询问-应答协议" class="headerlink" title="询问-应答协议"></a>询问-应答协议</h3><p><img src="img\image-20260106220631414.png" alt="image-20260106220631414"></p>
+<p><img src="img\image-20260106220833594.png" alt="image-20260106220833594"></p>
+<h3 id="Needham-Schroeder公钥认证协议"><a href="#Needham-Schroeder公钥认证协议" class="headerlink" title="Needham-Schroeder公钥认证协议"></a>Needham-Schroeder公钥认证协议</h3><p><img src="img\image-20260106220952642.png" alt="image-20260106220952642"></p>
+<h3 id="对Needham-Schroeder公钥认证协议的攻击"><a href="#对Needham-Schroeder公钥认证协议的攻击" class="headerlink" title="对Needham-Schroeder公钥认证协议的攻击"></a>对Needham-Schroeder公钥认证协议的攻击</h3><p>Lowe发现了对Needham-Schroeder公钥认证协议的一种攻击</p>
+<p>Lowe观察到，这个协议可以看做是两个逻辑分离协议的交织。第1、2、4、5步关系到如何获得公钥，而第3、6、7步关系到Alice和Bob的认证。因此，可以假定每个主体在开始时都有其他主体的公钥的认证副本。我们的注意力只限于下面的步骤3、6、7</p>
+<p><img src="img\image-20260106221626804.png" alt="image-20260106221626804"></p>
+<h2 id="第八章-加密——非对称技术"><a href="#第八章-加密——非对称技术" class="headerlink" title="第八章 加密——非对称技术"></a>第八章 加密——非对称技术</h2><p><img src="img\image-20260106221858785.png" alt="image-20260106221858785"></p>
+<h2 id="Diffie-Hellman密钥交换协议"><a href="#Diffie-Hellman密钥交换协议" class="headerlink" title="Diffie-Hellman密钥交换协议"></a>Diffie-Hellman密钥交换协议</h2><p><img src="img\image-20260106222031941.png" alt="image-20260106222031941"></p>
+<p><img src="img\image-20260106222215551.png" alt="image-20260106222215551"></p>
+<h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h3><p><img src="img\image-20260106222432682.png" alt="image-20260106222432682"></p>
+<p><img src="img\image-20260106222507591.png" alt="image-20260106222507591"></p>
+<p><img src="img\image-20260106222604127.png" alt="image-20260106222604127"></p>
+<p><img src="img\image-20260106222630729.png" alt="image-20260106222630729"></p>
+<p><img src="img\image-20260106222648555.png" alt="image-20260106222648555"></p>
+<p><img src="img\image-20260106222655283.png" alt="image-20260106222655283"></p>
+<h3 id="RSA密码体制（教科书式）"><a href="#RSA密码体制（教科书式）" class="headerlink" title="RSA密码体制（教科书式）"></a>RSA密码体制（教科书式）</h3><p><img src="img\image-20260106222756606.png" alt="image-20260106222756606"></p>
+<p><img src="img\image-20260106222808196.png" alt="image-20260106222808196"></p>
+<p><img src="img\image-20260106222819065.png" alt="image-20260106222819065"></p>
+<p><img src="img\image-20260106222829479.png" alt="image-20260106222829479"></p>
+<p><img src="img\image-20260106222840545.png" alt="image-20260106222840545"></p>
+<h3 id="教科书式RSA加密的不安全性"><a href="#教科书式RSA加密的不安全性" class="headerlink" title="教科书式RSA加密的不安全性"></a>教科书式RSA加密的不安全性</h3><p><img src="img\image-20260106222923192.png" alt="image-20260106222923192"></p>
+<p><img src="img\image-20260106222934263.png" alt="image-20260106222934263"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/2c2d59f9/">http://blog.just-ok.xyz/posts/2c2d59f9/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%B8%8E%E9%9A%90%E7%A7%81/">数据安全与隐私</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/4fedc59e/" title="Happy New Year 2026"><img class="cover" src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7142.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Happy New Year 2026</div></div><div class="info-2"><div class="info-item-1">一个庆祝2026年新年祝福动画页面，结合了视觉效果、倒计时和个性化问候功能。🔗预览🔗Github仓库 项目简介Midnight Leap 2026 是一个现代化的React应用，使用TypeScript和Vite构建，具有以下特色功能：  🎉 精美的烟花动画效果 ⏰ 实时新年倒计时 ✨ 个性化问候功能 🎨 响应式设计，适配各种设备 🌟 使用GSAP和Tailwind CSS实现的流畅动画  预览    技术栈 React 19 TypeScript Vite 7 Tailwind CSS GSAP (GreenSock Animation Platform) Canvas Confetti (烟花效果)  </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">第一章 大数据安全的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E7%9A%84%E4%B8%A4%E9%87%8D%E5%90%AB%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">大数据安全的两重含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E7%9A%84%E5%90%AB%E4%B9%89"><span class="toc-number">1.2.</span> <span class="toc-text">隐私的含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%B8%8E%E6%B3%95%E5%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">隐私与法律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AC%A7%E7%9B%9F%E3%80%8A%E9%80%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%9D%A1%E4%BE%8B%E3%80%8B"><span class="toc-number">1.4.</span> <span class="toc-text">欧盟《通用数据保护条例》</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E5%9B%BD%E7%9A%84%E3%80%8A%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF%E4%B8%AA%E4%BA%BA%E5%80%8D%E6%81%AF%E5%AE%89%E5%85%A8%E8%A7%84%E8%8C%83%E3%80%8B"><span class="toc-number">1.5.</span> <span class="toc-text">我国的《信息安全技术个人倍息安全规范》</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">第二章 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%A7%A3%E5%AF%86%E8%BF%87%E7%A8%8B%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text">加解密过程示意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E5%85%A5%E7%A7%98%E9%92%A5%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E8%BF%87%E7%A8%8B%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-number">2.2.</span> <span class="toc-text">引入秘钥的加解密过程示意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">2.3.</span> <span class="toc-text">密码设计思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E5%AF%86%E7%A0%81%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-number">2.4.</span> <span class="toc-text">流密码设计方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">常用的分组密码算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E6%93%8D%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.6.</span> <span class="toc-text">分组密码操作模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%9A%84%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">2.7.</span> <span class="toc-text">消息的完整性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%E4%BD%93%E5%88%B6"><span class="toc-number">2.8.</span> <span class="toc-text">公钥加密体制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IPSec"><span class="toc-number">2.9.</span> <span class="toc-text">IPSec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TLS-SSL"><span class="toc-number">2.10.</span> <span class="toc-text">TLS&#x2F;SSL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.11.</span> <span class="toc-text">身份认证的概念和常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%8E%9F%E7%90%86"><span class="toc-number">2.12.</span> <span class="toc-text">单点登录原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLP%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.13.</span> <span class="toc-text">BLP模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Biba%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.14.</span> <span class="toc-text">Biba模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8"><span class="toc-number">3.</span> <span class="toc-text">第三章 大数据服务架构及其安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-Services%E5%AE%89%E5%85%A8"><span class="toc-number">3.1.</span> <span class="toc-text">Web Services安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#REST"><span class="toc-number">3.2.</span> <span class="toc-text">REST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#REST%E6%A6%82%E5%BF%B5"><span class="toc-number">3.3.</span> <span class="toc-text">REST概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.4.</span> <span class="toc-text">微服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="toc-number">3.5.</span> <span class="toc-text">身份认证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%8F%AF%E4%BF%A1%E8%AE%A1%E7%AE%97%E7%8E%AF%E5%A2%83"><span class="toc-number">4.</span> <span class="toc-text">第四章 可信计算环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E4%BF%A1%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">4.1.</span> <span class="toc-text">可信执行环境的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TEE%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">TEE的架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rich-OS%E3%80%81TEE%E4%B8%8ESE%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-number">4.3.</span> <span class="toc-text">Rich OS、TEE与SE的比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TrustZone"><span class="toc-number">4.4.</span> <span class="toc-text">TrustZone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SGX"><span class="toc-number">4.5.</span> <span class="toc-text">SGX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SGX%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">4.6.</span> <span class="toc-text">SGX的原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E5%AD%98%E5%82%A8%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81"><span class="toc-number">5.</span> <span class="toc-text">第五章 大数据处理与存储及其安全隐私</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E8%AE%A1%E7%AE%97%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E7%89%B9%E5%BE%81"><span class="toc-number">5.1.</span> <span class="toc-text">云计算的定义与特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%B7%E6%AD%8C%E7%9A%84MapReduce"><span class="toc-number">5.2.</span> <span class="toc-text">谷歌的MapReduce</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E7%B3%BB%E7%BB%9F-Hadoop"><span class="toc-number">5.3.</span> <span class="toc-text">开源系统:Hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%80%81%E5%8A%A0%E5%AF%86"><span class="toc-number">5.4.</span> <span class="toc-text">同态加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%81%E6%9C%89%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2"><span class="toc-number">5.5.</span> <span class="toc-text">私有信息检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%A4%9A%E6%96%B9%E8%AE%A1%E7%AE%97"><span class="toc-number">5.6.</span> <span class="toc-text">安全多方计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E5%9D%87%E5%B7%A5%E8%B5%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.7.</span> <span class="toc-text">平均工资问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8%E9%9A%90%E6%82%A3"><span class="toc-number">5.8.</span> <span class="toc-text">大数据存储及其安全隐患</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7%E6%9C%BA%E5%88%B6"><span class="toc-number">5.9.</span> <span class="toc-text">数据完整性机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6"><span class="toc-number">5.10.</span> <span class="toc-text">隐私保护机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%85%B1%E4%BA%AB%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81"><span class="toc-number">6.</span> <span class="toc-text">第六章 大数据共享及其安全隐私</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">6.1.</span> <span class="toc-text">隐私的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%BF%E5%90%8D%E5%8C%96%E6%8A%80%E6%9C%AF"><span class="toc-number">6.2.</span> <span class="toc-text">数据匿名化技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K%E5%8C%BF%E5%90%8D%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.3.</span> <span class="toc-text">K匿名隐私保护模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#l-%E5%A4%9A%E6%A0%B7%E6%80%A7%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.4.</span> <span class="toc-text">$l$-多样性隐私保护模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T%E7%9B%B8%E8%BF%91%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.5.</span> <span class="toc-text">T相近隐私保护模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%AE%E5%88%86%E9%9A%90%E7%A7%81%E6%8A%80%E6%9C%AF"><span class="toc-number">6.6.</span> <span class="toc-text">差分隐私技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8"><span class="toc-number">7.</span> <span class="toc-text">第七章 大数据算法及其安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%AE%97%E6%B3%95%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">7.1.</span> <span class="toc-text">搜索引擎算法的基本原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95%E7%9A%84%E6%94%BB%E5%87%BB"><span class="toc-number">7.2.</span> <span class="toc-text">对大数据算法的攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E8%AE%A4%E8%AF%81%E4%B8%8E%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="toc-number">8.</span> <span class="toc-text">第八章 大数据服务的认证与访问控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E6%8A%80%E6%9C%AF"><span class="toc-number">8.1.</span> <span class="toc-text">身份认证技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%8A%80%E6%9C%AF"><span class="toc-number">8.2.</span> <span class="toc-text">访问控制技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%8F%8A%E5%85%B6%E5%AE%89%E5%85%A8%E9%9A%90%E7%A7%81"><span class="toc-number">9.</span> <span class="toc-text">第九章 大数据采集及其安全隐私</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BF%E5%90%8D%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A1%86%E6%9E%B6"><span class="toc-number">9.1.</span> <span class="toc-text">匿名通信的基本框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFHTTPS"><span class="toc-number">9.2.</span> <span class="toc-text">什么是HTTPS?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%88%B0%E7%AB%AF%E7%9A%84%E5%8A%A0%E5%AF%86"><span class="toc-number">9.3.</span> <span class="toc-text">端到端的加密</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E4%BF%A1%E6%B8%B8%E6%88%8F"><span class="toc-number">10.</span> <span class="toc-text">第一章 一个简单的通信游戏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%98%B2%E5%AE%88%E4%B8%8E%E6%94%BB%E5%87%BB"><span class="toc-number">11.</span> <span class="toc-text">第二章 防守与攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%93%E5%8F%97%E6%94%BB%E5%87%BB%E7%9A%84%E7%8E%AF%E5%A2%83%EF%BC%88Dolev-Yao%E5%A8%81%E8%83%81%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">11.1.</span> <span class="toc-text">易受攻击的环境（Dolev-Yao威胁模型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C%E4%BB%8EAlice%E5%88%B0Bob%E2%80%9D%E5%8D%8F%E8%AE%AE"><span class="toc-number">11.2.</span> <span class="toc-text">“从Alice到Bob”协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9C%E6%9D%A5%E8%87%AATrent%E7%9A%84%E4%BC%9A%E8%AF%9D%E5%AF%86%E9%92%A5%E2%80%9D%E5%8D%8F%E8%AE%AE"><span class="toc-number">11.3.</span> <span class="toc-text">“来自Trent的会话密钥”协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%94%BB%E5%87%BB"><span class="toc-number">11.4.</span> <span class="toc-text">一个攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81"><span class="toc-number">11.5.</span> <span class="toc-text">消息认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%A2%E9%97%AE-%E5%BA%94%E7%AD%94%E5%8D%8F%E8%AE%AE"><span class="toc-number">11.6.</span> <span class="toc-text">询问-应答协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Needham-Schroeder%E5%85%AC%E9%92%A5%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">11.7.</span> <span class="toc-text">Needham-Schroeder公钥认证协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9Needham-Schroeder%E5%85%AC%E9%92%A5%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%94%BB%E5%87%BB"><span class="toc-number">11.8.</span> <span class="toc-text">对Needham-Schroeder公钥认证协议的攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%8A%A0%E5%AF%86%E2%80%94%E2%80%94%E9%9D%9E%E5%AF%B9%E7%A7%B0%E6%8A%80%E6%9C%AF"><span class="toc-number">12.</span> <span class="toc-text">第八章 加密——非对称技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Diffie-Hellman%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E5%8D%8F%E8%AE%AE"><span class="toc-number">13.</span> <span class="toc-text">Diffie-Hellman密钥交换协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB"><span class="toc-number">13.1.</span> <span class="toc-text">中间人攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6%EF%BC%88%E6%95%99%E7%A7%91%E4%B9%A6%E5%BC%8F%EF%BC%89"><span class="toc-number">13.2.</span> <span class="toc-text">RSA密码体制（教科书式）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%99%E7%A7%91%E4%B9%A6%E5%BC%8FRSA%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%8D%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">13.3.</span> <span class="toc-text">教科书式RSA加密的不安全性</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/2c2d59f9/" title="数据安全与隐私笔记"><img src="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0c.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数据安全与隐私笔记"/></a><div class="content"><a class="title" href="/posts/2c2d59f9/" title="数据安全与隐私笔记">数据安全与隐私笔记</a><time datetime="2026-01-08T06:16:56.000Z" title="发表于 2026-01-08 14:16:56">2026-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4fedc59e/" title="Happy New Year 2026"><img src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf7142.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Happy New Year 2026"/></a><div class="content"><a class="title" href="/posts/4fedc59e/" title="Happy New Year 2026">Happy New Year 2026</a><time datetime="2025-12-31T10:09:05.000Z" title="发表于 2025-12-31 18:09:05">2025-12-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/843c5cef/" title="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra"/></a><div class="content"><a class="title" href="/posts/843c5cef/" title="🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra">🚀 告别 &quot;Garbage In&quot;！我挖到了一个能把“废话”编译成神级指令的 AI 专家——Lyra</a><time datetime="2025-12-17T09:57:23.000Z" title="发表于 2025-12-17 17:57:23">2025-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/6429e9e7/" title="ElGamal、Schnorr、DSA 签名方案对比分析"><img src="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ElGamal、Schnorr、DSA 签名方案对比分析"/></a><div class="content"><a class="title" href="/posts/6429e9e7/" title="ElGamal、Schnorr、DSA 签名方案对比分析">ElGamal、Schnorr、DSA 签名方案对比分析</a><time datetime="2025-12-15T08:59:41.000Z" title="发表于 2025-12-15 16:59:41">2025-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fb09ecc0/" title="机器学习课程实验报告"><img src="https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="机器学习课程实验报告"/></a><div class="content"><a class="title" href="/posts/fb09ecc0/" title="机器学习课程实验报告">机器学习课程实验报告</a><time datetime="2025-12-12T06:55:06.000Z" title="发表于 2025-12-12 14:55:06">2025-12-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2026  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/前端/">前端</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/现代密码学/">现代密码学</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/建站指南/">建站指南</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/数据结构/">数据结构</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/网络空间安全数学基础/">网络空间安全数学基础</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/AI/">AI</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/python/">python</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/实用小脚本/">实用小脚本</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/实用tips/">实用tips</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/信息安全基础与密码学综合实验/">信息安全基础与密码学综合实验</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/数据安全与隐私/">数据安全与隐私</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统综合实验/">操作系统综合实验</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/软件逆向工程/">软件逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
