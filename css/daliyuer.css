@@ -4,6 +4,7 @@
     --font-bg: #fff;
     --font-color: #4c4948;
     --daliyuer-bd-rd: 6px;
+    --daliyuer-white: #fff;
 }
 [data-theme='dark'] {
     --font-bg: #0d0d0d;

